@@ -54,7 +54,7 @@
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Abre tu primer sobre para revelar tus <strong>4 cartas estelares</strong> con imágenes generadas por IA:</p>
+                <p class="text-sm text-slate-300">¡Bienvenido! Abre tu primer sobre para revelar tus <strong>4 cartas estelares</strong>:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
                     ¡ABRIR SOBRE DE INICIO (4 CARTAS ESTELARES)! 📦
                 </button>
@@ -334,7 +334,7 @@
     </div>
 
     <footer class="w-full max-w-5xl text-center py-3 border-t border-slate-800 text-[11px] text-slate-500">
-        Ultimate FC Card Legends &bull; Imágenes IA desde GitHub &bull; Mundial 2026
+        Ultimate FC Card Legends &bull; Imágenes PNG desde GitHub &bull; Mundial 2026
     </footer>
 
     <script>
@@ -352,16 +352,16 @@
         let matchIntervalRef = null;
         let pendingSubPosition = null;
 
-        // STARTER CARDS WITH YOUR GITHUB AI IMAGES & CONTRACARA
+        // STARTER CARDS WITH CORRECT ROOT PNG PATHS
         const starterPool = [
-            { id: "img1", nombre: "K. Mbappé", numero: 7, decade: "starter", continente: "Europa", pais: "🇫🇷 FR", posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", marketPrice: 120000000, img: "img/img1-K. Mbappé.jpg" },
-            { id: "img2", nombre: "Keylor Navas", numero: 1, decade: "starter", continente: "América", pais: "🇨🇷 CR", posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", marketPrice: 45000000, img: "img/img2-Keylor Navas.jpg" },
-            { id: "img3", nombre: "Erling Haaland", numero: 9, decade: "starter", continente: "Europa", pais: "🇳🇴 NO", posicion: "ST", media: 9.5, equipo: "Manchester City", rol: "ST GOALSCORER", marketPrice: 140000000, img: "img/img3-Erling Haaland.jpg" },
-            { id: "img4", nombre: "L. Messi", numero: 10, decade: "starter", continente: "Sudamérica", pais: "🇦🇷 AR", posicion: "CAM", media: 9.8, equipo: "Inter Miami", rol: "CAM MAGIC", marketPrice: 200000000, img: "img/img4-L. Messi.jpg" }
+            { id: "img1", nombre: "K. Mbappé", numero: 7, decade: "starter", continente: "Europa", pais: "🇫🇷 FR", posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", marketPrice: 120000000, img: "img1.png" },
+            { id: "img2", nombre: "Keylor Navas", numero: 1, decade: "starter", continente: "América", pais: "🇨🇷 CR", posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", marketPrice: 45000000, img: "img2.png" },
+            { id: "img3", nombre: "Erling Haaland", numero: 9, decade: "starter", continente: "Europa", pais: "🇳🇴 NO", posicion: "ST", media: 9.5, equipo: "Manchester City", rol: "ST GOALSCORER", marketPrice: 140000000, img: "img3.png" },
+            { id: "img4", nombre: "L. Messi", numero: 10, decade: "starter", continente: "Sudamérica", pais: "🇦🇷 AR", posicion: "CAM", media: 9.8, equipo: "Inter Miami", rol: "CAM MAGIC", marketPrice: 200000000, img: "img4.png" }
         ];
 
         const legendPool = [
-            { id: "l_pele", nombre: "PELÉ", numero: 10, decade: "legends", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "ST", media: 9.9, equipo: "Santos", rol: "ST GOALSCORER", marketPrice: 280000000, img: "img/img4-L. Messi.jpg" }
+            { id: "l_pele", nombre: "PELÉ", numero: 10, decade: "legends", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "ST", media: 9.9, equipo: "Santos", rol: "ST GOALSCORER", marketPrice: 280000000, img: "img4.png" }
         ];
 
         const cpuNationalTeams = {
@@ -515,10 +515,6 @@
             RW: null
         };
 
-        let draftCount = 0;
-        let currentDraftCandidate = null;
-
-        // OPEN INITIAL PACK WITH 4 CARDS (MBAPPE, KEYLOR, HAALAND, MESSI)
         function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
@@ -533,7 +529,6 @@
                 grid.appendChild(cardEl);
             });
 
-            // Assign positions automatically to starting 11
             activeSquad.GK = starterPool.find(p => p.posicion === 'GK') || starterPool[1];
             activeSquad.ST = starterPool.find(p => p.id === 'img1') || starterPool[0];
             activeSquad.CAM = starterPool.find(p => p.id === 'img4') || starterPool[3];
@@ -564,7 +559,7 @@
                     </div>
                     <!-- BACK: CONTRACARA -->
                     <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900">
-                        <img src="img/Contracara.jpg" alt="Contracara" class="w-full h-full object-cover">
+                        <img src="contracara.png" alt="Contracara" class="w-full h-full object-cover">
                     </div>
                 </div>
             `;
