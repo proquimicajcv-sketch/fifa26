@@ -47,16 +47,16 @@
 
     <!-- START SCREEN & INITIAL PACK OPENING WITH FLIP CARDS -->
     <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4 overflow-y-auto">
-        <div class="max-w-2xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
+        <div class="max-w-3xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
                 <span class="text-3xl">🏆</span>
                 <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">MUNDIAL 2026 DRAFT INICIAL</h1>
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Comienzas abriendo tu sobre. Tus cartas están boca abajo con la contracara. <strong>Haz clic en cada una</strong> para darles la vuelta y descubrir tus fichajes:</p>
+                <p class="text-sm text-slate-300">¡Bienvenido! Tu sobre inicial contiene <strong>4 cartas aleatorias</strong> distribuidas por posición (GK, DEF, MED, ATK)[cite: 6]. Están boca abajo con la contracara. <strong>Haz clic en cada una</strong> para descubrirlas:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
-                    ¡REPARTIR SOBRE DE INICIO (4 CARTAS)! 📦
+                    ¡ABRIR SOBRE DE INICIO (4 CARTAS ALEATORIAS)! 📦
                 </button>
             </div>
 
@@ -332,7 +332,7 @@
     </div>
 
     <footer class="w-full max-w-5xl text-center py-3 border-t border-slate-800 text-[11px] text-slate-500">
-        Ultimate FC Card Legends &bull; Imágenes PNG desde carpeta img/ &bull; Mundial 2026
+        Ultimate FC Card Legends &bull; 40 Cartas Oficiales &bull; Mundial 2026
     </footer>
 
     <script>
@@ -398,16 +398,52 @@
             } catch(e) {}
         }
 
-        const starterPool = [
-            { id: "img1", nombre: "K. Mbappé", numero: 7, decade: "starter", continente: "Europa", pais: "🇫🇷 FR", posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", marketPrice: 120000000, img: "img/img1.png" },
-            { id: "img2", nombre: "Keylor Navas", numero: 1, decade: "starter", continente: "América", pais: "🇨🇷 CR", posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", marketPrice: 45000000, img: "img/img2.png" },
-            { id: "img3", nombre: "Erling Haaland", numero: 9, decade: "starter", continente: "Europa", pais: "🇳🇴 NO", posicion: "ST", media: 9.5, equipo: "Manchester City", rol: "ST GOALSCORER", marketPrice: 140000000, img: "img/img3.png" },
-            { id: "img4", nombre: "L. Messi", numero: 10, decade: "starter", continente: "Sudamérica", pais: "🇦🇷 AR", posicion: "CAM", media: 9.8, equipo: "Inter Miami", rol: "CAM MAGIC", marketPrice: 200000000, img: "img/img4.png" }
+        // CATALOGO COMPLETO DE 40 CARTAS (INCLUYENDO JUGADORES REALES Y NPCs CON POSICIÓN ESTRICTA)[cite: 6]
+        const masterCardPool = [
+            { id: "img1", nombre: "K. Mbappé", numero: 7, posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", img: "img/img1.png" },
+            { id: "img2", nombre: "Keylor Navas", numero: 1, posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", img: "img/img2.png" },
+            { id: "img3", nombre: "Erling Haaland", numero: 9, posicion: "ST", media: 9.5, equipo: "Manchester City", rol: "ST GOALSCORER", img: "img/img3.png" },
+            { id: "img4", nombre: "L. Messi", numero: 10, posicion: "CAM", media: 9.8, equipo: "Inter Miami", rol: "CAM MAGIC", img: "img/img4.png" },
+            { id: "img5", nombre: "Pelé", numero: 10, posicion: "ST", media: 9.9, equipo: "Brasil Leyenda", rol: "ST GOALSCORER", img: "img/img5.png" },
+            { id: "img6", nombre: "Ronaldinho", numero: 10, posicion: "CAM", media: 9.6, equipo: "Barcelona", rol: "CAM MAGIC", img: "img/img6.png" },
+            { id: "img7", nombre: "Ronaldo Nazário", numero: 9, posicion: "ST", media: 9.7, equipo: "Brasil", rol: "ST STRIKER", img: "img/img7.png" },
+            { id: "img8", nombre: "Cristiano Ronaldo", numero: 7, posicion: "ST", media: 9.8, equipo: "Al Nassr", rol: "ST GOALSCORER", img: "img/img8.png" },
+            { id: "img9", nombre: "Onana", numero: 23, posicion: "GK", media: 9.1, equipo: "Camerún", rol: "GK DEFENDER", img: "img/img9.png" },
+            { id: "img10", nombre: "Son Heung-Min", numero: 7, posicion: "LW", media: 9.2, equipo: "Tottenham", rol: "LW WINGER", img: "img/img10.png" },
+            { id: "img11", nombre: "Cucurella", numero: 3, posicion: "LB", media: 8.9, equipo: "Chelsea", rol: "LB LATERAL", img: "img/img11.png" },
+            { id: "img12", nombre: "Dembélé", numero: 11, posicion: "RW", media: 9.1, equipo: "PSG", rol: "RW SPEEDSTER", img: "img/img12.png" },
+            { id: "img13", nombre: "Zidane", numero: 5, posicion: "CAM", media: 9.7, equipo: "Francia Leyenda", rol: "CAM MAGIC", img: "img/img13.png" },
+            { id: "img14", nombre: "Marcelo", numero: 12, posicion: "LB", media: 9.2, equipo: "Fluminense", rol: "LB LATERAL", img: "img/img14.png" },
+            { id: "img15", nombre: "David Villa", numero: 7, posicion: "ST", media: 9.1, equipo: "España", rol: "ST STRIKER", img: "img/img15.png" },
+            { id: "img16", nombre: "Raúl", numero: 7, posicion: "ST", media: 9.2, equipo: "Real Madrid", rol: "ST STRIKER", img: "img/img16.png" },
+            { id: "img17", nombre: "Sergio Ramos", numero: 4, posicion: "CB", media: 9.3, equipo: "Sevilla", rol: "CB GUARDIAN", img: "img/img17.png" },
+            { id: "img18", nombre: "Xabi Alonso", numero: 14, posicion: "CM", media: 9.2, equipo: "B. Leverkusen", rol: "CM MOTOR", img: "img/img18.png" },
+            { id: "img19", nombre: "René Higuita", numero: 1, posicion: "GK", media: 9.0, equipo: "Colombia", rol: "GK DEFENDER", img: "img/img19.png" },
+            { id: "img20", nombre: "James Rodríguez", numero: 10, posicion: "CAM", media: 9.1, equipo: "Colombia", rol: "CAM PLAYMAKER", img: "img/img20.png" },
+            { id: "img21", nombre: "Dibu Martínez", numero: 23, posicion: "GK", media: 9.2, equipo: "Argentina", rol: "GK DEFENDER", img: "img/img21.png" },
+            { id: "img22", nombre: "Jamal Musiala", numero: 42, posicion: "CAM", media: 9.2, equipo: "B. Múnich", rol: "CAM MAGIC", img: "img/img22.png" },
+            { id: "img23", nombre: "Luka Modric", numero: 10, posicion: "CM", media: 9.4, equipo: "Real Madrid", rol: "CM CREATOR", img: "img/img23.png" },
+            { id: "img24", nombre: "Ryan Mendes", numero: 11, posicion: "RW", media: 8.7, equipo: "Selección", rol: "RW WINGER", img: "img/img24.png" },
+            { id: "img25", nombre: "Vosinha", numero: 1, posicion: "GK", media: 8.6, equipo: "Selección", rol: "GK DEFENDER", img: "img/img25.png" },
+            { id: "img26", nombre: "Hugo Sánchez", numero: 9, posicion: "ST", media: 9.3, equipo: "México Leyenda", rol: "ST GOALSCORER", img: "img/img26.png" },
+            { id: "img27", nombre: "Fidel Escobar", numero: 3, posicion: "CB", media: 8.7, equipo: "Saprissa", rol: "CB ROBUST", img: "img/img27.png" },
+            // NPCS CON POSICIÓN ESTRICTA ASIGNADA[cite: 6]
+            { id: "img28", nombre: "NPC Defensor 1", numero: 2, posicion: "CB", media: 8.5, equipo: "Amateur", rol: "CB GUARDIAN", img: "img/img28.png" },
+            { id: "img29", nombre: "NPC Defensor 2", numero: 4, posicion: "CB", media: 8.5, equipo: "Amateur", rol: "CB ROBUST", img: "img/img29.png" },
+            { id: "img30", nombre: "NPC Mediocampista 1", numero: 8, posicion: "CM", media: 8.6, equipo: "Amateur", rol: "CM MOTOR", img: "img/img30.png" },
+            { id: "img31", nombre: "NPC Defensor 3", numero: 5, posicion: "LB", media: 8.4, equipo: "Amateur", rol: "LB LATERAL", img: "img/img31.png" },
+            { id: "img32", nombre: "NPC Portero 1", numero: 12, posicion: "GK", media: 8.6, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img32.png" },
+            { id: "img33", nombre: "NPC Atacante 1", numero: 11, posicion: "ST", media: 8.7, equipo: "Amateur", rol: "ST STRIKER", img: "img/img33.png" },
+            { id: "img34", nombre: "NPC Portero 2", numero: 13, posicion: "GK", media: 8.5, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img34.png" },
+            { id: "img35", nombre: "NPC Defensor 4", numero: 6, posicion: "RB", media: 8.5, equipo: "Amateur", rol: "RB LATERAL", img: "img/img35.png" },
+            { id: "img36", nombre: "NPC Portero 3", numero: 25, posicion: "GK", media: 8.4, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img36.png" },
+            { id: "img37", nombre: "NPC Atacante 2", numero: 17, posicion: "LW", media: 8.6, equipo: "Amateur", rol: "LW WINGER", img: "img/img37.png" },
+            { id: "img38", nombre: "NPC Atacante 3", numero: 19, posicion: "RW", media: 8.6, equipo: "Amateur", rol: "RW SPEEDSTER", img: "img/img38.png" },
+            { id: "img39", nombre: "NPC Atacante 4", numero: 20, posicion: "ST", media: 8.7, equipo: "Amateur", rol: "ST GOALSCORER", img: "img/img39.png" },
+            { id: "img40", nombre: "NPC Portero 4", numero: 30, posicion: "GK", media: 8.5, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img40.png" }
         ];
 
-        const legendPool = [
-            { id: "l_pele", nombre: "PELÉ", numero: 10, decade: "legends", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "ST", media: 9.9, equipo: "Santos", rol: "ST GOALSCORER", marketPrice: 280000000, img: "img/img4.png" }
-        ];
+        const legendPool = masterCardPool.filter(p => p.media >= 9.5);
 
         const cpuNationalTeams = {
             BRA: { nombre: "Brasil", flag: "🇧🇷", key: "BRA", GK: { nombre: "ALISSON", numero: 1 }, ST: { nombre: "VINICIUS JR", numero: 11 }, CAM: { nombre: "NEYMAR", numero: 10 } },
@@ -440,6 +476,7 @@
             RW: null
         };
 
+        // SELECCIONAR 4 CARTAS ALEATORIAS GARANTIZANDO UNA POR CADA POSICIÓN (GK, DEF, MED, ATK)
         function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
@@ -448,16 +485,28 @@
             const grid = document.getElementById('initial-cards-grid');
             grid.innerHTML = '';
 
-            starterPool.forEach(player => {
+            const gkPool = masterCardPool.filter(p => p.posicion === 'GK');
+            const defPool = masterCardPool.filter(p => ['CB', 'LB', 'RB'].includes(p.posicion));
+            const medPool = masterCardPool.filter(p => ['CM', 'CAM'].includes(p.posicion));
+            const atkPool = masterCardPool.filter(p => ['ST', 'LW', 'RW'].includes(p.posicion));
+
+            const randomGK = gkPool[Math.floor(Math.random() * gkPool.length)];
+            const randomDEF = defPool[Math.floor(Math.random() * defPool.length)];
+            const randomMED = medPool[Math.floor(Math.random() * medPool.length)];
+            const randomATK = atkPool[Math.floor(Math.random() * atkPool.length)];
+
+            const starterCards = [randomGK, randomDEF, randomMED, randomATK];
+
+            starterCards.forEach(player => {
                 userInventory.push(player);
                 const cardEl = createFlipCardElement(player);
                 grid.appendChild(cardEl);
             });
 
-            activeSquad.GK = starterPool.find(p => p.posicion === 'GK') || starterPool[1];
-            activeSquad.ST = starterPool.find(p => p.id === 'img1') || starterPool[0];
-            activeSquad.CAM = starterPool.find(p => p.id === 'img4') || starterPool[3];
-            activeSquad.CB1 = starterPool.find(p => p.id === 'img3') || starterPool[2];
+            activeSquad.GK = randomGK;
+            activeSquad.CB1 = randomDEF;
+            activeSquad.CAM = randomMED;
+            activeSquad.ST = randomATK;
 
             document.getElementById('btn-enter-game').classList.remove('hidden');
         }
@@ -719,7 +768,7 @@
             wheel.classList.add('animate-roulette');
             setTimeout(() => {
                 wheel.classList.remove('animate-roulette');
-                const randomCard = legendPool[0];
+                const randomCard = legendPool[Math.floor(Math.random() * legendPool.length)];
                 if(!userInventory.some(p => p.id === randomCard.id)) userInventory.push(randomCard);
                 filterCards();
                 showModal("¡Nuevo Fichaje!", `¡Has obtenido a ${randomCard.nombre}!`);
