@@ -60,7 +60,6 @@
                 </button>
             </div>
 
-            <!-- CONTAINER FOR REVEALING CARDS GRADUALLY -->
             <div id="draft-reveal-container" class="hidden space-y-4">
                 <p class="text-sm text-amber-400 font-bold">¡Cartas listas! Haz clic en cada una para voltearlas y revelar al jugador:</p>
                 <div id="initial-cards-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center"></div>
@@ -152,13 +151,29 @@
                 </div>
             </div>
 
+            <!-- PITCH CONTAINER WITH VISUAL SCOREBOARD -->
             <div class="w-full relative rounded-3xl border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden bg-slate-950">
-                <div class="absolute inset-x-0 top-2 z-20 flex justify-between px-6 text-[10px] text-amber-300/80 font-black uppercase tracking-widest pointer-events-none">
+                <!-- VISUAL SCOREBOARD OVERLAY -->
+                <div class="absolute inset-x-0 top-3 z-30 flex justify-center items-center pointer-events-none">
+                    <div class="bg-slate-900/90 border-2 border-amber-500/80 px-6 py-2 rounded-2xl shadow-2xl flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-black text-white">TUS JUGADORES ⚡</span>
+                        </div>
+                        <div class="bg-slate-950 px-4 py-1 rounded-xl border border-slate-700 text-emerald-400 font-black text-lg tracking-widest shadow-inner" id="pitch-scoreboard-val">
+                            0 - 0
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-black text-red-400" id="pitch-cpu-label">Brasil 🇧🇷</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute inset-x-0 top-16 z-20 flex justify-between px-6 text-[10px] text-amber-300/80 font-black uppercase tracking-widest pointer-events-none">
                     <span id="cpu-team-badge">Gradería Norte • Brasil (FIFA)</span>
                     <span>Balón Oficial Mundial 2026 ⚽</span>
                 </div>
 
-                <div id="pitch-container" class="w-full h-[780px] pitch-stripes relative flex flex-col justify-between p-4 shadow-inner overflow-y-auto border-4 border-emerald-600/80">
+                <div id="pitch-container" class="w-full h-[780px] pitch-stripes relative flex flex-col justify-between p-4 pt-16 shadow-inner overflow-y-auto border-4 border-emerald-600/80">
                     <div class="absolute inset-x-0 top-1/2 h-1 bg-white/40 pointer-events-none"></div>
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border-2 border-white/40 pointer-events-none"></div>
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-3 z-30 w-6 h-6 bg-white rounded-full border-2 border-slate-900 flex items-center justify-center text-xs shadow-2xl animate-spin" style="animation-duration: 8s;">⚽</div>
@@ -187,7 +202,7 @@
                     </div>
                 </div>
 
-                <div id="match-commentary-feed" class="bg-slate-950 border border-slate-800 p-3 rounded-xl h-36 overflow-y-auto space-y-2 text-xs font-mono">
+                <div id="match-commentary-feed" class="bg-slate-950 border border-slate-800 p-3 rounded-xl h-40 overflow-y-auto space-y-2 text-xs font-mono">
                     <div class="text-slate-400">[00:00] ¡Arranca el partido! Suena el silbato inicial en el estadio.</div>
                 </div>
             </div>
@@ -334,7 +349,54 @@
         let matchIntervalRef = null;
         let pendingSubPosition = null;
 
-        // STARTER CARDS WITH EXACT FOLDER PATH img/
+        let audioCtx = null;
+        function initAudio() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playWhistleSound() {
+            try {
+                initAudio();
+                if(!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(2600, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(2900, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            } catch(e) {}
+        }
+
+        function playGoalHornSound() {
+            try {
+                initAudio();
+                if(!audioCtx) return;
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(225, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioCtx.currentTime + 1.8);
+                osc2.stop(audioCtx.currentTime + 1.8);
+            } catch(e) {}
+        }
+
         const starterPool = [
             { id: "img1", nombre: "K. Mbappé", numero: 7, decade: "starter", continente: "Europa", pais: "🇫🇷 FR", posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", marketPrice: 120000000, img: "img/img1.png" },
             { id: "img2", nombre: "Keylor Navas", numero: 1, decade: "starter", continente: "América", pais: "🇨🇷 CR", posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", marketPrice: 45000000, img: "img/img2.png" },
@@ -347,134 +409,14 @@
         ];
 
         const cpuNationalTeams = {
-            BRA: {
-                nombre: "Brasil (FIFA)",
-                flag: "🇧🇷",
-                GK: { nombre: "ALISSON", numero: 1, posicion: "GK", media: 9.2, rol: "GK DEFENDER" },
-                CB1: { nombre: "MARQUINHOS", numero: 3, posicion: "CB", media: 9.1, rol: "CB GUARDIAN" },
-                CB2: { nombre: "MILITAO", numero: 14, posicion: "CB", media: 9.0, rol: "CB ROBUST" },
-                LB: { nombre: "MARCELO", numero: 12, posicion: "LB", media: 9.2, rol: "LB LATERAL" },
-                RB: { nombre: "DANI ALVES", numero: 2, posicion: "RB", media: 9.1, rol: "RB LATERAL" },
-                CM1: { nombre: "CASEMIRO", numero: 5, posicion: "CM", media: 9.3, rol: "CM TACKLER" },
-                CM2: { nombre: "PAQUETÁ", numero: 7, posicion: "CM", media: 9.1, rol: "CM CREATOR" },
-                CM3: { nombre: "BRUNO G.", numero: 8, posicion: "CM", media: 9.1, rol: "CM MOTOR" },
-                CAM: { nombre: "NEYMAR", numero: 10, posicion: "CAM", media: 9.6, rol: "CAM MAGIC" },
-                ST: { nombre: "VINICIUS JR", numero: 11, posicion: "ST", media: 9.5, rol: "ST STRIKER" },
-                LW: { nombre: "RODRYGO", numero: 21, posicion: "LW", media: 9.3, rol: "LW SPEEDSTER" },
-                RW: { nombre: "RAPHINHA", numero: 22, posicion: "RW", media: 9.2, rol: "RW WINGER" }
-            },
-            FRA: {
-                nombre: "Francia (FIFA)",
-                flag: "🇫🇷",
-                GK: { nombre: "MAIGNAN", numero: 1, posicion: "GK", media: 9.2, rol: "GK DEFENDER" },
-                CB1: { nombre: "VARANE", numero: 4, posicion: "CB", media: 9.1, rol: "CB GUARDIAN" },
-                CB2: { nombre: "UPAMECANO", numero: 18, posicion: "CB", media: 9.0, rol: "CB ROBUST" },
-                LB: { nombre: "T. HERNANDEZ", numero: 22, posicion: "LB", media: 9.2, rol: "LB LATERAL" },
-                RB: { nombre: "KOUNDE", numero: 5, posicion: "RB", media: 9.1, rol: "RB LATERAL" },
-                CM1: { nombre: "KANTE", numero: 13, posicion: "CM", media: 9.4, rol: "CM TACKLER" },
-                CM2: { nombre: "TCHOUAMENI", numero: 8, posicion: "CM", media: 9.2, rol: "CM CREATOR" },
-                CM3: { nombre: "GRIEZMANN", numero: 7, posicion: "CM", media: 9.5, rol: "CM MOTOR" },
-                CAM: { nombre: "ZIDANE", numero: 10, posicion: "CAM", media: 9.7, rol: "CAM MAGIC" },
-                ST: { nombre: "MBAPPE", numero: 9, posicion: "ST", media: 9.8, rol: "ST GOALSCORER" },
-                LW: { nombre: "COMAN", numero: 20, posicion: "LW", media: 9.1, rol: "LW WINGER" },
-                RW: { nombre: "DEMBELE", numero: 11, posicion: "RW", media: 9.1, rol: "RW SPEEDSTER" }
-            },
-            ARG: {
-                nombre: "Argentina (FIFA)",
-                flag: "🇦🇷",
-                GK: { nombre: "MARTINEZ", numero: 23, posicion: "GK", media: 9.2, rol: "GK DEFENDER" },
-                CB1: { nombre: "ROMERO", numero: 13, posicion: "CB", media: 9.2, rol: "CB GUARDIAN" },
-                CB2: { nombre: "OTAMENDI", numero: 19, posicion: "CB", media: 9.0, rol: "CB ROBUST" },
-                LB: { nombre: "ACUÑA", numero: 8, posicion: "LB", media: 9.0, rol: "LB LATERAL" },
-                RB: { nombre: "MOLINA", numero: 26, posicion: "RB", media: 9.0, rol: "RB LATERAL" },
-                CM1: { nombre: "DE PAUL", numero: 7, posicion: "CM", media: 9.2, rol: "CM MOTOR" },
-                CM2: { nombre: "ENZO F.", numero: 24, posicion: "CM", media: 9.2, rol: "CM CREATOR" },
-                CM3: { nombre: "MAC ALLISTER", numero: 20, posicion: "CM", media: 9.1, rol: "CM TACKLER" },
-                CAM: { nombre: "MARADONA", numero: 10, posicion: "CAM", media: 9.8, rol: "CAM MAGIC" },
-                ST: { nombre: "MESSI", numero: 10, posicion: "ST", media: 9.9, rol: "ST GOALSCORER" },
-                LW: { nombre: "DI MARIA", numero: 11, posicion: "LW", media: 9.3, rol: "LW WINGER" },
-                RW: { nombre: "JULIAN A.", numero: 9, posicion: "RW", media: 9.2, rol: "RW SPEEDSTER" }
-            },
-            ESP: {
-                nombre: "España (FIFA)",
-                flag: "🇪🇸",
-                GK: { nombre: "SIMON", numero: 23, posicion: "GK", media: 9.0, rol: "GK DEFENDER" },
-                CB1: { nombre: "LAPORTE", numero: 14, posicion: "CB", media: 9.1, rol: "CB GUARDIAN" },
-                CB2: { nombre: "CARVAJAL", numero: 2, posicion: "CB", media: 9.1, rol: "CB ROBUST" },
-                LB: { nombre: "BALDE", numero: 3, posicion: "LB", media: 9.0, rol: "LB LATERAL" },
-                RB: { nombre: "ALBA", numero: 18, posicion: "RB", media: 9.1, rol: "LB LATERAL" },
-                CM1: { nombre: "RODRI", numero: 16, posicion: "CM", media: 9.5, rol: "CM TACKLER" },
-                CM2: { nombre: "GAVI", numero: 9, posicion: "CM", media: 9.1, rol: "CM MOTOR" },
-                CM3: { nombre: "PEDRI", numero: 20, posicion: "CM", media: 9.2, rol: "CM CREATOR" },
-                CAM: { nombre: "INIESTA", numero: 8, posicion: "CAM", media: 9.6, rol: "CAM MAGIC" },
-                ST: { nombre: "MORATA", numero: 7, posicion: "ST", media: 9.0, rol: "ST GOALSCORER" },
-                LW: { nombre: "NICO W.", numero: 12, posicion: "LW", media: 9.1, rol: "LW WINGER" },
-                RW: { nombre: "LAMINE Y.", numero: 19, posicion: "RW", media: 9.3, rol: "RW SPEEDSTER" }
-            },
-            GER: {
-                nombre: "Alemania (FIFA)",
-                flag: "🇩🇪",
-                GK: { nombre: "NEUER", numero: 1, posicion: "GK", media: 9.3, rol: "GK DEFENDER" },
-                CB1: { nombre: "RUDIGER", numero: 2, posicion: "CB", media: 9.2, rol: "CB GUARDIAN" },
-                CB2: { nombre: "SULE", numero: 15, posicion: "CB", media: 9.0, rol: "CB ROBUST" },
-                LB: { nombre: "RAUM", numero: 3, posicion: "LB", media: 8.9, rol: "LB LATERAL" },
-                RB: { nombre: "KIMMICH", numero: 6, posicion: "RB", media: 9.3, rol: "RB LATERAL" },
-                CM1: { nombre: "KROOS", numero: 8, posicion: "CM", media: 9.5, rol: "CM CREATOR" },
-                CM2: { nombre: "GORETZKA", numero: 18, posicion: "CM", media: 9.1, rol: "CM MOTOR" },
-                CM3: { nombre: "MULLER", numero: 13, posicion: "CM", media: 9.2, rol: "CM TACKLER" },
-                CAM: { nombre: "MUSIALA", numero: 10, posicion: "CAM", media: 9.3, rol: "CAM MAGIC" },
-                ST: { nombre: "FULLKRUG", numero: 9, posicion: "ST", media: 9.0, rol: "ST GOALSCORER" },
-                LW: { nombre: "SANE", numero: 19, posicion: "LW", media: 9.1, rol: "LW WINGER" },
-                RW: { nombre: "GNABRY", numero: 10, posicion: "RW", media: 9.1, rol: "RW SPEEDSTER" }
-            },
-            MEX: {
-                nombre: "México (FIFA)",
-                flag: "🇲🇽",
-                GK: { nombre: "OCHOA", numero: 13, posicion: "GK", media: 9.0, rol: "GK DEFENDER" },
-                CB1: { nombre: "MONTES", numero: 3, posicion: "CB", media: 8.9, rol: "CB GUARDIAN" },
-                CB2: { nombre: "VASQUEZ", numero: 5, posicion: "CB", media: 8.8, rol: "CB ROBUST" },
-                LB: { nombre: "GALLARDO", numero: 23, posicion: "LB", media: 8.8, rol: "LB LATERAL" },
-                RB: { nombre: "SANCHEZ", numero: 2, posicion: "RB", media: 8.8, rol: "RB LATERAL" },
-                CM1: { nombre: "EDSON A.", numero: 4, posicion: "CM", media: 9.1, rol: "CM TACKLER" },
-                CM2: { nombre: "CHENA", numero: 7, posicion: "CM", media: 8.9, rol: "CM CREATOR" },
-                CM3: { nombre: "RODRIGUEZ", numero: 18, posicion: "CM", media: 8.8, rol: "CM MOTOR" },
-                CAM: { nombre: "CHICHARITO", numero: 14, posicion: "CAM", media: 9.0, rol: "CAM MAGIC" },
-                ST: { nombre: "JIMENEZ", numero: 9, posicion: "ST", media: 8.9, rol: "ST GOALSCORER" },
-                LW: { nombre: "VEGA", numero: 10, posicion: "LW", media: 8.8, rol: "LW WINGER" },
-                RW: { nombre: "ANTUNA", numero: 21, posicion: "RW", media: 8.8, rol: "RW SPEEDSTER" }
-            },
-            USA: {
-                nombre: "Estados Unidos (FIFA)",
-                flag: "🇺🇸",
-                GK: { nombre: "TURNER", numero: 1, posicion: "GK", media: 8.9, rol: "GK DEFENDER" },
-                CB1: { nombre: "ZIMMERMAN", numero: 3, posicion: "CB", media: 8.8, rol: "CB GUARDIAN" },
-                CB2: { nombre: "RICHARDS", numero: 4, posicion: "CB", media: 8.9, rol: "CB ROBUST" },
-                LB: { nombre: "ROBINSON", numero: 5, posicion: "LB", media: 9.0, rol: "LB LATERAL" },
-                RB: { nombre: "DEST", numero: 2, posicion: "RB", media: 9.0, rol: "RB LATERAL" },
-                CM1: { nombre: "MCKENNIE", numero: 8, posicion: "CM", media: 9.0, rol: "CM TACKLER" },
-                CM2: { nombre: "MUSAH", numero: 6, posicion: "CM", media: 8.9, rol: "CM CREATOR" },
-                CM3: { nombre: "ADAMS", numero: 4, posicion: "CM", media: 9.1, rol: "CM MOTOR" },
-                CAM: { nombre: "REYNA", numero: 7, posicion: "CAM", media: 9.0, rol: "CAM MAGIC" },
-                ST: { nombre: "BALOGUN", numero: 20, posicion: "ST", media: 9.0, rol: "ST GOALSCORER" },
-                LW: { nombre: "PULISIC", numero: 10, posicion: "LW", media: 9.2, rol: "LW WINGER" },
-                RW: { nombre: "WEAH", numero: 21, posicion: "RW", media: 8.9, rol: "RW SPEEDSTER" }
-            },
-            CMR: {
-                nombre: "Camerún (FIFA)",
-                flag: "🇨🇲",
-                GK: { nombre: "ONANA", numero: 23, posicion: "GK", media: 9.1, rol: "GK DEFENDER" },
-                CB1: { nombre: "CASTELLETTO", numero: 21, posicion: "CB", media: 8.8, rol: "CB GUARDIAN" },
-                CB2: { nombre: "NKOULOU", numero: 3, posicion: "CB", media: 8.7, rol: "CB ROBUST" },
-                LB: { nombre: "TOLO", numero: 25, posicion: "LB", media: 8.7, rol: "LB LATERAL" },
-                RB: { nombre: "FAI", numero: 19, posicion: "RB", media: 8.7, rol: "RB LATERAL" },
-                CM1: { nombre: "ANGUISSA", numero: 8, posicion: "CM", media: 9.1, rol: "CM TACKLER" },
-                CM2: { nombre: "ONDA", numero: 14, posicion: "CM", media: 8.7, rol: "CM CREATOR" },
-                CM3: { nombre: "KOUNDE C.", numero: 22, posicion: "CM", media: 8.7, rol: "CM MOTOR" },
-                CAM: { nombre: "ETTORE", numero: 10, posicion: "CAM", media: 9.2, rol: "CAM MAGIC" },
-                ST: { nombre: "ABOUBAKAR", numero: 10, posicion: "ST", media: 9.0, rol: "ST GOALSCORER" },
-                LW: { nombre: "MBUEMMO", numero: 20, posicion: "LW", media: 8.9, rol: "LW WINGER" },
-                RW: { nombre: "CHOUPO-M.", numero: 13, posicion: "RW", media: 8.9, rol: "RW SPEEDSTER" }
-            }
+            BRA: { nombre: "Brasil", flag: "🇧🇷", key: "BRA", GK: { nombre: "ALISSON", numero: 1 }, ST: { nombre: "VINICIUS JR", numero: 11 }, CAM: { nombre: "NEYMAR", numero: 10 } },
+            FRA: { nombre: "Francia", flag: "🇫🇷", key: "FRA", GK: { nombre: "MAIGNAN", numero: 1 }, ST: { nombre: "MBAPPE", numero: 9 }, CAM: { nombre: "GRIEZMANN", numero: 7 } },
+            ARG: { nombre: "Argentina", flag: "🇦🇷", key: "ARG", GK: { nombre: "MARTINEZ", numero: 23 }, ST: { nombre: "JULIAN A.", numero: 9 }, CAM: { nombre: "MESSI", numero: 10 } },
+            ESP: { nombre: "España", flag: "🇪🇸", key: "ESP", GK: { nombre: "SIMON", numero: 23 }, ST: { nombre: "MORATA", numero: 7 }, CAM: { nombre: "PEDRI", numero: 20 } },
+            GER: { nombre: "Alemania", flag: "🇩🇪", key: "GER", GK: { nombre: "NEUER", numero: 1 }, ST: { nombre: "FULLKRUG", numero: 9 }, CAM: { nombre: "MUSIALA", numero: 10 } },
+            MEX: { nombre: "México", flag: "🇲🇽", key: "MEX", GK: { nombre: "OCHOA", numero: 13 }, ST: { nombre: "JIMENEZ", numero: 9 }, CAM: { nombre: "CHICHARITO", numero: 14 } },
+            USA: { nombre: "Estados Unidos", flag: "🇺🇸", key: "USA", GK: { nombre: "TURNER", numero: 1 }, ST: { nombre: "BALOGUN", numero: 20 }, CAM: { nombre: "PULISIC", numero: 10 } },
+            CMR: { nombre: "Camerún", flag: "🇨🇲", key: "CMR", GK: { nombre: "ONANA", numero: 23 }, ST: { nombre: "ABOUBAKAR", numero: 10 }, CAM: { nombre: "ETTORE", numero: 12 } }
         };
 
         let userInventory = [];
@@ -498,7 +440,7 @@
         };
 
         function openInitialPack() {
-            document.getElementById('draft-step-1').classList.add('hidden');
+            document.getElementById('start-screen').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
             revealContainer.classList.remove('hidden');
 
@@ -523,14 +465,11 @@
             const wrapper = document.createElement('div');
             wrapper.className = "w-32 h-48 sm:w-36 sm:h-52 perspective-1000 cursor-pointer";
             
-            // Starts facing back (showing img/contracara.png by default)
             wrapper.innerHTML = `
                 <div class="card-inner relative w-full h-full transform-style-3d shadow-2xl rounded-2xl transition-transform duration-500 rotate-y-180">
-                    <!-- FRONT: PLAYER IMAGE -->
                     <div class="absolute inset-0 backface-hidden rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900">
                         <img src="${player.img}" alt="${player.nombre}" class="w-full h-full object-cover">
                     </div>
-                    <!-- BACK: CONTRACARA -->
                     <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900">
                         <img src="img/contracara.png" alt="Contracara" class="w-full h-full object-cover">
                     </div>
@@ -542,9 +481,9 @@
                 isFlipped = !isFlipped;
                 const inner = wrapper.querySelector('.card-inner');
                 if(isFlipped) {
-                    inner.classList.remove('rotate-y-180'); // Shows front (Player image)
+                    inner.classList.remove('rotate-y-180');
                 } else {
-                    inner.classList.add('rotate-y-180'); // Shows back (Contracara)
+                    inner.classList.add('rotate-y-180');
                 }
             };
 
@@ -592,48 +531,23 @@
             const team = cpuNationalTeams[cpuTeamKey];
             document.getElementById('cpu-team-badge').innerText = `Gradería Norte • ${team.nombre} ${team.flag}`;
             document.getElementById('cpu-banner').innerText = `Alineación Rival (${team.nombre})`;
+            document.getElementById('pitch-cpu-label').innerText = `${team.nombre} ${team.flag}`;
             renderPitchSlots();
         }
 
         function renderPitchSlots() {
             const board = document.getElementById('user-formation-board');
             board.innerHTML = '';
-            let userRows = [];
-
-            if (currentFormation === '4-3-3') {
-                userRows = [
-                    { slots: ['LW', 'ST', 'RW'] },
-                    { slots: ['CM1', 'CAM', 'CM2'] },
-                    { slots: ['LB', 'CB1', 'CB2', 'RB'] },
-                    { slots: ['GK'] }
-                ];
-            } else if (currentFormation === '4-4-2') {
-                userRows = [
-                    { slots: ['ST', 'CAM'] },
-                    { slots: ['LW', 'CM1', 'CM2', 'RW'] },
-                    { slots: ['LB', 'CB1', 'CB2', 'RB'] },
-                    { slots: ['GK'] }
-                ];
-            } else if (currentFormation === '3-5-2') {
-                userRows = [
-                    { slots: ['ST', 'CAM'] },
-                    { slots: ['LW', 'CM1', 'CM2', 'CM3', 'RW'] },
-                    { slots: ['CB1', 'CB2', 'LB'] },
-                    { slots: ['GK'] }
-                ];
-            } else { 
-                userRows = [
-                    { slots: ['LW', 'ST', 'CAM', 'RW'] },
-                    { slots: ['CM1', 'CM2'] },
-                    { slots: ['LB', 'CB1', 'CB2', 'RB'] },
-                    { slots: ['GK'] }
-                ];
-            }
+            let userRows = [
+                { slots: ['LW', 'ST', 'RW'] },
+                { slots: ['CM1', 'CAM', 'CM2'] },
+                { slots: ['LB', 'CB1', 'CB2', 'RB'] },
+                { slots: ['GK'] }
+            ];
 
             userRows.forEach(row => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = "flex justify-center items-center gap-2 flex-wrap px-2";
-                
                 row.slots.forEach(pos => {
                     const player = activeSquad[pos];
                     let displayPos = pos.replace(/[0-9]/g, '');
@@ -647,7 +561,7 @@
                                 <img src="${player.img}" class="w-full h-full object-cover">
                             </div>
                             <div class="overflow-hidden">
-                                <div class="text-[7px] text-amber-400 font-black uppercase tracking-tight">${player.rol || 'PLAYER'}</div>
+                                <div class="text-[7px] text-amber-400 font-black uppercase tracking-tight">#${player.numero || 10} &bull; ${player.posicion}</div>
                                 <div class="font-black text-white text-xs truncate">${player.nombre}</div>
                                 <div class="text-[7px] text-emerald-400 font-bold">Rating: ${player.media}</div>
                             </div>
@@ -680,21 +594,18 @@
             cpuRows.forEach(row => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = "flex justify-center items-center gap-2 flex-wrap px-2";
-                
                 row.slots.forEach(pos => {
-                    const bot = cpuSquad[pos] || { nombre: "RIVAL", numero: 9, posicion: pos, media: 9.1, rol: "RIVAL" };
-                    let botPos = (bot.posicion || pos).replace(/[0-9]/g, '');
                     const botDiv = document.createElement('div');
                     botDiv.className = "bg-slate-900/95 border border-red-500/60 rounded-xl p-2 flex items-center gap-2 shadow-xl w-full max-w-[160px]";
                     botDiv.innerHTML = `
                         <div class="w-7 h-9 bg-red-600 rounded-lg flex flex-col items-center justify-center text-[9px] text-white font-black shrink-0">
-                            <span>${bot.numero}</span>
-                            <span class="text-[6px]">${botPos}</span>
+                            <span>9</span>
+                            <span class="text-[6px]">${pos}</span>
                         </div>
                         <div class="overflow-hidden">
-                            <div class="text-[7px] text-red-400 font-bold">${bot.rol}</div>
-                            <div class="font-black text-white text-xs truncate">${bot.nombre}</div>
-                            <div class="text-[7px] text-slate-300">Rating: ${bot.media}</div>
+                            <div class="text-[7px] text-red-400 font-bold">${cpuSquad.nombre}</div>
+                            <div class="font-black text-white text-xs truncate">Rival ${pos}</div>
+                            <div class="text-[7px] text-slate-300">Rating: 9.2</div>
                         </div>
                     `;
                     rowDiv.appendChild(botDiv);
@@ -703,47 +614,36 @@
             });
         }
 
-        function openSubsModal() {
-            openSubsModalForPosition('ST');
-        }
+        function openSubsModal() { openSubsModalForPosition('ST'); }
 
         function openSubsModalForPosition(slotPos) {
             pendingSubPosition = slotPos;
             let generalPos = slotPos.replace(/[0-9]/g, '');
             document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador disponible para la posición [${generalPos}]:`;
-            
             const grid = document.getElementById('subs-inventory-grid');
             grid.innerHTML = '';
 
-            const eligible = userInventory;
-
-            if(eligible.length === 0) {
-                grid.innerHTML = `<div class="col-span-3 text-center text-xs text-slate-400 py-6">No tienes jugadores en tu álbum.</div>`;
-            } else {
-                eligible.forEach(player => {
-                    const item = document.createElement('div');
-                    item.className = "bg-slate-950 border border-amber-500/50 p-2.5 rounded-xl flex flex-col items-center justify-between space-y-1.5 cursor-pointer hover:border-amber-400 transition";
-                    item.innerHTML = `
-                        <div class="w-12 h-16 rounded overflow-hidden border border-amber-400">
-                            <img src="${player.img}" class="w-full h-full object-cover">
-                        </div>
-                        <div class="text-center">
-                            <div class="text-[10px] font-black text-amber-400">${player.posicion}</div>
-                            <div class="text-xs font-bold text-white">${player.nombre}</div>
-                        </div>
-                        <button onclick="assignStrictPlayer('${player.id}', '${slotPos}')" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition">
-                            Colocar
-                        </button>
-                    `;
-                    grid.appendChild(item);
-                });
-            }
+            userInventory.forEach(player => {
+                const item = document.createElement('div');
+                item.className = "bg-slate-950 border border-amber-500/50 p-2.5 rounded-xl flex flex-col items-center justify-between space-y-1.5 cursor-pointer hover:border-amber-400 transition";
+                item.innerHTML = `
+                    <div class="w-12 h-16 rounded overflow-hidden border border-amber-400">
+                        <img src="${player.img}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[10px] font-black text-amber-400">#${player.numero} &bull; ${player.posicion}</div>
+                        <div class="text-xs font-bold text-white">${player.nombre}</div>
+                    </div>
+                    <button onclick="assignStrictPlayer('${player.id}', '${slotPos}')" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition">
+                        Colocar
+                    </button>
+                `;
+                grid.appendChild(item);
+            });
             document.getElementById('subs-modal').classList.remove('hidden');
         }
 
-        function closeSubsModal() {
-            document.getElementById('subs-modal').classList.add('hidden');
-        }
+        function closeSubsModal() { document.getElementById('subs-modal').classList.add('hidden'); }
 
         function assignStrictPlayer(playerId, slotPos) {
             const player = userInventory.find(p => p.id === playerId);
@@ -760,13 +660,8 @@
             document.getElementById('custom-modal').classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('custom-modal').classList.add('hidden');
-        }
-
-        function closeGoalModal() {
-            document.getElementById('goal-modal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('custom-modal').classList.add('hidden'); }
+        function closeGoalModal() { document.getElementById('goal-modal').classList.add('hidden'); }
 
         function updateStatsDisplay() {
             document.getElementById('user-points').innerText = userPoints.toLocaleString();
@@ -808,8 +703,7 @@
             const container = document.getElementById('cards-grid');
             container.innerHTML = '';
             userInventory.forEach(player => {
-                const cardEl = createFlipCardElement(player);
-                container.appendChild(cardEl);
+                container.appendChild(createFlipCardElement(player));
             });
         }
 
@@ -820,16 +714,12 @@
             }
             userPoints -= 250;
             updateStatsDisplay();
-
             const wheel = document.getElementById('roulette-wheel');
             wheel.classList.add('animate-roulette');
-
             setTimeout(() => {
                 wheel.classList.remove('animate-roulette');
                 const randomCard = legendPool[0];
-                if(!userInventory.some(p => p.id === randomCard.id)) {
-                    userInventory.push(randomCard);
-                }
+                if(!userInventory.some(p => p.id === randomCard.id)) userInventory.push(randomCard);
                 filterCards();
                 showModal("¡Nuevo Fichaje!", `¡Has obtenido a ${randomCard.nombre}!`);
             }, 3000);
@@ -841,9 +731,7 @@
         ];
         let currentTriviaIndex = 0;
 
-        function initTrivia() {
-            loadTriviaQuestion();
-        }
+        function initTrivia() { loadTriviaQuestion(); }
 
         function loadTriviaQuestion() {
             const t = triviaQuestions[currentTriviaIndex];
@@ -862,8 +750,7 @@
         function checkTriviaAnswer(selectedIndex) {
             const t = triviaQuestions[currentTriviaIndex];
             if(selectedIndex === t.answer) {
-                userPoints += 150;
-                userCash += 3000000;
+                userPoints += 150; userCash += 3000000;
                 updateStatsDisplay();
                 showModal("¡Correcto!", "Has ganado 150 Puntos y $3,000,000.");
             } else {
@@ -875,63 +762,112 @@
 
         function getRandomActiveUserPlayer() {
             const assigned = Object.values(activeSquad).filter(p => p !== null);
-            return assigned[Math.floor(Math.random() * assigned.length)] || { nombre: "JUGADOR", numero: 10 };
+            return assigned[Math.floor(Math.random() * assigned.length)] || { nombre: "Mbappé", numero: 7 };
         }
 
-        function getRandomCpuPlayer() {
-            const cpuSquad = cpuNationalTeams[cpuTeamKey];
-            const list = Object.values(cpuSquad);
-            return list[Math.floor(Math.random() * list.length)];
-        }
-
+        // REALISTIC REAL-TIME MATCH ENGINE WITH VAR & UNIQUE NARRATIVE
         function startMatch() {
             if(matchInProgress) return;
             matchInProgress = true;
             matchPaused = false;
+            playWhistleSound();
+
             document.getElementById('match-result').classList.add('hidden');
             const liveBox = document.getElementById('live-match-box');
             liveBox.classList.remove('hidden');
             const feed = document.getElementById('match-commentary-feed');
-            feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Comienza el encuentro en el ${activeStadium.nombre}!</div>`;
+            const cpuTeam = cpuNationalTeams[cpuTeamKey];
+            feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Arranca el partido en el ${activeStadium.nombre}! Enfrentamiento imperdible contra ${cpuTeam.nombre} ${cpuTeam.flag}.</div>`;
 
             let userGoals = 0;
             let cpuGoals = 0;
             let tickCount = 0;
 
+            const narrativeEvents = [
+                (m, p) => `[${m}] El #${p.numero} ${p.nombre} arma la jugada colectiva en tres cuartos de cancha, buscando asociarse con sus compañeros.`,
+                (m, p) => `[${m}] ⚡ ¡Desborde eléctrico por la banda de ${p.nombre} (#${p.numero}), dejando atrás a su marcador con pura velocidad!`,
+                (m, p) => `[${m}] 🎯 ¡Disparo de media distancia ejecutado por ${p.nombre} (#${p.numero})! El balón pasa rozando el poste derecho de la cabaña rival.`,
+                (m, p) => `[${m}] 🛡️ ¡Excelente cruce defensivo! El equipo corta el avance rival y recupera la posesión con firmeza.`,
+                (m, p) => `[${m}] 🖥️ ¡Atención! El árbitro detiene el juego y va a la pantalla del **VAR** para revisar una jugada compleja en el área... ¡Se decreta PENAL!`,
+                (m, p) => `[${m}] 🟨 Tarjeta amarilla para el mediocampo rival tras una falta táctica sobre #${p.numero} ${p.nombre}.`,
+                (m, p) => `[${m}] 🧤 ¡Impresionante intervención del guardameta bajo los tres palos para evitar la caída de su arco!`
+            ];
+
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
                 tickCount++;
 
-                let timeStr = `${Math.min(90, tickCount * 6)}:00`;
-                document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO (${timeStr})`;
-                
-                if(tickCount === 4) {
-                    userGoals++;
-                    const scorer = getRandomActiveUserPlayer();
-                    document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${scorer.nombre}`;
-                    document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
-                    document.getElementById('goal-modal').classList.remove('hidden');
+                let matchMinute = Math.min(90, tickCount * 6);
+                let timeStr = `${matchMinute.toString().padStart(2, '0')}:00`;
+                document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO &bull; MINUTO ${timeStr}`;
+
+                let activePlayer = getRandomActiveUserPlayer();
+
+                // Goal triggers on specific ticks
+                if(tickCount === 3 || tickCount === 8 || tickCount === 12) {
+                    if(Math.random() > 0.3) {
+                        userGoals++;
+                        playGoalHornSound();
+                        document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
+                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                        document.getElementById('goal-modal').classList.remove('hidden');
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DE TUS JUGADORES!!! ¡Definición magistral de ${activePlayer.nombre} (#${activePlayer.numero})!</div>`;
+                    } else {
+                        cpuGoals++;
+                        playGoalHornSound();
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeam.nombre}: #${cpuTeam.ST.numero} ${cpuTeam.ST.nombre}`;
+                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                        document.getElementById('goal-modal').classList.remove('hidden');
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeam.nombre}! Anotación de #${cpuTeam.ST.numero} ${cpuTeam.ST.nombre}.</div>`;
+                    }
+                } else {
+                    let randomEvent = narrativeEvents[Math.floor(Math.random() * narrativeEvents.length)];
+                    feed.innerHTML += `<div>${randomEvent(timeStr, activePlayer)}</div>`;
                 }
 
-                feed.innerHTML += `<div>[${timeStr}] Jugada intensa en el campo de juego.</div>`;
+                // Update scoreboard visual indicators
+                const scoreStr = `${userGoals} - ${cpuGoals}`;
+                document.getElementById('pitch-scoreboard-val').innerText = scoreStr;
+                document.getElementById('live-score-display').innerText = `TUS JUGADORES ${scoreStr} ${cpuTeam.key}`;
                 feed.scrollTop = feed.scrollHeight;
 
                 if(tickCount >= 15) {
                     clearInterval(matchIntervalRef);
                     matchInProgress = false;
+                    playWhistleSound();
+
                     document.getElementById('match-result').classList.remove('hidden');
-                    document.getElementById('result-title').innerText = "¡PARTIDO FINALIZADO!";
-                    document.getElementById('result-desc').innerText = `Resultado final: ${userGoals} - ${cpuGoals}`;
-                    userCash += 5000000;
-                    userPoints += 200;
+                    const title = document.getElementById('result-title');
+                    const desc = document.getElementById('result-desc');
+
+                    if(userGoals > cpuGoals) {
+                        userTrophies += 10; userCash += 8000000; userPoints += 300;
+                        title.innerText = `¡VICTORIA TRIUNFAL (${userGoals}-${cpuGoals})!`;
+                        desc.innerText = `¡Excelente partido! Has ganado +$8.0M de dinero y +300 Puntos.`;
+                    } else if(userGoals === cpuGoals) {
+                        userCash += 3500000; userPoints += 150;
+                        title.innerText = `EMPATE DISPUTADO (${userGoals}-${cpuGoals})`;
+                        desc.innerText = `Reparto de puntos en el Mundial. Obtienes +$3.5M y +150 Puntos.`;
+                    } else {
+                        userCash += 1500000; userPoints += 75;
+                        title.innerText = `DERROTA AJUSTADA (${userGoals}-${cpuGoals})`;
+                        desc.innerText = `Buen esfuerzo táctico. Obtienes compensación de +$1.5M y +75 Puntos.`;
+                    }
                     updateStatsDisplay();
                 }
-            }, 5000);
+            }, 6000);
         }
 
         function pauseMatch() {
             if(!matchInProgress) return;
             matchPaused = !matchPaused;
+            const btn = document.getElementById('btn-pause-match');
+            if(matchPaused) {
+                btn.innerText = "▶️ Reanudar Partido";
+                openSubsModalForPosition('ST');
+            } else {
+                btn.innerText = "⏸️ Pausa / Cambios";
+            }
         }
     </script>
 </body>
