@@ -29,11 +29,15 @@
                 #166534 90px
             );
         }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-goal { animation: bounce-slow 0.6s infinite ease-in-out; }
     </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-between p-3 selection:bg-amber-500 selection:text-black">
 
-    <!-- START SCREEN / DRAFT INITIAL -->
     <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4">
         <div class="max-w-xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6">
             <div class="flex justify-center items-center gap-3">
@@ -42,7 +46,7 @@
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Comienzas desde abajo con un equipo humilde. Escoge tu primer bloque de <strong>4 cartas básicas</strong> al azar para iniciar:</p>
+                <p class="text-sm text-slate-300">¡Bienvenido! Comienzas desde abajo con un equipo humilde de perfiles modestos. Escoge tu primer bloque de <strong>4 cartas básicas</strong> al azar para iniciar tu camino:</p>
                 <button onclick="startDraftStep1()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
                     ¡ABRIR SOBRE DE INICIO (4 CARTAS BÁSICAS)! 📦
                 </button>
@@ -68,7 +72,6 @@
         </div>
     </div>
 
-    <!-- MAIN HEADER -->
     <header class="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center py-3 border-b border-slate-800 gap-3">
         <div class="flex items-center gap-3">
             <div class="relative w-12 h-12 flex items-center justify-center bg-gradient-to-r from-amber-500 to-yellow-400 rounded-xl shadow-lg shadow-amber-500/20 overflow-hidden border border-amber-300">
@@ -150,7 +153,7 @@
                 </div>
             </div>
 
-            <!-- VERTICAL SCORE MATCH PITCH -->
+            <!-- VERTICAL SCORE MATCH PITCH WITH STRICT POSITION LOCKING -->
             <div class="w-full relative rounded-3xl border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden bg-slate-950">
                 <div class="absolute inset-x-0 top-2 z-20 flex justify-between px-6 text-[10px] text-amber-300/80 font-black uppercase tracking-widest pointer-events-none">
                     <span id="cpu-team-badge">Gradería Norte • Brasil (FIFA)</span>
@@ -202,7 +205,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <div>
                     <h2 class="text-lg font-extrabold text-amber-400">Álbum de Cartas & Mercado de Traspasos</h2>
-                    <p class="text-xs text-slate-400">Haz clic en cualquier carta para alinearla estrictamente en su posición (GK, CB...), o véndela por su valor real de mercado.</p>
+                    <p class="text-xs text-slate-400">Haz clic en cualquier carta para alinearla estrictamente en su posición oficial (GK, CB...), o véndela por su valor real de mercado.</p>
                 </div>
                 <div>
                     <select id="decade-filter" onchange="filterCards()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-amber-300 focus:outline-none">
@@ -295,6 +298,22 @@
         </div>
     </div>
 
+    <!-- GOAL CELEBRATION POPUP MODAL -->
+    <div id="goal-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="bg-gradient-to-b from-amber-600 via-slate-900 to-slate-950 border-4 border-amber-400 p-8 rounded-3xl max-w-md w-full mx-4 shadow-[0_0_60px_rgba(245,158,11,0.6)] text-center space-y-4 animate-goal">
+            <span class="text-6xl">⚽🎉</span>
+            <h2 class="text-4xl font-black bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 bg-clip-text text-transparent">¡¡¡ G O L !!!</h2>
+            <div id="goal-scorer-info" class="text-sm font-bold text-amber-200"></div>
+            <div class="bg-slate-950/80 border border-amber-500/40 p-3 rounded-xl">
+                <div class="text-xs text-slate-400 uppercase tracking-widest">Marcador Parcial</div>
+                <div class="text-2xl font-black text-emerald-400 mt-1" id="goal-modal-score">0 - 0</div>
+            </div>
+            <button onclick="closeGoalModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl hover:scale-105 transition text-sm cursor-pointer shadow-lg">
+                Continuar Partido ⚽
+            </button>
+        </div>
+    </div>
+
     <!-- CUSTOM MESSAGE MODAL -->
     <div id="custom-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xs w-full mx-4 shadow-2xl text-center space-y-3">
@@ -305,7 +324,7 @@
     </div>
 
     <footer class="w-full max-w-5xl text-center py-3 border-t border-slate-800 text-[11px] text-slate-500">
-        Ultimate FC Card Legends &bull; Posiciones Estrictas (GK, CB, ST...) &bull; Mundial 2026
+        Ultimate FC Card Legends &bull; Posiciones Estrictas en Inglés (GK, CB...) &bull; Mundial 2026
     </footer>
 
     <script>
@@ -359,6 +378,34 @@
             } catch(e) {}
         }
 
+        function playGoalHornSound() {
+            try {
+                initAudio();
+                if(!audioCtx) return;
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
+                
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(225, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioCtx.currentTime + 1.8);
+                osc2.stop(audioCtx.currentTime + 1.8);
+            } catch(e) {}
+        }
+
         function playWhistleSound() {
             try {
                 initAudio();
@@ -377,6 +424,7 @@
             } catch(e) {}
         }
 
+        // STARTER POOL WITH LESSER-KNOWN PLAYERS AND MARKET PRICES PROPORTIONAL TO REAL TRANSFER VALUES
         const starterPool = [
             { id: "st_gk", nombre: "GARCÍA", numero: 1, decade: "starter", continente: "América", pais: "🇲🇽 MX", posicion: "GK", media: 6.8, equipo: "Club Local B", rol: "GK DEFENDER", marketPrice: 250000, trait: "cap" },
             { id: "st_cb1", nombre: "SILVA", numero: 4, decade: "starter", continente: "Sudamérica", pais: "🇨🇱 CL", posicion: "CB", media: 6.9, equipo: "FC Regional", rol: "CB GUARDIAN", marketPrice: 300000, trait: "classic" },
@@ -657,6 +705,7 @@
             renderPitchSlots();
         }
 
+        // STRICT ENGLISH POSITION LOCKING ON THE PITCH
         function renderPitchSlots() {
             const board = document.getElementById('user-formation-board');
             board.innerHTML = '';
@@ -698,6 +747,7 @@
                 
                 row.slots.forEach(pos => {
                     const player = activeSquad[pos];
+                    let displayPos = pos.replace(/[0-9]/g, '');
                     const cardDiv = document.createElement('div');
                     cardDiv.className = "bg-slate-900/95 border-2 border-amber-500/70 rounded-xl p-2 flex items-center gap-2 shadow-2xl w-full max-w-[160px] cursor-pointer hover:border-amber-300 transition";
                     cardDiv.onclick = () => openSubsModalForPosition(pos);
@@ -706,7 +756,7 @@
                         cardDiv.innerHTML = `
                             <div class="w-7 h-9 bg-gradient-to-b from-amber-400 to-amber-600 rounded-lg flex flex-col items-center justify-center text-[10px] text-slate-950 font-black shrink-0 shadow">
                                 <span>${player.numero || 10}</span>
-                                <span class="text-[6px] bg-black/20 px-1 rounded text-white">${pos}</span>
+                                <span class="text-[6px] bg-black/20 px-1 rounded text-white">${displayPos}</span>
                             </div>
                             <div class="overflow-hidden">
                                 <div class="text-[7px] text-amber-400 font-black uppercase tracking-tight">${player.rol || 'PLAYER'}</div>
@@ -718,7 +768,7 @@
                         cardDiv.innerHTML = `
                             <div class="w-7 h-9 bg-slate-800 border border-dashed border-slate-600 rounded-lg flex items-center justify-center text-xs text-slate-500 shrink-0">+</div>
                             <div>
-                                <div class="text-[7px] text-amber-400 font-bold">${pos} (Estricto)</div>
+                                <div class="text-[7px] text-amber-400 font-bold">[${displayPos}] Estricto</div>
                                 <div class="font-bold text-slate-400 text-[10px]">Asignar</div>
                             </div>
                         `;
@@ -728,7 +778,7 @@
                 board.appendChild(rowDiv);
             });
 
-            // CPU BOARD
+            // CPU BOARD WITH AUTHENTIC NATIONAL TEAM LINEUPS
             const cpuSquad = cpuNationalTeams[cpuTeamKey];
             const cpuWrapper = document.getElementById('cpu-formation-board');
             cpuWrapper.innerHTML = '';
@@ -746,12 +796,13 @@
                 
                 row.slots.forEach(pos => {
                     const bot = cpuSquad[pos] || { nombre: "RIVAL", numero: 9, posicion: pos, media: 9.1, rol: "RIVAL" };
+                    let botPos = (bot.posicion || pos).replace(/[0-9]/g, '');
                     const botDiv = document.createElement('div');
                     botDiv.className = "bg-slate-900/95 border border-red-500/60 rounded-xl p-2 flex items-center gap-2 shadow-xl w-full max-w-[160px]";
                     botDiv.innerHTML = `
                         <div class="w-7 h-9 bg-red-600 rounded-lg flex flex-col items-center justify-center text-[9px] text-white font-black shrink-0">
                             <span>${bot.numero}</span>
-                            <span class="text-[6px]">${bot.posicion || pos}</span>
+                            <span class="text-[6px]">${botPos}</span>
                         </div>
                         <div class="overflow-hidden">
                             <div class="text-[7px] text-red-400 font-bold">${bot.rol}</div>
@@ -769,10 +820,11 @@
             openSubsModalForPosition('ST');
         }
 
+        // STRICT ENGLISH POSITION MATCHING FOR SUBSTITUTIONS
         function openSubsModalForPosition(slotPos) {
             pendingSubPosition = slotPos;
             let generalPos = slotPos.replace(/[0-9]/g, '');
-            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador disponible con posición estricta compatible con [${generalPos}]:`;
+            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador disponible con posición estricta en inglés [${generalPos}]:`;
             
             const grid = document.getElementById('subs-inventory-grid');
             grid.innerHTML = '';
@@ -828,6 +880,10 @@
 
         function closeModal() {
             document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function closeGoalModal() {
+            document.getElementById('goal-modal').classList.add('hidden');
         }
 
         function updateStatsDisplay() {
@@ -1090,7 +1146,7 @@
             return list[Math.floor(Math.random() * list.length)];
         }
 
-        // REAL-TIME MATCH ENGINE WITH EXACT PLAYER NAMES & JERSEY NUMBERS
+        // REAL-TIME MATCH ENGINE: 4 MINUTES TOTAL (2 MINUTES PER HALF) WITH VAR PENALTIES & GOAL POPUPS
         function startMatch() {
             if(matchInProgress) return;
             matchInProgress = true;
@@ -1117,7 +1173,7 @@
                 },
                 (m) => {
                     const cpuP = getRandomCpuPlayer();
-                    return `[${m}] ⚠️ ¡Falta táctica en el círculo central cometida por el #${cpuP.numero} ${cpuP.nombre}! El árbitro amonesta sin cartulina.`;
+                    return `[${m}] ⚠️ ¡Falta táctica en el círculo central cometida por el #${cpuP.numero} ${cpuP.nombre} (${teamName})! El árbitro amonesta sin cartulina.`;
                 },
                 (m) => {
                     const p = getRandomActiveUserPlayer();
@@ -1132,25 +1188,37 @@
                     return `[${m}] 🟨 ¡Tarjeta amarilla! Fuerte entrada del #${cpuP.numero} ${cpuP.nombre} (${teamName}) sancionada por el colegiado.`;
                 },
                 (m) => {
+                    const rivalP = getRandomCpuPlayer();
+                    return `[${m}] 📊 Alerta de Posesión: ${teamName} domina el ritmo del partido con un 62% de posesión gracias a su fuerte posicionamiento táctico.`;
+                },
+                (m) => {
                     if(Math.random() > 0.5) {
                         userGoals++;
                         const scorer = getRandomActiveUserPlayer();
+                        playGoalHornSound();
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Anotador: #${scorer.numero || 9} ${scorer.nombre}`;
+                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                        document.getElementById('goal-modal').classList.remove('hidden');
                         return `[${m}] ⚽ ¡GOOOOL DE TUS JUGADORES! ¡Remate impecable del #${scorer.numero || 9} ${scorer.nombre} para vencer al portero rival!`;
                     } else {
                         cpuGoals++;
                         const cpuScorer = getRandomCpuPlayer();
+                        playGoalHornSound();
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${teamName}: #${cpuScorer.numero} ${cpuScorer.nombre}`;
+                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                        document.getElementById('goal-modal').classList.remove('hidden');
                         return `[${m}] ⚽ ¡Gol de ${teamName}! Definición precisa del #${cpuScorer.numero} ${cpuScorer.nombre} para adelantar a la visita.`;
                     }
                 },
                 (m) => {
                     const p = getRandomActiveUserPlayer();
-                    return `[${m}] 🚨 ¡PENAL! Derriban dentro del área al #${p.numero || 10} ${p.nombre}. ¡Oportunidad dorada desde los once pasos!`;
+                    return `[${m}] 🖥️ VAR: Posible penal revisando la jugada en el monitor... ¡Se confirma la pena máxima sobre el #${p.numero || 10} ${p.nombre}!`;
                 },
                 (m) => `[${m}] ⏱️ Cierre de presión alta. Los técnicos dan instrucciones desde la zona técnica.`
             ];
 
             let tickCount = 0;
-            
+            // 16 ticks total (8 ticks per half = 2 minutes real time per half)
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
 
@@ -1165,7 +1233,7 @@
                     feed.innerHTML += `<div class="text-amber-400 font-bold">[45:00] ⏸️ ¡Final del Primer Tiempo! Comienza el descanso y arranca la parte complementaria.</div>`;
                 } else {
                     currentHalf = 2;
-                    matchMinute = 45 + Math.round(((tickCount - 9) / 8) * 45);
+                    matchMinute = 45 + Math.round(((tickCount - 9) / 7) * 45);
                     if(matchMinute > 90) matchMinute = 90;
                 }
 
@@ -1177,7 +1245,7 @@
                 feed.innerHTML += `<div>${randomEventFunc(timeStr)}</div>`;
                 feed.scrollTop = feed.scrollHeight;
 
-                if(tickCount >= 17) {
+                if(tickCount >= 16) {
                     clearInterval(matchIntervalRef);
                     matchInProgress = false;
                     playWhistleSound();
@@ -1217,7 +1285,7 @@
                     userCash += rewardCash;
                     updateStatsDisplay();
                 }
-            }, 15000);
+            }, 15000); // 15 seconds per commentary tick -> 16 ticks = 4 minutes total match time (2 minutes per half)
         }
 
         function pauseMatch() {
