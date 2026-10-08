@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Career Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Fixed Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -54,7 +54,7 @@
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido a tu carrera! Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para revelar tus <strong>4 cartas aleatorias</strong> (GK, DEF, MED, ATK). Las posiciones restantes se completarán con jugadores NPC de Media 70. <strong>Haz clic en cada carta</strong> para descubrirlas:</p>
+                <p class="text-sm text-slate-300">¡Bienvenido! Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para revelar tus <strong>4 cartas aleatorias</strong> sin duplicados (GK, DEF, MED, ATK). Las posiciones restantes se completarán con jugadores NPC de Media 70. <strong>Haz clic en cada carta</strong> para descubrirlas:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
                     ¡ABRIR SOBRE DE INICIO (4 CARTAS)! 📦
                 </button>
@@ -156,13 +156,13 @@
                             0 - 0
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black text-red-400" id="pitch-cpu-label">Brasil 🇧🇷</span>
+                            <span class="text-xs font-black text-red-400" id="pitch-cpu-label">Nueva Zelanda 🇳🇿</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="absolute inset-x-0 top-16 z-20 flex justify-between px-6 text-[10px] text-amber-300/80 font-black uppercase tracking-widest pointer-events-none">
-                    <span id="cpu-team-badge">Gradería Norte • Brasil (FIFA)</span>
+                    <span id="cpu-team-badge">Gradería Norte • Nueva Zelanda (FIFA)</span>
                     <span>Balón Oficial Mundial 2026 ⚽</span>
                 </div>
 
@@ -288,9 +288,10 @@
     <!-- SUBS MODAL -->
     <div id="subs-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center hidden">
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xl w-full mx-4 shadow-2xl space-y-3">
-            <h3 class="text-lg font-black text-amber-400">Banquillo y Cambios Tácticos</h3>
+            <h3 id="subs-modal-title" class="text-lg font-black text-amber-400">Banquillo y Cambios Tácticos</h3>
+            <p id="subs-modal-desc" class="text-xs text-slate-300">Selecciona un jugador disponible para la posición:</p>
             <div id="subs-inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto p-1"></div>
-            <button onclick="closeSubsModal()" class="w-full py-1 bg-slate-800 rounded text-xs">Cerrar</button>
+            <button onclick="closeSubsModal()" class="w-full py-1 bg-slate-800 rounded text-xs cursor-pointer">Cerrar</button>
         </div>
     </div>
 
@@ -301,8 +302,8 @@
             <div id="halftime-stats" class="bg-slate-950 p-4 rounded-xl text-xs space-y-2 font-mono text-slate-300"></div>
             <p id="halftime-timer-msg" class="text-xs text-amber-300 font-bold">Reanudando en 30 segundos...</p>
             <div class="flex gap-2">
-                <button onclick="openSubsModalForPosition('ST')" class="w-1/2 py-2.5 bg-amber-500 text-slate-950 font-black rounded-xl text-xs">🔄 Cambios</button>
-                <button onclick="resumeSecondHalf()" class="w-1/2 py-2.5 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs">▶️ Iniciar 2do Tiempo</button>
+                <button onclick="openSubsModalForPosition('ST')" class="w-1/2 py-2.5 bg-amber-500 text-slate-950 font-black rounded-xl text-xs cursor-pointer">🔄 Cambios</button>
+                <button onclick="resumeSecondHalf()" class="w-1/2 py-2.5 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs cursor-pointer">▶️ Iniciar 2do Tiempo</button>
             </div>
         </div>
     </div>
@@ -313,7 +314,7 @@
             <span class="text-6xl">⚽🎉</span>
             <h2 class="text-4xl font-black text-amber-300">¡¡¡ G O L !!!</h2>
             <div id="goal-scorer-info" class="text-sm font-bold text-amber-200"></div>
-            <button onclick="closeGoalModal()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm">Continuar</button>
+            <button onclick="closeGoalModal()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm cursor-pointer">Continuar</button>
         </div>
     </div>
 
@@ -322,7 +323,7 @@
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xs w-full mx-4 text-center space-y-3">
             <h3 id="modal-title" class="text-lg font-black text-amber-400">Aviso</h3>
             <p id="modal-message" class="text-slate-300 text-xs"></p>
-            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs">Entendido</button>
+            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs cursor-pointer">Entendido</button>
         </div>
     </div>
 
@@ -353,36 +354,62 @@
             { id: "img4", nombre: "L. Messi", numero: 10, posicion: "CAM", media: 9.8, equipo: "Inter Miami", img: "img/img4.png" }
         ];
 
-        // 48 SELECCIONES OFICIALES ORDENADAS HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
+        // 48 SELECCIONES CON PLANTILLAS REALES COMPLETAS Y ORDENADAS HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
         const rawWorldTeams = [
-            { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿" }, { id: "QAT", name: "Catar", flag: "🇶🇦" }, { id: "IRN", name: "Irán", flag: "🇮🇷" }, { id: "TUN", name: "Túnez", flag: "🇹🇳" }, { id: "ALG", name: "Argelia", flag: "🇩🇿" },
-            { id: "EGY", name: "Egipto", flag: "🇪🇬" }, { id: "CIV", name: "Costa de Marfil", flag: "🇨🇮" }, { id: "GHA", name: "Ghana", flag: "🇬🇭" }, { id: "NGA", name: "Nigeria", flag: "🇳🇬" }, { id: "CMR", name: "Camerún", flag: "🇨🇲" },
-            { id: "CAN", name: "Canadá", flag: "🇨🇦" }, { id: "PAN", name: "Panamá", flag: "🇵🇦" }, { id: "VEN", name: "Venezuela", flag: "🇻🇪" }, { id: "ECU", name: "Ecuador", flag: "🇪🇨" }, { id: "PER", name: "Perú", flag: "🇵🇪" },
-            { id: "CHI", name: "Chile", flag: "🇨🇱" }, { id: "SWE", name: "Suecia", flag: "🇸🇪" }, { id: "CZE", name: "República Checa", flag: "🇨🇿" }, { id: "GRE", name: "Grecia", flag: "🇬🇷" }, { id: "TUR", name: "Turquía", flag: "🇹🇷" },
-            { id: "SRB", name: "Serbia", flag: "🇷🇸" }, { id: "AUT", name: "Austria", flag: "🇦🇹" }, { id: "UKR", name: "Ucrania", flag: "🇺🇦" }, { id: "POL", name: "Polonia", flag: "🇵🇱" }, { id: "DEN", name: "Dinamarca", flag: "🇩🇰" },
-            { id: "SUI", name: "Suiza", flag: "🇨🇭" }, { id: "SEN", name: "Senegal", flag: "🇸🇳" }, { id: "MAR", name: "Marruecos", flag: "🇲🇦" }, { id: "KSA", name: "Arabia Saudita", flag: "🇸🇦" }, { id: "AUS", name: "Australia", flag: "🇦🇺" },
-            { id: "KOR", name: "Corea del Sur", flag: "🇰🇷" }, { id: "JPN", name: "Japón", flag: "🇯🇵" }, { id: "USA", name: "Estados Unidos", flag: "🇺🇸" }, { id: "CRC", name: "Costa Rica", flag: "🇨🇷" }, { id: "MEX", name: "México", flag: "🇲🇽" },
-            { id: "COL", name: "Colombia", flag: "🇨🇴" }, { id: "URU", name: "Uruguay", flag: "🇺🇾" }, { id: "CRO", name: "Croacia", flag: "🇭🇷" }, { id: "BEL", name: "Bélgica", flag: "🇧🇪" }, { id: "ITA", name: "Italia", flag: "🇮🇹" },
-            { id: "NED", name: "Países Bajos", flag: "🇳🇱" }, { id: "POR", name: "Portugal", flag: "🇵🇹" }, { id: "GER", name: "Alemania", flag: "🇩🇪" }, { id: "ENG", name: "Inglaterra", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, { id: "ARG", name: "Argentina", flag: "🇦🇷" },
-            { id: "BRA", name: "Brasil", flag: "🇧🇷" }, { id: "FRA", name: "Francia", flag: "🇫🇷" }, { id: "ESP", name: "España", flag: "🇪🇸" }
+            { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿", players: [{nombre:"Max Crocombe",posicion:"GK",numero:1,media:7.6},{nombre:"Tim Payne",posicion:"CB",numero:2,media:7.5},{nombre:"Michael Boxall",posicion:"CB",numero:5,media:7.6},{nombre:"Liberato Cacace",posicion:"LB",numero:13,media:7.9},{nombre:"Joe Bell",posicion:"CM",numero:8,media:7.7},{nombre:"Marko Stamenic",posicion:"CM",numero:6,media:7.9},{nombre:"Matthew Garbett",posicion:"CAM",numero:10,media:7.7},{nombre:"Elijah Just",posicion:"LW",numero:7,media:7.6},{nombre:"Chris Wood",posicion:"ST",numero:9,media:8.2},{nombre:"Sarpreet Singh",posicion:"RW",numero:11,media:7.8},{nombre:"Nando Pijnaker",posicion:"CB",numero:4,media:7.6}]},
+            { id: "QAT", name: "Catar", flag: "🇶🇦", players: [{nombre:"Meshaal Barsham",posicion:"GK",numero:22,media:7.8},{nombre:"Pedro Miguel",posicion:"RB",numero:2,media:7.7},{nombre:"Boualem Khoukhi",posicion:"CB",numero:16,media:7.8},{nombre:"Lucas Mendes",posicion:"CB",numero:12,media:7.7},{nombre:"Homam Ahmed",posicion:"LB",numero:14,media:7.6},{nombre:"Ahmed Fathy",posicion:"CM",numero:23,media:7.6},{nombre:"Hassan Al-Haydos",posicion:"CAM",numero:10,media:7.9},{nombre:"Abdulaziz Hatem",posicion:"CM",numero:6,media:7.6},{nombre:"Akram Afif",posicion:"LW",numero:11,media:8.3},{nombre:"Almoez Ali",posicion:"ST",numero:19,media:8.1},{nombre:"Yusuf Abdurisag",posicion:"RW",numero:17,media:7.6}]},
+            { id: "IRN", name: "Irán", flag: "🇮🇷", players: [{nombre:"Alireza Beiranvand",posicion:"GK",numero:1,media:7.9},{nombre:"Ramin Rezaeian",posicion:"RB",numero:23,media:7.7},{nombre:"Hossein Kanaanizadegan",posicion:"CB",numero:13,media:7.7},{nombre:"Shoja Khalilzadeh",posicion:"CB",numero:4,media:7.6},{nombre:"Ehsan Hajsafi",posicion:"LB",numero:3,media:7.7},{nombre:"Saeid Ezatolahi",posicion:"CM",numero:6,media:7.9},{nombre:"Saman Ghoddos",posicion:"CAM",numero:14,media:8.0},{nombre:"Ali Gholizadeh",posicion:"RW",numero:17,media:7.7},{nombre:"Alireza Jahanbakhsh",posicion:"RW",numero:7,media:7.9},{nombre:"Mehdi Taremi",posicion:"ST",numero:9,media:8.4},{nombre:"Sardar Azmoun",posicion:"ST",numero:20,media:8.3}]},
+            { id: "TUN", name: "Túnez", flag: "🇹🇳", players: [{nombre:"Aymen Dahmen",posicion:"GK",numero:16,media:7.7},{nombre:"Yan Valery",posicion:"RB",numero:2,media:7.6},{nombre:"Montassar Talbi",posicion:"CB",numero:3,media:7.9},{nombre:"Yassine Meriah",posicion:"CB",numero:4,media:7.7},{nombre:"Ali Abdi",posicion:"LB",numero:12,media:7.7},{nombre:"Ellyes Skhiri",posicion:"CM",numero:17,media:8.2},{nombre:"Aïssa Laidouni",posicion:"CM",numero:14,media:7.9},{nombre:"Mohamed Ali Ben Romdhane",posicion:"CAM",numero:25,media:7.7},{nombre:"Elias Achouri",posicion:"LW",numero:7,media:7.8},{nombre:"Youssef Msakni",posicion:"ST",numero:10,media:7.9},{nombre:"Issam Jebali",posicion:"ST",numero:11,media:7.6}]},
+            { id: "ALG", name: "Argelia", flag: "🇩🇿", players: [{nombre:"Anthony Mandréa",posicion:"GK",numero:23,media:7.8},{nombre:"Youcef Atal",posicion:"RB",numero:20,media:7.9},{nombre:"Aïssa Mandi",posicion:"CB",numero:2,media:7.8},{nombre:"Ramy Bensebaïni",posicion:"CB",numero:21,media:8.0},{nombre:"Rayane Aït-Nouri",posicion:"LB",numero:15,media:8.1},{nombre:"Nabil Bentaleb",posicion:"CM",numero:14,media:7.9},{nombre:"Ismaël Bennacer",posicion:"CM",numero:6,media:8.3},{nombre:"Houssem Aouar",posicion:"CAM",numero:8,media:8.0},{nombre:"Riyad Mahrez",posicion:"RW",numero:7,media:8.4},{nombre:"Amine Gouiri",posicion:"ST",numero:11,media:8.1},{nombre:"Baghdad Bounedjah",posicion:"ST",numero:9,media:7.8}]},
+            { id: "EGY", name: "Egipto", flag: "🇪🇬", players: [{nombre:"Mohamed El Shenawy",posicion:"GK",numero:1,media:8.0},{nombre:"Mohamed Hany",posicion:"RB",numero:3,media:7.7},{nombre:"Ramy Rabia",posicion:"CB",numero:6,media:7.7},{nombre:"Mohamed Abdelmonem",posicion:"CB",numero:2,media:8.0},{nombre:"Ahmed Fatouh",posicion:"LB",numero:13,media:7.7},{nombre:"Marwan Attia",posicion:"CM",numero:17,media:7.8},{nombre:"Hamdy Fathy",posicion:"CM",numero:5,media:7.8},{nombre:"Trezeguet",posicion:"CAM",numero:7,media:8.0},{nombre:"Mohamed Salah",posicion:"RW",numero:10,media:8.9},{nombre:"Mostafa Mohamed",posicion:"ST",numero:19,media:8.0},{nombre:"Emam Ashour",posicion:"LW",numero:8,media:7.9}]},
+            { id: "CIV", name: "Costa de Marfil", flag: "🇨🇮", players: [{nombre:"Yahia Fofana",posicion:"GK",numero:1,media:7.8},{nombre:"Wilfried Singo",posicion:"RB",numero:17,media:8.0},{nombre:"Odilon Kossounou",posicion:"CB",numero:7,media:8.1},{nombre:"Evan Ndicka",posicion:"CB",numero:21,media:8.1},{nombre:"Ghislain Konan",posicion:"LB",numero:3,media:7.7},{nombre:"Seko Fofana",posicion:"CM",numero:8,media:8.2},{nombre:"Franck Kessié",posicion:"CM",numero:6,media:8.4},{nombre:"Ibrahim Sangaré",posicion:"CAM",numero:18,media:8.0},{nombre:"Simon Adingra",posicion:"LW",numero:11,media:8.1},{nombre:"Sébastien Haller",posicion:"ST",numero:22,media:8.2},{nombre:"Nicolas Pépé",posicion:"RW",numero:19,media:7.9}]},
+            { id: "GHA", name: "Ghana", flag: "🇬🇭", players: [{nombre:"Lawrence Ati-Zigi",posicion:"GK",numero:1,media:7.7},{nombre:"Tariq Lamptey",posicion:"RB",numero:2,media:7.8},{nombre:"Alexander Djiku",posicion:"CB",numero:23,media:7.8},{nombre:"Mohammed Salisu",posicion:"CB",numero:6,media:8.0},{nombre:"Gideon Mensah",posicion:"LB",numero:14,media:7.6},{nombre:"Thomas Partey",posicion:"CM",numero:5,media:8.3},{nombre:"Mohammed Kudus",posicion:"CAM",numero:20,media:8.4},{nombre:"Salis Abdul Samed",posicion:"CM",numero:21,media:7.7},{nombre:"Jordan Ayew",posicion:"LW",numero:9,media:7.8},{nombre:"Inaki Williams",posicion:"ST",numero:19,media:8.1},{nombre:"Ernest Nuamah",posicion:"RW",numero:17,media:7.8}]},
+            { id: "NGA", name: "Nigeria", flag: "🇳🇬", players: [{nombre:"Stanley Nwabali",posicion:"GK",numero:23,media:7.8},{nombre:"Ola Aina",posicion:"RB",numero:2,media:8.0},{nombre:"William Troost-Ekong",posicion:"CB",numero:5,media:8.0},{nombre:"Calvin Bassey",posicion:"CB",numero:21,media:8.1},{nombre:"Zaidu Sanusi",posicion:"LB",numero:3,media:7.8},{nombre:"Wilfred Ndidi",posicion:"CM",numero:4,media:8.2},{nombre:"Alex Iwobi",posicion:"CAM",numero:17,media:8.1},{nombre:"Frank Onyeka",posicion:"CM",numero:8,media:7.9},{nombre:"Ademola Lookman",posicion:"LW",numero:15,media:8.4},{nombre:"Victor Osimhen",posicion:"ST",numero:9,media:8.7},{nombre:"Samuel Chukwueze",posicion:"RW",numero:11,media:8.0}]},
+            { id: "CMR", name: "Camerún", flag: "🇨🇲", players: [{nombre:"André Onana",posicion:"GK",numero:1,media:8.3},{nombre:"Jackson Tchatchoua",posicion:"RB",numero:19,media:7.7},{nombre:"Christopher Wooh",posicion:"CB",numero:4,media:7.8},{nombre:"Michael Ngadeu-Ngadjui",posicion:"CB",numero:5,media:7.8},{nombre:"Nouhou Tolo",posicion:"LB",numero:24,media:7.7},{nombre:"Carlos Baleba",posicion:"CM",numero:6,media:8.0},{nombre:"André-Frank Zambo Anguissa",posicion:"CM",numero:8,media:8.3},{nombre:"Martin Hongla",posicion:"CAM",numero:18,media:7.7},{nombre:"Bryan Mbeumo",posicion:"RW",numero:20,media:8.2},{nombre:"Vincent Aboubakar",posicion:"ST",numero:10,media:8.0},{nombre:"Karl Toko Ekambi",posicion:"LW",numero:12,media:7.9}]},
+            { id: "CAN", name: "Canadá", flag: "🇨🇦", players: [{nombre:"Maxime Crépeau",posicion:"GK",numero:16,media:7.8},{nombre:"Alistair Johnston",posicion:"RB",numero:2,media:8.0},{nombre:"Moïse Bombito",posicion:"CB",numero:15,media:7.8},{nombre:"Derek Cornelius",posicion:"CB",numero:4,media:7.7},{nombre:"Alphonso Davies",posicion:"LB",numero:19,media:8.7},{nombre:"Stephen Eustaquio",posicion:"CM",numero:7,media:8.1},{nombre:"Ismaël Koné",posicion:"CM",numero:8,media:8.0},{nombre:"Tajon Buchanan",posicion:"CAM",numero:17,media:8.1},{nombre:"Jacob Shaffelburg",posicion:"LW",numero:14,media:7.8},{nombre:"Jonathan David",posicion:"ST",numero:10,media:8.4},{nombre:"Cyle Larin",posicion:"ST",numero:9,media:8.0}]},
+            { id: "PAN", name: "Panamá", flag: "🇵🇦", players: [{nombre:"Orlando Mosquera",posicion:"GK",numero:22,media:7.7},{nombre:"Michael Amir Murillo",posicion:"RB",numero:23,media:8.0},{nombre:"Fidel Escobar",posicion:"CB",numero:16,media:7.7},{nombre:"José Córdoba",posicion:"CB",numero:3,media:7.8},{nombre:"Eric Davis",posicion:"LB",numero:15,media:7.6},{nombre:"Anibal Godoy",posicion:"CM",numero:6,media:7.8},{nombre:"Adalberto Carrasquilla",posicion:"CM",numero:8,media:8.1},{nombre:"Cristian Martínez",posicion:"CAM",numero:11,media:7.6},{nombre:"José Luis Rodríguez",posicion:"RW",numero:7,media:7.7},{nombre:"José Fajardo",posicion:"ST",numero:17,media:7.6},{nombre:"César Blackman",posicion:"LW",numero:2,media:7.6}]},
+            { id: "VEN", name: "Venezuela", flag: "🇻🇪", players: [{nombre:"Rafael Romo",posicion:"GK",numero:22,media:7.9},{nombre:"Jon Aramburu",posicion:"RB",numero:4,media:7.8},{nombre:"Yordan Osorio",posicion:"CB",numero:3,media:7.8},{nombre:"Nahuel Ferraresi",posicion:"CB",numero:2,media:7.7},{nombre:"Miguel Navarro",posicion:"LB",numero:15,media:7.7},{nombre:"José Andrés Martínez",posicion:"CM",numero:13,media:7.8},{nombre:"Yangel Herrera",posicion:"CM",numero:6,media:8.1},{nombre:"Cristian Casseres Jr.",posicion:"CAM",numero:11,media:7.7},{nombre:"Jefferson Savarino",posicion:"RW",numero:7,media:7.9},{nombre:"Salomón Rondón",posicion:"ST",numero:23,media:8.2},{nombre:"Yeferson Soteldo",posicion:"LW",numero:10,media:8.0}]},
+            { id: "ECU", name: "Ecuador", flag: "🇪🇨", players: [{nombre:"Hernán Galindez",posicion:"GK",numero:22,media:7.8},{nombre:"Angelo Preciado",posicion:"RB",numero:17,media:7.9},{nombre:"Félix Torres",posicion:"CB",numero:2,media:7.9},{nombre:"Willian Pacho",posicion:"CB",numero:6,media:8.2},{nombre:"Pervis Estupiñán",posicion:"LB",numero:7,media:8.3},{nombre:"Moisés Caicedo",posicion:"CM",numero:23,media:8.5},{nombre:"Alan Franco",posicion:"CM",numero:21,media:7.8},{nombre:"Kendry Páez",posicion:"CAM",numero:16,media:8.1},{nombre:"John Yeboah",posicion:"RW",numero:19,media:7.8},{nombre:"Enner Valencia",posicion:"ST",numero:13,media:8.1},{nombre:"Jeremy Sarmiento",posicion:"LW",numero:10,media:7.9}]},
+            { id: "PER", name: "Perú", flag: "🇵🇪", players: [{nombre:"Pedro Gallese",posicion:"GK",numero:1,media:8.0},{nombre:"Luis Advíncula",posicion:"RB",numero:17,media:7.9},{nombre:"Carlos Zambrano",posicion:"CB",numero:5,media:7.8},{nombre:"Alexander Callens",posicion:"CB",numero:22,media:7.7},{nombre:"Marcos López",posicion:"LB",numero:6,media:7.6},{nombre:"Renato Tapia",posicion:"CM",numero:13,media:8.0},{nombre:"Wilder Cartagena",posicion:"CM",numero:16,media:7.6},{nombre:"Sergio Peña",posicion:"CAM",numero:8,media:7.7},{nombre:"André Carrillo",posicion:"RW",numero:18,media:7.8},{nombre:"Gianluca Lapadula",posicion:"ST",numero:9,media:8.0},{nombre:"Bryan Reyna",posicion:"LW",numero:14,media:7.6}]},
+            { id: "CHI", name: "Chile", flag: "🇨🇱", players: [{nombre:"Claudio Bravo",posicion:"GK",numero:1,media:7.9},{nombre:"Mauricio Isla",posicion:"RB",numero:4,media:7.7},{nombre:"Guillermo Maripán",posicion:"CB",numero:3,media:7.9},{nombre:"Paulo Diaz",posicion:"CB",numero:5,media:7.8},{nombre:"Gabriel Suazo",posicion:"LB",numero:2,media:7.9},{nombre:"Erick Pulgar",posicion:"CM",numero:13,media:7.8},{nombre:"Marcelino Núñez",posicion:"CM",numero:18,media:7.7},{nombre:"Diego Valdés",posicion:"CAM",numero:10,media:7.9},{nombre:"Alexis Sánchez",posicion:"ST",numero:7,media:8.2},{nombre:"Eduardo Vargas",posicion:"ST",numero:11,media:7.8},{nombre:"Ben Brereton Díaz",posicion:"LW",numero:22,media:7.9}]},
+            { id: "SWE", name: "Suecia", flag: "🇸🇪", players: [{nombre:"Robin Olsen",posicion:"GK",numero:1,media:7.8},{nombre:"Emil Krafth",posicion:"RB",numero:2,media:7.6},{nombre:"Victor Lindelöf",posicion:"CB",numero:3,media:8.1},{nombre:"Isak Hien",posicion:"CB",numero:14,media:7.8},{nombre:"Ludwig Augustinsson",posicion:"LB",numero:6,media:7.8},{nombre:"Jens Cajuste",posicion:"CM",numero:17,media:7.7},{nombre:"Mattias Svanberg",posicion:"CM",numero:20,media:7.8},{nombre:"Dejan Kulusevski",posicion:"CAM",numero:21,media:8.3},{nombre:"Anthony Elanga",posicion:"LW",numero:11,media:7.9},{nombre:"Viktor Gyökeres",posicion:"ST",numero:17,media:8.5},{nombre:"Alexander Isak",posicion:"ST",numero:11,media:8.5}]},
+            { id: "CZE", name: "República Checa", flag: "🇨🇿", players: [{nombre:"Jindřich Staněk",posicion:"GK",numero:1,media:7.8},{nombre:"Tomáš Holeš",posicion:"RB",numero:2,media:7.9},{nombre:"Robin Hranáč",posicion:"CB",numero:4,media:7.7},{nombre:"Ladislav Krejčí",posicion:"CB",numero:18,media:7.9},{nombre:"Vladimír Coufal",posicion:"LB",numero:5,media:8.0},{nombre:"Tomáš Souček",posicion:"CM",numero:22,media:8.3},{nombre:"Lukáš Provod",posicion:"CM",numero:14,media:7.8},{nombre:"Antonín Barák",posicion:"CAM",numero:7,media:7.9},{nombre:"Václav Hroný",posicion:"RW",numero:8,media:7.8},{nombre:"Patrik Schick",posicion:"ST",numero:10,media:8.3},{nombre:"Jan Kuchta",posicion:"LW",numero:11,media:7.7}]},
+            { id: "GRE", name: "Grecia", flag: "🇬🇷", players: [{nombre:"Odisseas Vlachodimos",posicion:"GK",numero:1,media:8.0},{nombre:"George Baldock",posicion:"RB",numero:2,media:7.7},{nombre:"Dinos Mavropanos",posicion:"CB",numero:4,media:7.9},{nombre:"Pantelis Hatzidiakos",posicion:"CB",numero:15,media:7.6},{nombre:"Kostas Tsimikas",posicion:"LB",numero:21,media:8.1},{nombre:"Manolis Siopis",posicion:"CM",numero:23,media:7.7},{nombre:"Dimitris Kourbelis",posicion:"CM",numero:6,media:7.6},{nombre:"Tasos Bakasetas",posicion:"CAM",numero:10,media:8.0},{nombre:"Giorgos Masouras",posicion:"RW",numero:7,media:7.8},{nombre:"Vangelis Pavlidis",posicion:"ST",numero:9,media:8.0},{nombre:"Christos Tzolis",posicion:"LW",numero:17,media:7.7}]},
+            { id: "TUR", name: "Turquía", flag: "🇹🇷", players: [{nombre:"Mert Günok",posicion:"GK",numero:1,media:7.8},{nombre:"Mert Müldür",posicion:"RB",numero:18,media:7.7},{nombre:"Merih Demiral",posicion:"CB",numero:4,media:7.9},{nombre:"Abdulkerim Bardakci",posicion:"CB",numero:14,media:7.8},{nombre:"Ferdi Kadıoğlu",posicion:"LB",numero:20,media:8.1},{nombre:"Hakan Çalhanoğlu",posicion:"CM",numero:10,media:8.5},{nombre:"Ismail Yüksek",posicion:"CM",numero:15,media:7.8},{nombre:"Arda Güler",posicion:"CAM",numero:8,media:8.4},{nombre:"Kenan Yıldız",posicion:"LW",numero:19,media:8.0},{nombre:"Barış Alper Yilmaz",posicion:"ST",numero:21,media:7.9},{nombre:"Kerem Aktürkoğlu",posicion:"RW",numero:7,media:7.9}]},
+            { id: "SRB", name: "Serbia", flag: "🇷🇸", players: [{nombre:"Vanja Milinković-Savić",posicion:"GK",numero:23,media:7.8},{nombre:"Nikola Milenković",posicion:"RB",numero:4,media:8.0},{nombre:"Miloš Veljković",posicion:"CB",numero:13,media:7.7},{nombre:"Strahinja Pavlović",posicion:"CB",numero:2,media:8.0},{nombre:"Filip Kostić",posicion:"LB",numero:11,media:8.0},{nombre:"Saša Lukić",posicion:"CM",numero:16,media:7.8},{nombre:"Ivan Ilić",posicion:"CM",numero:17,media:7.8},{nombre:"Sergej Milinković-Savić",posicion:"CAM",numero:20,media:8.3},{nombre:"Andrija Živković",posicion:"RW",numero:14,media:7.9},{nombre:"Aleksandar Mitrović",posicion:"ST",numero:9,media:8.3},{nombre:"Dušan Tadić",posicion:"LW",numero:10,media:8.2}]},
+            { id: "AUT", name: "Austria", flag: "🇦🇹", players: [{nombre:"Patrick Pentz",posicion:"GK",numero:13,media:7.8},{nombre:"Stefan Posch",posicion:"RB",numero:5,media:7.9},{nombre:"Kevin Danso",posicion:"CB",numero:4,media:8.0},{nombre:"Philipp Lienhart",posicion:"CB",numero:15,media:7.8},{nombre:"Phillipp Mwene",posicion:"LB",numero:16,media:7.7},{nombre:"Nicolas Seiwald",posicion:"CM",numero:6,media:8.0},{nombre:"Konrad Laimer",posicion:"CM",numero:20,media:8.2},{nombre:"Marcel Sabitzer",posicion:"CAM",numero:9,media:8.4},{nombre:"Christoph Baumgartner",posicion:"LW",numero:19,media:8.1},{nombre:"Marko Arnautović",posicion:"ST",numero:7,media:8.0},{nombre:"Patrick Wimmer",posicion:"RW",numero:21,media:7.8}]},
+            { id: "UKR", name: "Ucrania", flag: "🇺🇦", players: [{nombre:"Anatoliy Trubin",posicion:"GK",numero:12,media:8.0},{nombre:"Yukhym Konoplya",posicion:"RB",numero:2,media:7.7},{nombre:"Illia Zabarnyi",posicion:"CB",numero:13,media:8.1},{nombre:"Mykola Matviyenko",posicion:"CB",numero:22,media:7.9},{nombre:"Vitaliy Mykolenko",posicion:"LB",numero:16,media:8.0},{nombre:"Taras Stepanenko",posicion:"CM",numero:6,media:7.8},{nombre:"Oleksandr Zinchenko",posicion:"CM",numero:17,media:8.2},{nombre:"Georgiy Sudakov",posicion:"CAM",numero:14,media:8.0},{nombre:"Viktor Tsyhankov",posicion:"RW",numero:15,media:8.1},{nombre:"Artem Dovbyk",posicion:"ST",numero:11,media:8.3},{nombre:"Mykhailo Mudryk",posicion:"LW",numero:10,media:8.2}]},
+            { id: "POL", name: "Polonia", flag: "🇵🇱", players: [{nombre:"Wojciech Szczęsny",posicion:"GK",numero:1,media:8.3},{nombre:"Matty Cash",posicion:"RB",numero:2,media:7.9},{nombre:"Jan Bednarek",posicion:"CB",numero:5,media:7.8},{nombre:"Jakub Kiwior",posicion:"CB",numero:14,media:8.0},{nombre:"Nicola Zalewski",posicion:"LB",numero:21,media:7.9},{nombre:"Piotr Zieliński",posicion:"CM",numero:10,media:8.4},{nombre:"Sebastian Szymański",posicion:"CM",numero:20,media:7.9},{nombre:"Kacper Urbański",posicion:"CAM",numero:8,media:7.6},{nombre:"Przemyslaw Frankowski",posicion:"RW",numero:19,media:7.8},{nombre:"Robert Lewandowski",posicion:"ST",numero:9,media:8.8},{nombre:"Karol Świderski",posicion:"LW",numero:16,media:7.7}]},
+            { id: "DEN", name: "Dinamarca", flag: "🇩🇰", players: [{nombre:"Kasper Schmeichel",posicion:"GK",numero:1,media:8.1},{nombre:"Joakim Mæhle",posicion:"RB",numero:5,media:8.0},{nombre:"Andreas Christensen",posicion:"CB",numero:4,media:8.3},{nombre:"Jannik Vestergaard",posicion:"CB",numero:3,media:7.8},{nombre:"Victor Kristiansen",posicion:"LB",numero:17,media:7.7},{nombre:"Pierre-Emile Højbjerg",posicion:"CM",numero:23,media:8.3},{nombre:"Morten Hjulmand",posicion:"CM",numero:21,media:8.0},{nombre:"Christian Eriksen",posicion:"CAM",numero:10,media:8.2},{nombre:"Andreas Skov Olsen",posicion:"RW",numero:11,media:7.9},{nombre:"Rasmus Højlund",posicion:"ST",numero:9,media:8.2},{nombre:"Mikkel Damsgaard",posicion:"LW",numero:14,media:7.8}]},
+            { id: "SUI", name: "Suiza", flag: "🇨🇭", players: [{nombre:"Yann Sommer",posicion:"GK",numero:1,media:8.3},{nombre:"Silvan Widmer",posicion:"RB",numero:3,media:7.8},{nombre:"Manuel Akanji",posicion:"CB",numero:5,media:8.4},{nombre:"Nico Elvedi",posicion:"CB",numero:4,media:7.9},{nombre:"Ricardo Rodríguez",posicion:"LB",numero:13,media:8.0},{nombre:"Granit Xhaka",posicion:"CM",numero:10,media:8.6},{nombre:"Remo Freuler",posicion:"CM",numero:8,media:8.1},{nombre:"Denis Zakaria",posicion:"CAM",numero:6,media:8.0},{nombre:"Dan Ndoye",posicion:"RW",numero:19,media:8.0},{nombre:"Breel Embolo",posicion:"ST",numero:7,media:8.1},{nombre:"Ruben Vargas",posicion:"LW",numero:17,media:7.9}]},
+            { id: "SEN", name: "Senegal", flag: "🇸🇳", players: [{nombre:"Édouard Mendy",posicion:"GK",numero:16,media:8.2},{nombre:"Krepin Diatta",posicion:"RB",numero:15,media:7.8},{nombre:"Kalidou Koulibaly",posicion:"CB",numero:3,media:8.3},{nombre:"Abdou Diallo",posicion:"CB",numero:22,media:7.9},{nombre:"Ismail Jakobs",posicion:"LB",numero:14,media:7.7},{nombre:"Idrissa Gueye",posicion:"CM",numero:5,media:8.0},{nombre:"Pape Matar Sarr",posicion:"CM",numero:17,media:8.1},{nombre:"Lamine Camara",posicion:"CAM",numero:25,media:7.9},{nombre:"Iliman Ndiaye",posicion:"RW",numero:13,media:7.9},{nombre:"Nicolas Jackson",posicion:"ST",numero:7,media:8.1},{nombre:"Sadio Mané",posicion:"LW",numero:10,media:8.6}]},
+            { id: "MAR", name: "Marruecos", flag: "🇲🇦", players: [{nombre:"Yassine Bounou",posicion:"GK",numero:1,media:8.5},{nombre:"Achraf Hakimi",posicion:"RB",numero:2,media:8.7},{nombre:"Nayef Aguerd",posicion:"CB",numero:5,media:8.2},{nombre:"Romain Saïss",posicion:"CB",numero:6,media:7.9},{nombre:"Noussair Mazraoui",posicion:"LB",numero:3,media:8.1},{nombre:"Sofyan Amrabat",posicion:"CM",numero:4,media:8.4},{nombre:"Azzedine Ounahi",posicion:"CM",numero:8,media:8.1},{nombre:"Brahim Díaz",posicion:"CAM",numero:10,media:8.5},{nombre:"Hakim Ziyech",posicion:"RW",numero:7,media:8.2},{nombre:"Youssef En-Nesyri",posicion:"ST",numero:19,media:8.1},{nombre:"Abde Ezzalzouli",posicion:"LW",numero:16,media:7.9}]},
+            { id: "KSA", name: "Arabia Saudita", flag: "🇸🇦", players: [{nombre:"Mohammed Al-Owais",posicion:"GK",numero:21,media:7.8},{nombre:"Saud Abdulhamid",posicion:"RB",numero:12,media:7.9},{nombre:"Ali Lajami",posicion:"CB",numero:4,media:7.6},{nombre:"Ali Al-Bulaihi",posicion:"CB",numero:5,media:7.6},{nombre:"Nasser Al-Dawsari",posicion:"LB",numero:16,media:7.5},{nombre:"Mohamed Kanno",posicion:"CM",numero:23,media:7.8},{nombre:"Abdulellah Al-Malki",posicion:"CM",numero:8,media:7.5},{nombre:"Salem Al-Dawsari",posicion:"CAM",numero:10,media:8.2},{nombre:"Ayman Yahya",posicion:"RW",numero:18,media:7.6},{nombre:"Feras Al-Buraikan",posicion:"ST",numero:9,media:7.7},{nombre:"Abdullah Radif",posicion:"LW",numero:20,media:7.5}]},
+            { id: "AUS", name: "Australia", flag: "🇦🇺", players: [{nombre:"Mathew Ryan",posicion:"GK",numero:1,media:7.9},{nombre:"Gethin Jones",posicion:"RB",numero:4,media:7.5},{nombre:"Harry Souttar",posicion:"CB",numero:19,media:8.0},{nombre:"Kye Rowles",posicion:"CB",numero:4,media:7.6},{nombre:"Aziz Behich",posicion:"LB",numero:16,media:7.6},{nombre:"Jackson Irvine",posicion:"CM",numero:22,media:7.9},{nombre:"Connor Metcalfe",posicion:"CM",numero:14,media:7.6},{nombre:"Keanu Baccus",posicion:"CAM",numero:8,media:7.6},{nombre:"Martin Boyle",posicion:"RW",numero:6,media:7.7},{nombre:"Kusini Yengi",posicion:"ST",numero:15,media:7.5},{nombre:"Craig Goodwin",posicion:"LW",numero:23,media:7.8}]},
+            { id: "KOR", name: "Corea del Sur", flag: "🇰🇷", players: [{nombre:"Jo Hyeon-woo",posicion:"GK",numero:21,media:7.8},{nombre:"Seol Young-woo",posicion:"RB",numero:22,media:7.7},{nombre:"Kim Min-jae",posicion:"CB",numero:4,media:8.5},{nombre:"Kim Young-gwon",posicion:"CB",numero:19,media:7.7},{nombre:"Lee Ki-je",posicion:"LB",numero:2,media:7.5},{nombre:"Hwang In-beom",posicion:"CM",numero:6,media:8.0},{nombre:"Park Yong-woo",posicion:"CM",numero:5,media:7.6},{nombre:"Lee Kang-in",posicion:"CAM",numero:18,media:8.4},{nombre:"Hwang Hee-chan",posicion:"RW",numero:11,media:8.1},{nombre:"Son Heung-min",posicion:"ST",numero:7,media:8.7},{nombre:"Cho Gue-sung",posicion:"LW",numero:9,media:7.8}]},
+            { id: "JPN", name: "Japón", flag: "🇯🇵", players: [{nombre:"Zion Suzuki",posicion:"GK",numero:1,media:7.9},{nombre:"Yukinari Sugawara",posicion:"RB",numero:2,media:8.0},{nombre:"Ko Itakura",posicion:"CB",numero:4,media:8.1},{nombre:"Takehiro Tomiyasu",posicion:"CB",numero:16,media:8.3},{nombre:"Hiroki Ito",posicion:"LB",numero:21,media:7.8},{nombre:"Wataru Endo",posicion:"CM",numero:6,media:8.3},{nombre:"Hidemasa Morita",posicion:"CM",numero:5,media:8.1},{nombre:"Takefusa Kubo",posicion:"CAM",numero:20,media:8.4},{nombre:"Ritsu Doan",posicion:"RW",numero:10,media:8.1},{nombre:"Ayase Ueda",posicion:"ST",numero:9,media:8.0},{nombre:"Kaoru Mitoma",posicion:"LW",numero:7,media:8.5}]},
+            { id: "USA", name: "Estados Unidos", flag: "🇺🇸", players: [{nombre:"Matt Turner",posicion:"GK",numero:1,media:7.8},{nombre:"Sergiño Dest",posicion:"RB",numero:2,media:8.0},{nombre:"Chris Richards",posicion:"CB",numero:4,media:7.9},{nombre:"Tim Ream",posicion:"CB",numero:13,media:7.7},{nombre:"Antonee Robinson",posicion:"LB",numero:5,media:8.2},{nombre:"Tyler Adams",posicion:"CM",numero:4,media:8.1},{nombre:"Weston McKennie",posicion:"CM",numero:8,media:8.0},{nombre:"Yunus Musah",posicion:"CAM",numero:6,media:7.8},{nombre:"Timothy Weah",posicion:"RW",numero:21,media:7.9},{nombre:"Folarin Balogun",posicion:"ST",numero:20,media:8.0},{nombre:"Christian Pulisic",posicion:"LW",numero:10,media:8.4}]},
+            { id: "CRC", name: "Costa Rica", flag: "🇨🇷", players: [{nombre:"Keylor Navas",posicion:"GK",numero:1,media:8.3},{nombre:"Carlos Martínez",posicion:"RB",numero:2,media:7.5},{nombre:"Juan Pablo Vargas",posicion:"CB",numero:15,media:7.7},{nombre:"Francisco Calvo",posicion:"CB",numero:15,media:7.6},{nombre:"Julio Cascante",posicion:"LB",numero:4,media:7.5},{nombre:"Orlando Galo",posicion:"CM",numero:14,media:7.6},{nombre:"Alejandro Bran",posicion:"CM",numero:13,media:7.4},{nombre:"Brandon Aguilera",posicion:"CAM",numero:10,media:7.7},{nombre:"Álvaro Zamora",posicion:"LW",numero:11,media:7.5},{nombre:"Manfred Ugalde",posicion:"ST",numero:9,media:7.9},{nombre:"Josimar Alcócer",posicion:"RW",numero:17,media:7.6}]},
+            { id: "MEX", name: "México", flag: "🇲🇽", players: [{nombre:"Luis Malagón",posicion:"GK",numero:1,media:7.9},{nombre:"Jorge Sánchez",posicion:"RB",numero:2,media:7.7},{nombre:"César Montes",posicion:"CB",numero:3,media:7.9},{nombre:"Johan Vásquez",posicion:"CB",numero:5,media:8.0},{nombre:"Gerardo Arteaga",posicion:"LB",numero:6,media:7.8},{nombre:"Edson Álvarez",posicion:"CM",numero:4,media:8.3},{nombre:"Luis Chávez",posicion:"CM",numero:24,media:7.9},{nombre:"Orbelin Pineda",posicion:"CAM",numero:7,media:7.8},{nombre:"Hirving Lozano",posicion:"RW",numero:22,media:8.1},{nombre:"Santiago Giménez",posicion:"ST",numero:11,media:8.2},{nombre:"Julián Quiñones",posicion:"LW",numero:10,media:8.0}]},
+            { id: "COL", name: "Colombia", flag: "🇨🇴", players: [{nombre:"Camilo Vargas",posicion:"GK",numero:12,media:8.0},{nombre:"Daniel Muñoz",posicion:"RB",numero:21,media:8.2},{nombre:"Davinson Sánchez",posicion:"CB",numero:23,media:8.0},{nombre:"Jhon Lucumi",posicion:"CB",numero:3,media:7.9},{nombre:"Johan Mojica",posicion:"LB",numero:17,media:7.8},{nombre:"Jefferson Lerma",posicion:"CM",numero:16,media:8.1},{nombre:"Richard Rios",posicion:"CM",numero:6,media:8.0},{nombre:"Jhon Arias",posicion:"CAM",numero:11,media:8.1},{nombre:"James Rodriguez",posicion:"CAM",numero:10,media:8.3},{nombre:"Luis Díaz",posicion:"LW",numero:7,media:8.6},{nombre:"Jhon Córdoba",posicion:"ST",numero:24,media:8.0}]},
+            { id: "URU", name: "Uruguay", flag: "🇺🇾", players: [{nombre:"Sergio Rochet",posicion:"GK",numero:1,media:8.0},{nombre:"Nahitan Nández",posicion:"RB",numero:8,media:7.9},{nombre:"José María Giménez",posicion:"CB",numero:2,media:8.1},{nombre:"Ronald Araújo",posicion:"CB",numero:4,media:8.4},{nombre:"Mathias Olivera",posicion:"LB",numero:16,media:7.9},{nombre:"Manuel Ugarte",posicion:"CM",numero:5,media:8.2},{nombre:"Federico Valverde",posicion:"CM",numero:15,media:8.8},{nombre:"Rodrigo Bentancur",posicion:"CAM",numero:6,media:8.2},{nombre:"Facundo Pellistri",posicion:"RW",numero:11,media:7.8},{nombre:"Darwin Núñez",posicion:"ST",numero:9,media:8.3},{nombre:"Maximiliano Araújo",posicion:"LW",numero:20,media:7.9}]},
+            { id: "CRO", name: "Croacia", flag: "🇭🇷", players: [{nombre:"Dominik Livaković",posicion:"GK",numero:1,media:8.2},{nombre:"Josip Stanišić",posicion:"RB",numero:2,media:8.0},{nombre:"Josip Šutalo",posicion:"CB",numero:6,media:7.9},{nombre:"Joško Gvardiol",posicion:"CB",numero:4,media:8.5},{nombre:"Borna Sosa",posicion:"LB",numero:19,media:7.8},{nombre:"Luka Modrić",posicion:"CM",numero:10,media:8.6},{nombre:"Mateo Kovačić",posicion:"CM",numero:8,media:8.3},{nombre:"Marcelo Brozović",posicion:"CAM",numero:11,media:8.2},{nombre:"Lovro Majer",posicion:"RW",numero:7,media:7.9},{nombre:"Andrej Kramarić",posicion:"ST",numero:9,media:8.1},{nombre:"Ivan Perišić",posicion:"LW",numero:14,media:8.0}]},
+            { id: "BEL", name: "Bélgica", flag: "🇧🇪", players: [{nombre:"Koen Casteels",posicion:"GK",numero:1,media:8.1},{nombre:"Timothy Castagne",posicion:"RB",numero:21,media:7.8},{nombre:"Wout Faes",posicion:"CB",numero:4,media:7.9},{nombre:"Jan Vertonghen",posicion:"CB",numero:5,media:8.0},{nombre:"Arthur Theate",posicion:"LB",numero:3,media:7.8},{nombre:"Amadou Onana",posicion:"CM",numero:6,media:8.2},{nombre:"Youri Tielemans",posicion:"CM",numero:8,media:8.1},{nombre:"Kevin De Bruyne",posicion:"CAM",numero:7,media:9.1},{nombre:"Leandro Trossard",posicion:"LW",numero:9,media:8.2},{nombre:"Romelu Lukaku",posicion:"ST",numero:10,media:8.4},{nombre:"Jérémy Doku",posicion:"RW",numero:11,media:8.3}]},
+            { id: "ITA", name: "Italia", flag: "🇮🇹", players: [{nombre:"Gianluigi Donnarumma",posicion:"GK",numero:1,media:8.6},{nombre:"Giovanni Di Lorenzo",posicion:"RB",numero:2,media:8.1},{nombre:"Alessandro Bastoni",posicion:"CB",numero:23,media:8.4},{nombre:"Riccardo Calafiori",posicion:"CB",numero:5,media:8.2},{nombre:"Federico Dimarco",posicion:"LB",numero:3,media:8.3},{nombre:"Jorginho",posicion:"CM",numero:8,media:8.1},{nombre:"Nicolò Barella",posicion:"CM",numero:18,media:8.5},{nombre:"Sandro Tonali",posicion:"CAM",numero:8,media:8.3},{nombre:"Federico Chiesa",posicion:"RW",numero:14,media:8.4},{nombre:"Mateo Retegui",posicion:"ST",numero:9,media:7.9},{nombre:"Lorenzo Pellegrini",posicion:"LW",numero:10,media:8.1}]},
+            { id: "NED", name: "Países Bajos", flag: "🇳🇱", players: [{nombre:"Bart Verbruggen",posicion:"GK",numero:1,media:8.1},{nombre:"Denzel Dumfries",posicion:"RB",numero:22,media:8.3},{nombre:"Virgil van Dijk",posicion:"CB",numero:4,media:8.8},{nombre:"Nathan Aké",posicion:"CB",numero:5,media:8.4},{nombre:"Micky van de Ven",posicion:"LB",numero:15,media:8.2},{nombre:"Jerdy Schouten",posicion:"CM",numero:24,media:8.0},{nombre:"Tijjani Reijnders",posicion:"CM",numero:14,media:8.3},{nombre:"Frenkie de Jong",posicion:"CAM",numero:21,media:8.5},{nombre:"Xavi Simons",posicion:"RW",numero:7,media:8.4},{nombre:"Memphis Depay",posicion:"ST",numero:10,media:8.2},{nombre:"Cody Gakpo",posicion:"LW",numero:11,media:8.4}]},
+            { id: "POR", name: "Portugal", flag: "🇵🇹", players: [{nombre:"Diogo Costa",posicion:"GK",numero:22,media:8.4},{nombre:"João Cancelo",posicion:"RB",numero:20,media:8.2},{nombre:"Rúben Dias",posicion:"CB",numero:4,media:8.6},{nombre:"Pepe",posicion:"CB",numero:3,media:8.0},{nombre:"Nuno Mendes",posicion:"LB",numero:19,media:8.2},{nombre:"João Palhinha",posicion:"CM",numero:6,media:8.3},{nombre:"Vitinha",posicion:"CM",numero:23,media:8.4},{nombre:"Bruno Fernandes",posicion:"CAM",numero:8,media:8.7},{nombre:"Bernardo Silva",posicion:"RW",numero:10,media:8.7},{nombre:"Cristiano Ronaldo",posicion:"ST",numero:7,media:8.8},{nombre:"Rafael Leão",posicion:"LW",numero:17,media:8.5}]},
+            { id: "GER", name: "Alemania", flag: "🇩🇪", players: [{nombre:"Manuel Neuer",posicion:"GK",numero:1,media:8.3},{nombre:"Joshua Kimmich",posicion:"RB",numero:6,media:8.5},{nombre:"Antonio Rüdiger",posicion:"CB",numero:2,media:8.5},{nombre:"Jonathan Tah",posicion:"CB",numero:4,media:8.1},{nombre:"David Raum",posicion:"LB",numero:3,media:7.9},{nombre:"Robert Andrich",posicion:"CM",numero:23,media:8.0},{nombre:"Toni Kroos",posicion:"CM",numero:8,media:8.8},{nombre:"Ilkay Gündoğan",posicion:"CAM",numero:21,media:8.4},{nombre:"Jamal Musiala",posicion:"LW",numero:10,media:8.8},{nombre:"Florian Wirtz",posicion:"RW",numero:17,media:8.7},{nombre:"Kai Havertz",posicion:"ST",numero:7,media:8.3}]},
+            { id: "ENG", name: "Inglaterra", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", players: [{nombre:"Jordan Pickford",posicion:"GK",numero:1,media:8.2},{nombre:"Kyle Walker",posicion:"RB",numero:2,media:8.2},{nombre:"John Stones",posicion:"CB",numero:5,media:8.3},{nombre:"Marc Guéhi",posicion:"CB",numero:6,media:7.9},{nombre:"Luke Shaw",posicion:"LB",numero:3,media:8.0},{nombre:"Declan Rice",posicion:"CM",numero:4,media:8.5},{nombre:"Trent Alexander-Arnold",posicion:"CM",numero:8,media:8.2},{nombre:"Jude Bellingham",posicion:"CAM",numero:10,media:8.9},{nombre:"Bukayo Saka",posicion:"RW",numero:7,media:8.5},{nombre:"Harry Kane",posicion:"ST",numero:9,media:8.6},{nombre:"Anthony Gordon",posicion:"LW",numero:11,media:8.1}]},
+            { id: "ARG", name: "Argentina", flag: "🇦🇷", players: [{nombre:"Emiliano Martínez",posicion:"GK",numero:23,media:8.8},{nombre:"Nahuel Molina",posicion:"RB",numero:26,media:7.9},{nombre:"Cristian Romero",posicion:"CB",numero:13,media:8.1},{nombre:"Nicolás Otamendi",posicion:"CB",numero:19,media:7.8},{nombre:"Nicolás Tagliafico",posicion:"LB",numero:3,media:7.7},{nombre:"Rodrigo De Paul",posicion:"CM",numero:7,media:8.2},{nombre:"Enzo Fernández",posicion:"CM",numero:24,media:8.3},{nombre:"Alexis Mac Allister",posicion:"CAM",numero:20,media:8.2},{nombre:"Lionel Messi",posicion:"RW",numero:10,media:9.2},{nombre:"Julián Álvarez",posicion:"ST",numero:9,media:8.1},{nombre:"Lautaro Martínez",posicion:"LW",numero:22,media:8.0}]},
+            { id: "BRA", name: "Brasil", flag: "🇧🇷", players: [{nombre:"Alisson Becker",posicion:"GK",numero:1,media:8.4},{nombre:"Danilo",posicion:"RB",numero:2,media:7.8},{nombre:"Marquinhos",posicion:"CB",numero:4,media:8.1},{nombre:"Gabriel Magalhães",posicion:"CB",numero:14,media:8.0},{nombre:"Guilherme Arana",posicion:"LB",numero:16,media:7.7},{nombre:"Bruno Guimarães",posicion:"CM",numero:5,media:8.3},{nombre:"Casemiro",posicion:"CM",numero:5,media:8.0},{nombre:"Lucas Paquetá",posicion:"CAM",numero:7,media:7.9},{nombre:"Raphinha",posicion:"RW",numero:11,media:8.2},{nombre:"Vinícius Júnior",posicion:"LW",numero:7,media:8.8},{nombre:"Rodrygo",posicion:"ST",numero:10,media:8.3}]},
+            { id: "FRA", name: "Francia", flag: "🇫🇷", players: [{nombre:"Mike Maignan",posicion:"GK",numero:16,media:8.5},{nombre:"Jules Koundé",posicion:"RB",numero:5,media:8.1},{nombre:"Dayot Upamecano",posicion:"CB",numero:4,media:8.0},{nombre:"William Saliba",posicion:"CB",numero:17,media:8.4},{nombre:"Theo Hernández",posicion:"LB",numero:22,media:8.3},{nombre:"Aurélien Tchouaméni",posicion:"CM",numero:8,media:8.2},{nombre:"N'Golo Kanté",posicion:"CM",numero:13,media:8.3},{nombre:"Antoine Griezmann",posicion:"CAM",numero:7,media:8.4},{nombre:"Ousmane Dembélé",posicion:"RW",numero:11,media:8.3},{nombre:"Kylian Mbappé",posicion:"ST",numero:10,media:9.3},{nombre:"Marcus Thuram",posicion:"LW",numero:15,media:7.9}]},
+            { id: "ESP", name: "España", flag: "🇪🇸", players: [{nombre:"Unai Simón",posicion:"GK",numero:23,media:8.4},{nombre:"Dani Carvajal",posicion:"RB",numero:2,media:8.4},{nombre:"Robin Le Normand",posicion:"CB",numero:3,media:8.1},{nombre:"Aymeric Laporte",posicion:"CB",numero:14,media:8.2},{nombre:"Marc Cucurella",posicion:"LB",numero:24,media:8.0},{nombre:"Rodri",posicion:"CM",numero:16,media:9.1},{nombre:"Fabián Ruiz",posicion:"CM",numero:8,media:8.2},{nombre:"Pedri",posicion:"CAM",numero:20,media:8.5},{nombre:"Lamine Yamal",posicion:"RW",numero:19,media:8.7},{nombre:"Álvaro Morata",posicion:"ST",numero:7,media:8.1},{nombre:"Nico Williams",posicion:"LW",numero:17,media:8.5}]}
         ];
 
         let worldTeamsData = rawWorldTeams.map((t, idx) => ({
             id: t.id, name: t.name, flag: t.flag,
             unlocked: idx < 3,
-            players: [
-                { nombre: `GK ${t.name}`, posicion: "GK", numero: 1, media: 7.5 },
-                { nombre: `CB1 ${t.name}`, posicion: "CB", numero: 2, media: 7.5 },
-                { nombre: `CB2 ${t.name}`, posicion: "CB", numero: 4, media: 7.5 },
-                { nombre: `LB ${t.name}`, posicion: "LB", numero: 3, media: 7.5 },
-                { nombre: `RB ${t.name}`, posicion: "RB", numero: 5, media: 7.5 },
-                { nombre: `CM1 ${t.name}`, posicion: "CM", numero: 6, media: 7.6 },
-                { nombre: `CM2 ${t.name}`, posicion: "CM", numero: 8, media: 7.6 },
-                { nombre: `CAM ${t.name}`, posicion: "CAM", numero: 10, media: 7.8 },
-                { nombre: `RW ${t.name}`, posicion: "RW", numero: 7, media: 7.7 },
-                { nombre: `ST ${t.name}`, posicion: "ST", numero: 9, media: 7.9 },
-                { nombre: `LW ${t.name}`, posicion: "LW", numero: 11, media: 7.7 }
-            ]
+            players: t.players
         }));
 
         let marketplacePlayers = [];
@@ -391,29 +418,29 @@
                 marketplacePlayers.push({
                     id: `market_${team.id}_${idx}`,
                     nombre: p.nombre, numero: p.numero, posicion: p.posicion, media: p.media,
-                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", price: 1000000 // Precio económico para poder comprar tras pocos partidos
+                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", price: 350000 // Precio para comprar al 3er partido ganado ($350k x 3 = $1.05M)
                 });
             });
         });
 
         let userInventory = [];
-        let userPoints = 0; // INICIA EN 0
-        let userCash = 0;   // INICIA EN 0
+        let userPoints = 0;
+        let userCash = 0;
         let userTrophies = 0;
         let matchesWonCount = 0;
 
         let activeSquad = {
             GK: null, CB1: null, CB2: null, LB: null, RB: null,
-            CM1: null, CM2: null, CM3: null, CAM: null, ST: null, LW: null, RB: null
+            CM1: null, CM2: null, CM3: null, CAM: null, ST: null, LW: null, RW: null
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v2');
-            const savedSquad = localStorage.getItem('fc26_sq_v2');
-            const savedCash = localStorage.getItem('fc26_cash_v2');
-            const savedPoints = localStorage.getItem('fc26_pts_v2');
-            const savedTeams = localStorage.getItem('fc26_teams_v2');
-            const savedWins = localStorage.getItem('fc26_wins_v2');
+            const savedInv = localStorage.getItem('fc26_inv_v3');
+            const savedSquad = localStorage.getItem('fc26_sq_v3');
+            const savedCash = localStorage.getItem('fc26_cash_v3');
+            const savedPoints = localStorage.getItem('fc26_pts_v3');
+            const savedTeams = localStorage.getItem('fc26_teams_v3');
+            const savedWins = localStorage.getItem('fc26_wins_v3');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -437,12 +464,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v2', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v2', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v2', userCash);
-            localStorage.setItem('fc26_pts_v2', userPoints);
-            localStorage.setItem('fc26_teams_v2', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v2', matchesWonCount);
+            localStorage.setItem('fc26_inv_v3', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v3', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v3', userCash);
+            localStorage.setItem('fc26_pts_v3', userPoints);
+            localStorage.setItem('fc26_teams_v3', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v3', matchesWonCount);
         }
 
         function populateCpuSelect() {
@@ -457,7 +484,7 @@
             select.value = cpuTeamKey;
         }
 
-        // COMPLETAR LOS 11 ESPACIOS RESTANTES CON JUGADORES NPC DE MEDIA 70
+        // ABRIR SOBRE INICIAL SIN DUPLICADOS Y COMPLETAR CON NPC DE MEDIA 70
         function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
@@ -466,43 +493,40 @@
             const grid = document.getElementById('initial-cards-grid');
             grid.innerHTML = '';
 
-            // 4 cartas aleatorias con foto
-            const starterCards = [
-                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)],
-                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)],
-                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)],
-                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)]
-            ];
+            // Seleccionar 4 cartas únicas con foto
+            let shuffledPool = [...photoCardsPool].sort(() => 0.5 - Math.random());
+            let starterCards = shuffledPool.slice(0, 4);
 
             starterCards.forEach(player => {
                 if(!userInventory.some(p => p.id === player.id)) userInventory.push(player);
                 grid.appendChild(createFlipCardElement(player));
             });
 
-            // Rellenar posiciones faltantes con NPC de Media 70
-            const positionsList = ['GK', 'CB1', 'CB2', 'LB', 'RB', 'CM1', 'CM2', 'CM3', 'CAM', 'ST', 'LW', 'RW'];
+            // Mapear estrictamente a sus posiciones sin duplicar
+            activeSquad.GK = starterCards.find(p => p.posicion === 'GK') || starterCards[0];
+            activeSquad.ST = starterCards.find(p => p.posicion === 'ST') || starterCards[1];
+            activeSquad.CAM = starterCards.find(p => p.posicion === 'CAM') || starterCards[2];
+            activeSquad.CB1 = starterCards.find(p => ['CB', 'LB', 'RB'].includes(p.posicion)) || starterCards[3];
+
+            // Rellenar las posiciones restantes con NPC de Media 70 sin duplicar IDs
+            const allPositions = ['GK', 'CB1', 'CB2', 'LB', 'RB', 'CM1', 'CM2', 'CM3', 'CAM', 'ST', 'LW', 'RW'];
             let npcIndex = 1;
-            positionsList.forEach((pos, idx) => {
-                if(!activeSquad[pos] && idx < 11) {
+            allPositions.forEach(pos => {
+                if(!activeSquad[pos]) {
                     const npcPlayer = {
-                        id: `npc_${npcIndex}`,
+                        id: `npc_base_${npcIndex}`,
                         nombre: `NPC${npcIndex}`,
-                        numero: 12 + npcIndex,
+                        numero: 20 + npcIndex,
                         posicion: pos.replace(/[0-9]/g, ''),
                         media: 70,
                         equipo: "Plantel Base",
                         img: "img/contracara.png"
                     };
-                    userInventory.push(npcPlayer);
+                    if(!userInventory.some(p => p.id === npcPlayer.id)) userInventory.push(npcPlayer);
                     activeSquad[pos] = npcPlayer;
                     npcIndex++;
                 }
             });
-
-            activeSquad.GK = starterCards[0];
-            activeSquad.ST = starterCards[1];
-            activeSquad.CAM = starterCards[2];
-            activeSquad.CB1 = starterCards[3];
 
             saveGameData();
             document.getElementById('btn-enter-game').classList.remove('hidden');
@@ -642,26 +666,28 @@
                 board.appendChild(rowDiv);
             });
 
+            // RENDERIZAR RIVAL CON JUGADORES REALES DE SU PLANTILLA
             const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
             const cpuWrapper = document.getElementById('cpu-formation-board');
             cpuWrapper.innerHTML = '';
             
             const cpuRows = [{ slots: ['GK'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['CM1', 'CAM', 'CM2'] }, { slots: ['LW', 'ST', 'RW'] }];
-            cpuRows.forEach(row => {
+            cpuRows.forEach((row, rIdx) => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = "flex justify-center items-center gap-2 flex-wrap px-2";
-                row.slots.forEach(pos => {
+                row.slots.forEach((pos, pIdx) => {
+                    let rivalPlayer = cpuTeamObj.players[(rIdx * 3 + pIdx) % cpuTeamObj.players.length];
                     const botDiv = document.createElement('div');
                     botDiv.className = "bg-slate-900/95 border border-red-500/60 rounded-xl p-2 flex items-center gap-2 shadow-xl w-full max-w-[160px]";
                     botDiv.innerHTML = `
                         <div class="w-7 h-9 bg-red-600 rounded-lg flex flex-col items-center justify-center text-[9px] text-white font-black shrink-0">
-                            <span>9</span>
-                            <span class="text-[6px]">${pos}</span>
+                            <span>${rivalPlayer.numero}</span>
+                            <span class="text-[6px]">${rivalPlayer.posicion}</span>
                         </div>
                         <div class="overflow-hidden">
                             <div class="text-[7px] text-red-400 font-bold">${cpuTeamObj.name}</div>
-                            <div class="font-black text-white text-xs truncate">Rival ${pos}</div>
-                            <div class="text-[7px] text-slate-300">Rating: 8.4</div>
+                            <div class="font-black text-white text-xs truncate">${rivalPlayer.nombre}</div>
+                            <div class="text-[7px] text-slate-300">Rating: ${rivalPlayer.media}</div>
                         </div>
                     `;
                     rowDiv.appendChild(botDiv);
@@ -675,7 +701,7 @@
         function openSubsModalForPosition(slotPos) {
             pendingSubPosition = slotPos;
             let generalPos = slotPos.replace(/[0-9]/g, '');
-            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador compatible con [${generalPos}]:`;
+            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador para [${generalPos}] (Evita duplicados en cancha):`;
             const grid = document.getElementById('subs-inventory-grid');
             grid.innerHTML = '';
 
@@ -690,7 +716,7 @@
                         <div class="text-[10px] font-black text-amber-400">#${player.numero} &bull; ${player.posicion}</div>
                         <div class="text-xs font-bold text-white">${player.nombre}</div>
                     </div>
-                    <button onclick="assignStrictPlayer('${player.id}', '${slotPos}')" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition">
+                    <button onclick="assignStrictPlayer('${player.id}', '${slotPos}')" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition cursor-pointer">
                         Colocar
                     </button>
                 `;
@@ -704,11 +730,20 @@
         function assignStrictPlayer(playerId, slotPos) {
             const player = userInventory.find(p => p.id === playerId);
             if(!player) return;
+
+            // Evitar duplicar jugadores en la alineación titular
+            for(let key in activeSquad) {
+                if(activeSquad[key] && activeSquad[key].id === playerId && key !== slotPos) {
+                    showModal("Acción Denegada", `${player.nombre} ya está alineado en la posición ${key}. No se permiten duplicados.`);
+                    return;
+                }
+            }
+
             activeSquad[slotPos] = player;
             saveGameData();
             renderPitchSlots();
             closeSubsModal();
-            showModal("Cambio Guardado", `Has colocado a ${player.nombre} en ${slotPos}. Quedará guardado.`);
+            showModal("Cambio Guardado", `Has colocado a ${player.nombre} en ${slotPos}.`);
         }
 
         function renderCampaignGrid() {
@@ -746,7 +781,7 @@
             document.getElementById('cpu-team-select').value = teamId;
             changeCpuTeam();
             switchTab('pitch');
-            showModal("Rival Seleccionado", `Te enfrentarás contra ${worldTeamsData.find(t => t.id === teamId).name}. ¡Dale con todo!`);
+            showModal("Rival Seleccionado", `Te enfrentarás contra ${worldTeamsData.find(t => t.id === teamId).name}. ¡A ganar!`);
         }
 
         function unlockNextTeams(currentIndex) {
@@ -827,7 +862,7 @@
                 const cardEl = document.createElement('div');
                 cardEl.className = "bg-slate-900 border border-amber-500/50 p-3 rounded-2xl flex flex-col items-center justify-between w-48 shadow-xl space-y-2";
                 const isOwned = userInventory.some(p => p.id === player.id);
-                const itemPrice = player.price || 1000000;
+                const itemPrice = player.price || 350000;
 
                 cardEl.innerHTML = `
                     <div class="w-24 h-32 rounded-xl overflow-hidden border border-amber-400 bg-slate-950">
@@ -841,7 +876,7 @@
                     ${isOwned ? `
                         <div class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-1 rounded w-full text-center border border-emerald-500/30">En tu álbum</div>
                     ` : `
-                        <button onclick="buyPlayerMarket('${player.id}', ${itemPrice})" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition cursor-pointer">                             Fichar ($${(itemPrice/1000000).toFixed(1)}M)
+                        <button onclick="buyPlayerMarket('${player.id}', ${itemPrice})" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition cursor-pointer">                             Fichar ($${(itemPrice/1000000).toFixed(2)}M)
                         </button>
                     `}
                 `;
@@ -851,7 +886,7 @@
 
         function buyPlayerMarket(id, cost) {
             if(userCash < cost) {
-                showModal("Fondos Insuficientes", `Necesitas $${(cost/1000000).toFixed(1)}M. ¡Gana más partidos en el Camino al Mundial! (Al 3er partido ya podrás comprar tu primera tarjeta).`);
+                showModal("Fondos Insuficientes", `Necesitas $${(cost/1000000).toFixed(2)}M. ¡Gana partidos en el Camino al Mundial! (Al 3er partido ganado ya acumulas lo suficiente para tu primera compra).`);
                 return;
             }
             userCash -= cost;
@@ -867,7 +902,7 @@
 
         function spinRoulette() {
             if(userPoints < 250) {
-                showModal("Puntos Insuficientes", "Necesitas 250 Puntos (Gana partidos o entrena).");
+                showModal("Puntos Insuficientes", "Necesitas 250 Puntos.");
                 return;
             }
             userPoints -= 250;
@@ -908,10 +943,10 @@
         function checkTriviaAnswer(selectedIndex) {
             const t = triviaQuestions[currentTriviaIndex];
             if(selectedIndex === t.answer) {
-                userPoints += 50; userCash += 500000;
+                userPoints += 50; userCash += 100000;
                 saveGameData();
                 updateStatsDisplay();
-                showModal("¡Correcto!", "Has ganado +50 Puntos y +$500,000.");
+                showModal("¡Correcto!", "Has ganado +50 Puntos y +$100,000.");
             } else {
                 showModal("Incorrecto", "Sigue intentando.");
             }
@@ -974,10 +1009,11 @@
                     } else {
                         globalCpuGoals++;
                         playGoalHornSound();
-                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}`;
+                        let rivalScorer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalScorer.numero} ${rivalScorer.nombre}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}!</div>`;
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
                     }
                 } else {
                     let randomEvent = narrativeEvents[Math.floor(Math.random() * narrativeEvents.length)];
@@ -1035,6 +1071,8 @@
                 document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO &bull; MINUTO ${timeStr}`;
 
                 let activePlayer = getRandomActiveUserPlayer();
+                const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
+
                 if(secondHalfMinute === 60 || secondHalfMinute === 75) {
                     if(Math.random() > 0.4) {
                         globalUserGoals++;
@@ -1046,7 +1084,8 @@
                     } else {
                         globalCpuGoals++;
                         playGoalHornSound();
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol del equipo rival!</div>`;
+                        let rivalScorer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
                     }
                 } else {
                     feed.innerHTML += `<div>[${timeStr}] Jugada disputada en el terreno de juego.</div>`;
@@ -1069,7 +1108,7 @@
                     if(globalUserGoals > globalCpuGoals) {
                         matchesWonCount++;
                         userTrophies += 10; 
-                        userCash += 350000; // Premio por victoria balanceado para permitir compra al 3er partido
+                        userCash += 350000; // Al 3er partido ganado (3 x $350k = $1.05M) alcanza para comprar una tarjeta de $1.0M
                         userPoints += 100;
                         title.innerText = `¡VICTORIA (${globalUserGoals}-${globalCpuGoals})!`;
                         desc.innerText = `¡Victoria! Has ganado +$350,000 y +100 Puntos. (Partidos ganados: ${matchesWonCount})`;
