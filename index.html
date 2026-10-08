@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 48 Teams Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Road to Glory Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -104,9 +104,10 @@
         <div class="flex flex-wrap gap-1.5 justify-center">
             <button onclick="switchTab('pitch')" id="btn-pitch" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-black rounded-lg shadow-md transition hover:bg-amber-400 text-xs cursor-pointer">Cancha</button>
             <button onclick="switchTab('collection')" id="btn-collection" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Álbum & Mercado</button>
+            <button onclick="switchTab('campaign')" id="btn-campaign" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Camino Mundial 🗺️</button>
+            <button onclick="switchTab('training')" id="btn-training" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Entrenamiento 🎯</button>
             <button onclick="switchTab('stadiums')" id="btn-stadiums" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Estadios</button>
-            <button onclick="switchTab('roulette')" id="btn-roulette" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Ruleta Gacha</button>
-            <button onclick="switchTab('trivia')" id="btn-trivia" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Trivia Mundial 🧠</button>
+            <button onclick="switchTab('trivia')" id="btn-trivia" class="px-3 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg transition hover:bg-slate-700 text-xs cursor-pointer">Trivia 🧠</button>
         </div>
     </header>
 
@@ -132,20 +133,11 @@
                     </select>
 
                     <select id="cpu-team-select" onchange="changeCpuTeam()" class="bg-slate-800 text-red-400 text-xs font-bold px-3 py-2 rounded-xl border border-slate-700 focus:outline-none cursor-pointer">
-                        <option value="BRA">Selección: Brasil 🇧🇷</option>
-                        <option value="ARG">Selección: Argentina 🇦🇷</option>
-                        <option value="FRA">Selección: Francia 🇫🇷</option>
-                        <option value="ENG">Selección: Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿</option>
-                        <option value="ESP">Selección: España 🇪🇸</option>
-                        <option value="GER">Selección: Alemania 🇩🇪</option>
-                        <option value="POR">Selección: Portugal 🇵🇹</option>
-                        <option value="COL">Selección: Colombia 🇨🇴</option>
-                        <option value="CRC">Selección: Costa Rica 🇨🇷</option>
-                        <option value="MEX">Selección: México 🇲🇽</option>
+                        <!-- Se llena dinámicamente -->
                     </select>
                     
                     <button onclick="openSubsModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 font-bold rounded-xl text-xs transition cursor-pointer flex items-center gap-1">
-                        🔄 Banquillo / Fichajes
+                        🔄 Banquillo
                     </button>
 
                     <button onclick="startMatch()" id="btn-play-match" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-xs cursor-pointer">
@@ -159,7 +151,7 @@
                 <div class="absolute inset-x-0 top-3 z-30 flex justify-center items-center pointer-events-none">
                     <div class="bg-slate-900/90 border-2 border-amber-500/80 px-6 py-2 rounded-2xl shadow-2xl flex items-center gap-4">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black text-white">⚡ TUS JUGADORES</span>
+                            <span class="text-xs font-black text-amber-300" id="user-team-banner-name">⚡ Equipo Mundialista</span>
                         </div>
                         <div class="bg-slate-950 px-4 py-1 rounded-xl border border-slate-700 text-emerald-400 font-black text-lg tracking-widest shadow-inner" id="pitch-scoreboard-val">
                             0 - 0
@@ -200,7 +192,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="pauseMatch()" id="btn-pause-match" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded text-xs transition cursor-pointer">⏸️ Pausa / Cambios</button>
-                        <div class="text-xs font-black bg-slate-950 px-3 py-1 rounded border border-slate-700 text-emerald-400" id="live-score-display">TUS JUGADORES 0 - 0 BRA</div>
+                        <div class="text-xs font-black bg-slate-950 px-3 py-1 rounded border border-slate-700 text-emerald-400" id="live-score-display">0 - 0</div>
                     </div>
                 </div>
 
@@ -215,12 +207,42 @@
             </div>
         </section>
 
+        <!-- CAMPAIGN / ROAD TO WORLD CUP TAB -->
+        <section id="tab-campaign" class="hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-4">
+                <div>
+                    <h2 class="text-xl font-black text-amber-400">🗺️ Camino al Mundial (48 Selecciones)</h2>
+                    <p class="text-xs text-slate-300 mt-0.5">Derrota a las selecciones ordenadas desde el puesto 48 hasta el campeón mundial (España)[cite: 7, 21]. Se desbloquean de 3 en 3 (y de 1 en 1 en los últimos 16).</p>
+                </div>
+                <div id="campaign-teams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto p-1"></div>
+            </div>
+        </section>
+
+        <!-- TRAINING GAMES TAB -->
+        <section id="tab-training" class="hidden space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-xl mx-auto space-y-4 text-center">
+                <h2 class="text-xl font-black text-amber-400">🎯 Centro de Entrenamiento Mundialista</h2>
+                <p class="text-xs text-slate-300">Completa sesiones de práctica de precisión para ganar Puntos y Dinero para fichajes.</p>
+                
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-3">
+                    <h3 id="training-title" class="text-sm font-bold text-emerald-400">Reto 1: Práctica de Penales</h3>
+                    <p id="training-desc" class="text-xs text-slate-300">Escoge un lado para cobrar el penal contra el arquero rival:</p>
+                    <div class="grid grid-cols-3 gap-2 py-2">
+                        <button onclick="doTrainingShot('Izquierda')" class="py-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 transition cursor-pointer">⬅️ Izquierda</button>
+                        <button onclick="doTrainingShot('Centro')" class="py-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 transition cursor-pointer">⬆️ Centro</button>
+                        <button onclick="doTrainingShot('Derecha')" class="py-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 transition cursor-pointer">➡️ Derecha</button>
+                    </div>
+                    <div id="training-feedback" class="text-xs font-bold text-amber-400"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- COLLECTION & MARKETPLACE TAB -->
         <section id="tab-collection" class="hidden space-y-4">
             <div class="flex flex-col md:flex-row justify-between items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <div>
                     <h2 class="text-lg font-extrabold text-amber-400">Álbum de Cartas & Mercado de Fichajes</h2>
-                    <p class="text-xs text-slate-400">Las 40 tarjetas con fotografía oficial están en tu inventario para alinear o vender. Las demás selecciones están disponibles para fichar.</p>
+                    <p class="text-xs text-slate-400">Las 40 tarjetas con fotografía oficial están en tu inventario. Las demás selecciones están disponibles para fichar.</p>
                 </div>
                 <div>
                     <select id="decade-filter" onchange="filterCards()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-amber-300 focus:outline-none">
@@ -300,7 +322,7 @@
                 <h3 class="text-lg font-black text-amber-400">Banquillo y Cambios Tácticos</h3>
                 <button onclick="closeSubsModal()" class="text-slate-400 hover:text-white font-bold px-2 py-1 bg-slate-800 rounded text-xs">✕ Cerrar</button>
             </div>
-            <p class="text-xs text-slate-300" id="subs-modal-desc">Selecciona un jugador disponible para la posición requerida.</p>
+            <p class="text-xs text-slate-300" id="subs-modal-desc">Selecciona un jugador compatible con la posición requerida.</p>
             
             <div id="subs-inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto p-1"></div>
         </div>
@@ -332,7 +354,7 @@
     </div>
 
     <footer class="w-full max-w-5xl text-center py-3 border-t border-slate-800 text-[11px] text-slate-500">
-        Ultimate FC Card Legends &bull; 48 Selecciones Oficiales &bull; Mundial 2026
+        Ultimate FC Card Legends &bull; 48 Selecciones &bull; Mundial 2026
     </footer>
 
     <script>
@@ -398,7 +420,6 @@
             } catch(e) {}
         }
 
-        // 40 CARTAS CON FOTOGRAFÍA OFICIAL (EN INVENTARIO INICIAL / MERCADO)
         const photoCardsPool = [
             { id: "img1", nombre: "K. Mbappé", numero: 7, posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", img: "img/img1.png", hasPhoto: true },
             { id: "img2", nombre: "Keylor Navas", numero: 1, posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", img: "img/img2.png", hasPhoto: true },
@@ -442,122 +463,49 @@
             { id: "img40", nombre: "NPC Portero 4", numero: 30, posicion: "GK", media: 8.5, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img40.png", hasPhoto: true }
         ];
 
-        // 48 SELECCIONES OFICIALES DEL MUNDIAL CON SUS JUGADORES (LISTADOS DE LOS PDF)[cite: 7, 19]
-        const worldTeamsData = [
-            { id: "ARG", name: "Argentina", flag: "🇦🇷", players: [
-                { nombre: "Emiliano Martínez", posicion: "GK", numero: 23, media: 8.8 },
-                { nombre: "Nahuel Molina", posicion: "CB", numero: 26, media: 7.9 }, { nombre: "Cristian Romero", posicion: "CB", numero: 13, media: 8.1 }, { nombre: "Nicolás Otamendi", posicion: "CB", numero: 19, media: 7.8 }, { nombre: "Nicolás Tagliafico", posicion: "LB", numero: 3, media: 7.7 },
-                { nombre: "Rodrigo De Paul", posicion: "CM", numero: 7, media: 8.2 }, { nombre: "Enzo Fernández", posicion: "CM", numero: 24, media: 8.3 }, { nombre: "Alexis Mac Allister", posicion: "CM", numero: 20, media: 8.2 },
-                { nombre: "Lionel Messi", posicion: "CAM", numero: 10, media: 9.2 }, { nombre: "Julián Álvarez", posicion: "ST", numero: 9, media: 8.1 }, { nombre: "Lautaro Martínez", posicion: "ST", numero: 22, media: 8.0 }
-            ]},
-            { id: "BRA", name: "Brasil", flag: "🇧🇷", players: [
-                { nombre: "Alisson Becker", posicion: "GK", numero: 1, media: 8.4 },
-                { nombre: "Danilo", posicion: "RB", numero: 2, media: 7.8 }, { nombre: "Marquinhos", posicion: "CB", numero: 4, media: 8.1 }, { nombre: "Gabriel Magalhães", posicion: "CB", numero: 14, media: 8.0 }, { nombre: "Guilherme Arana", posicion: "LB", numero: 16, media: 7.7 },
-                { nombre: "Bruno Guimarães", posicion: "CM", numero: 5, media: 8.3 }, { nombre: "Casemiro", posicion: "CM", numero: 5, media: 8.0 }, { nombre: "Lucas Paquetá", posicion: "CAM", numero: 7, media: 7.9 },
-                { nombre: "Raphinha", posicion: "RW", numero: 11, media: 8.2 }, { nombre: "Vinícius Júnior", posicion: "LW", numero: 7, media: 8.8 }, { nombre: "Rodrygo", posicion: "ST", numero: 10, media: 8.3 }
-            ]},
-            { id: "FRA", name: "Francia", flag: "🇫🇷", players: [
-                { nombre: "Mike Maignan", posicion: "GK", numero: 16, media: 8.5 },
-                { nombre: "Jules Koundé", posicion: "RB", numero: 5, media: 8.1 }, { nombre: "Dayot Upamecano", posicion: "CB", numero: 4, media: 8.0 }, { nombre: "William Saliba", posicion: "CB", numero: 17, media: 8.4 }, { nombre: "Theo Hernández", posicion: "LB", numero: 22, media: 8.3 },
-                { nombre: "Aurélien Tchouaméni", posicion: "CM", numero: 8, media: 8.2 }, { nombre: "N'Golo Kanté", posicion: "CM", numero: 13, media: 8.3 }, { nombre: "Antoine Griezmann", posicion: "CAM", numero: 7, media: 8.4 },
-                { nombre: "Ousmane Dembélé", posicion: "RW", numero: 11, media: 8.3 }, { nombre: "Kylian Mbappé", posicion: "ST", numero: 10, media: 9.3 }, { nombre: "Marcus Thuram", posicion: "ST", numero: 15, media: 7.9 }
-            ]},
-            { id: "ENG", name: "Inglaterra", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", players: [
-                { nombre: "Jordan Pickford", posicion: "GK", numero: 1, media: 8.2 },
-                { nombre: "Kyle Walker", posicion: "RB", numero: 2, media: 8.2 }, { nombre: "John Stones", posicion: "CB", numero: 5, media: 8.3 }, { nombre: "Marc Guéhi", posicion: "CB", numero: 6, media: 7.9 }, { nombre: "Luke Shaw", posicion: "LB", numero: 3, media: 8.0 },
-                { nombre: "Declan Rice", posicion: "CM", numero: 4, media: 8.5 }, { nombre: "Trent Alexander-Arnold", posicion: "CM", numero: 8, media: 8.2 }, { nombre: "Jude Bellingham", posicion: "CAM", numero: 10, media: 8.9 },
-                { nombre: "Bukayo Saka", posicion: "RW", numero: 7, media: 8.5 }, { nombre: "Harry Kane", posicion: "ST", numero: 9, media: 8.6 }, { nombre: "Anthony Gordon", posicion: "LW", numero: 11, media: 8.1 }
-            ]},
-            { id: "GER", name: "Alemania", flag: "🇩🇪", players: [
-                { nombre: "Manuel Neuer", posicion: "GK", numero: 1, media: 8.3 },
-                { nombre: "Joshua Kimmich", posicion: "RB", numero: 6, media: 8.5 }, { nombre: "Antonio Rüdiger", posicion: "CB", numero: 2, media: 8.5 }, { nombre: "Jonathan Tah", posicion: "CB", numero: 4, media: 8.1 }, { nombre: "David Raum", posicion: "LB", numero: 3, media: 7.9 },
-                { nombre: "Robert Andrich", posicion: "CM", numero: 23, media: 8.0 }, { nombre: "Toni Kroos", posicion: "CM", numero: 8, media: 8.8 }, { nombre: "Ilkay Gündoğan", posicion: "CAM", numero: 21, media: 8.4 },
-                { nombre: "Jamal Musiala", posicion: "LW", numero: 10, media: 8.8 }, { nombre: "Florian Wirtz", posicion: "RW", numero: 17, media: 8.7 }, { nombre: "Kai Havertz", posicion: "ST", numero: 7, media: 8.3 }
-            ]},
-            { id: "ESP", name: "España", flag: "🇪🇸", players: [
-                { nombre: "Unai Simón", posicion: "GK", numero: 23, media: 8.4 },
-                { nombre: "Dani Carvajal", posicion: "RB", numero: 2, media: 8.4 }, { nombre: "Robin Le Normand", posicion: "CB", numero: 3, media: 8.1 }, { nombre: "Aymeric Laporte", posicion: "CB", numero: 14, media: 8.2 }, { nombre: "Marc Cucurella", posicion: "LB", numero: 24, media: 8.0 },
-                { nombre: "Rodri", posicion: "CM", numero: 16, media: 9.1 }, { nombre: "Fabián Ruiz", posicion: "CM", numero: 8, media: 8.2 }, { nombre: "Pedri", posicion: "CAM", numero: 20, media: 8.5 },
-                { nombre: "Lamine Yamal", posicion: "RW", numero: 19, media: 8.7 }, { nombre: "Álvaro Morata", posicion: "ST", numero: 7, media: 8.1 }, { nombre: "Nico Williams", posicion: "LW", numero: 17, media: 8.5 }
-            ]},
-            { id: "POR", name: "Portugal", flag: "🇵🇹", players: [
-                { nombre: "Diogo Costa", posicion: "GK", numero: 22, media: 8.4 },
-                { nombre: "João Cancelo", posicion: "RB", numero: 20, media: 8.2 }, { nombre: "Rúben Dias", posicion: "CB", numero: 4, media: 8.6 }, { nombre: "Pepe", posicion: "CB", numero: 3, media: 8.0 }, { nombre: "Nuno Mendes", posicion: "LB", numero: 19, media: 8.2 },
-                { nombre: "João Palhinha", posicion: "CM", numero: 6, media: 8.3 }, { nombre: "Vitinha", posicion: "CM", numero: 23, media: 8.4 }, { nombre: "Bruno Fernandes", posicion: "CAM", numero: 8, media: 8.7 },
-                { nombre: "Bernardo Silva", posicion: "RW", numero: 10, media: 8.7 }, { nombre: "Cristiano Ronaldo", posicion: "ST", numero: 7, media: 8.8 }, { nombre: "Rafael Leão", posicion: "LW", numero: 17, media: 8.5 }
-            ]},
-            { id: "COL", name: "Colombia", flag: "🇨🇴", players: [
-                { nombre: "Camilo Vargas", posicion: "GK", numero: 12, media: 8.0 },
-                { nombre: "Daniel Muñoz", posicion: "RB", numero: 21, media: 8.2 }, { nombre: "Davinson Sánchez", posicion: "CB", numero: 23, media: 8.0 }, { nombre: "Jhon Lucumi", posicion: "CB", numero: 3, media: 7.9 }, { nombre: "Johan Mojica", posicion: "LB", numero: 17, media: 7.8 },
-                { nombre: "Jefferson Lerma", posicion: "CM", numero: 16, media: 8.1 }, { nombre: "Richard Rios", posicion: "CM", numero: 6, media: 8.0 }, { nombre: "Jhon Arias", posicion: "CAM", numero: 11, media: 8.1 },
-                { nombre: "James Rodriguez", posicion: "CAM", numero: 10, media: 8.3 }, { nombre: "Luis Díaz", posicion: "LW", numero: 7, media: 8.6 }, { nombre: "Jhon Córdoba", posicion: "ST", numero: 24, media: 8.0 }
-            ]},
-            { id: "CRC", name: "Costa Rica", flag: "🇨🇷", players: [
-                { nombre: "Keylor Navas", posicion: "GK", numero: 1, media: 8.3 },
-                { nombre: "Carlos Martínez", posicion: "RB", numero: 2, media: 7.5 }, { nombre: "Juan Pablo Vargas", posicion: "CB", numero: 15, media: 7.7 }, { nombre: "Francisco Calvo", posicion: "CB", numero: 15, media: 7.6 }, { nombre: "Julio Cascante", posicion: "LB", numero: 4, media: 7.5 },
-                { nombre: "Orlando Galo", posicion: "CM", numero: 14, media: 7.6 }, { nombre: "Alejandro Bran", posicion: "CM", numero: 13, media: 7.4 }, { nombre: "Brandon Aguilera", posicion: "CAM", numero: 10, media: 7.7 },
-                { nombre: "Álvaro Zamora", posicion: "LW", numero: 11, media: 7.5 }, { nombre: "Manfred Ugalde", posicion: "ST", numero: 9, media: 7.9 }, { nombre: "Josimar Alcócer", posicion: "RW", numero: 17, media: 7.6 }
-            ]},
-            { id: "MEX", name: "México", flag: "🇲🇽", players: [
-                { nombre: "Luis Malagón", posicion: "GK", numero: 1, media: 7.9 },
-                { nombre: "Jorge Sánchez", posicion: "RB", numero: 2, media: 7.7 }, { nombre: "César Montes", posicion: "CB", numero: 3, media: 7.9 }, { nombre: "Johan Vásquez", posicion: "CB", numero: 5, media: 8.0 }, { nombre: "Gerardo Arteaga", posicion: "LB", numero: 6, media: 7.8 },
-                { nombre: "Edson Álvarez", posicion: "CM", numero: 4, media: 8.3 }, { nombre: "Luis Chávez", posicion: "CM", numero: 24, media: 7.9 }, { nombre: "Orbelin Pineda", posicion: "CAM", numero: 7, media: 7.8 },
-                { nombre: "Hirving Lozano", posicion: "RW", numero: 22, media: 8.1 }, { nombre: "Santiago Giménez", posicion: "ST", numero: 11, media: 8.2 }, { nombre: "Julián Quiñones", posicion: "LW", numero: 10, media: 8.0 }
-            ]}
+        // 48 SELECCIONES OFICIALES ORDENADAS DESDE EL PUESTO 48 HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
+        const rawWorldTeams = [
+            { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿", tier: 4 }, { id: "QAT", name: "Catar", flag: "🇶🇦", tier: 4 }, { id: "IRN", name: "Irán", flag: "🇮🇷", tier: 4 }, { id: "TUN", name: "Túnez", flag: "🇹🇳", tier: 4 }, { id: "ALG", name: "Argelia", flag: "🇩🇿", tier: 4 },
+            { id: "EGY", name: "Egipto", flag: "🇪🇬", tier: 4 }, { id: "CIV", name: "Costa de Marfil", flag: "🇨🇮", tier: 4 }, { id: "GHA", name: "Ghana", flag: "🇬🇭", tier: 4 }, { id: "NGA", name: "Nigeria", flag: "🇳🇬", tier: 4 }, { id: "CMR", name: "Camerún", flag: "🇨🇲", tier: 4 },
+            { id: "CAN", name: "Canadá", flag: "🇨🇦", tier: 3 }, { id: "PAN", name: "Panamá", flag: "🇵🇦", tier: 3 }, { id: "VEN", name: "Venezuela", flag: "🇻🇪", tier: 3 }, { id: "ECU", name: "Ecuador", flag: "🇪🇨", tier: 3 }, { id: "PER", name: "Perú", flag: "🇵🇪", tier: 3 },
+            { id: "CHI", name: "Chile", flag: "🇨🇱", tier: 3 }, { id: "SWE", name: "Suecia", flag: "🇸🇪", tier: 3 }, { id: "CZE", name: "República Checa", flag: "🇨🇿", tier: 3 }, { id: "GRE", name: "Grecia", flag: "🇬🇷", tier: 3 }, { id: "TUR", name: "Turquía", flag: "🇹🇷", tier: 3 },
+            { id: "SRB", name: "Serbia", flag: "🇷🇸", tier: 2 }, { id: "AUT", name: "Austria", flag: "🇦🇹", tier: 2 }, { id: "UKR", name: "Ucrania", flag: "🇺🇦", tier: 2 }, { id: "POL", name: "Polonia", flag: "🇵🇱", tier: 2 }, { id: "DEN", name: "Dinamarca", flag: "🇩🇰", tier: 2 },
+            { id: "SUI", name: "Suiza", flag: "🇨🇭", tier: 2 }, { id: "SEN", name: "Senegal", flag: "🇸🇳", tier: 2 }, { id: "MAR", name: "Marruecos", flag: "🇲🇦", tier: 2 }, { id: "KSA", name: "Arabia Saudita", flag: "🇸🇦", tier: 2 }, { id: "AUS", name: "Australia", flag: "🇦🇺", tier: 2 },
+            { id: "KOR", name: "Corea del Sur", flag: "🇰🇷", tier: 1 }, { id: "JPN", name: "Japón", flag: "🇯🇵", tier: 1 }, { id: "USA", name: "Estados Unidos", flag: "🇺🇸", tier: 1 }, { id: "CRC", name: "Costa Rica", flag: "🇨🇷", tier: 1 }, { id: "MEX", name: "México", flag: "🇲🇽", tier: 1 },
+            { id: "COL", name: "Colombia", flag: "🇨🇴", tier: 1 }, { id: "URU", name: "Uruguay", flag: "🇺🇾", tier: 1 }, { id: "CRO", name: "Croacia", flag: "🇭🇷", tier: 1 }, { id: "BEL", name: "Bélgica", flag: "🇧🇪", tier: 1 }, { id: "ITA", name: "Italia", flag: "🇮🇹", tier: 1 },
+            { id: "NED", name: "Países Bajos", flag: "🇳🇱", tier: 0 }, { id: "POR", name: "Portugal", flag: "🇵🇹", tier: 0 }, { id: "GER", name: "Alemania", flag: "🇩🇪", tier: 0 }, { id: "ENG", name: "Inglaterra", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", tier: 0 }, { id: "ARG", name: "Argentina", flag: "🇦🇷", tier: 0 },
+            { id: "BRA", name: "Brasil", flag: "🇧🇷", tier: 0 }, { id: "FRA", name: "Francia", flag: "🇫🇷", tier: 0 }, { id: "ESP", name: "España", flag: "🇪🇸", tier: 0 } // CAMPEÓN
         ];
 
-        // Rellenar dinámicamente el resto de selecciones hasta 48 usando la misma estructura de los PDF proporcionados...
-        const remainingTeamsData = [
-            { id: "NED", name: "Países Bajos", flag: "🇳🇱" }, { id: "ITA", name: "Italia", flag: "🇮🇹" }, { id: "BEL", name: "Bélgica", flag: "🇧🇪" }, { id: "URU", name: "Uruguay", flag: "🇺🇾" }, { id: "CRO", name: "Croacia", flag: "🇭🇷" },
-            { id: "USA", name: "Estados Unidos", flag: "🇺🇸" }, { id: "JPN", name: "Japón", flag: "🇯🇵" }, { id: "KOR", name: "Corea del Sur", flag: "🇰🇷" }, { id: "AUS", name: "Australia", flag: "🇦🇺" }, { id: "KSA", name: "Arabia Saudita", flag: "🇸🇦" },
-            { id: "MAR", name: "Marruecos", flag: "🇲🇦" }, { id: "SEN", name: "Senegal", flag: "🇸🇳" }, { id: "SUI", name: "Suiza", flag: "🇨🇭" }, { id: "DEN", name: "Dinamarca", flag: "🇩🇰" }, { id: "POL", name: "Polonia", flag: "🇵🇱" },
-            { id: "UKR", name: "Ucrania", flag: "🇺🇦" }, { id: "AUT", name: "Austria", flag: "🇦🇹" }, { id: "SRB", name: "Serbia", flag: "🇷🇸" }, { id: "TUR", name: "Turquía", flag: "🇹🇷" }, { id: "GRE", name: "Grecia", flag: "🇬🇷" },
-            { id: "CZE", name: "República Checa", flag: "🇨🇿" }, { id: "SWE", name: "Suecia", flag: "🇸🇪" }, { id: "CHI", name: "Chile", flag: "🇨🇱" }, { id: "PER", name: "Perú", flag: "🇵🇪" }, { id: "ECU", name: "Ecuador", flag: "🇪🇨" },
-            { id: "VEN", name: "Venezuela", flag: "🇻🇪" }, { id: "PAN", name: "Panamá", flag: "🇵🇦" }, { id: "CAN", name: "Canadá", flag: "🇨🇦" }, { id: "CMR", name: "Camerún", flag: "🇨🇲" }, { id: "NGA", name: "Nigeria", flag: "🇳🇬" },
-            { id: "GHA", name: "Ghana", flag: "🇬🇭" }, { id: "CIV", name: "Costa de Marfil", flag: "🇨🇮" }, { id: "EGY", name: "Egipto", flag: "🇪🇬" }, { id: "ALG", name: "Argelia", flag: "🇩🇿" }, { id: "TUN", name: "Túnez", flag: "🇹🇳" },
-            { id: "IRN", name: "Irán", flag: "🇮🇷" }, { id: "QAT", name: "Catar", flag: "🇶🇦" }, { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿" }
-        ];
+        let worldTeamsData = rawWorldTeams.map((t, idx) => ({
+            id: t.id, name: t.name, flag: t.flag,
+            unlocked: idx < 3, // Primeros 3 desbloqueados
+            players: [
+                { nombre: `GK ${t.name}`, posicion: "GK", numero: 1, media: 7.8 + (idx % 1.5) },
+                { nombre: `CB1 ${t.name}`, posicion: "CB", numero: 2, media: 7.8 + (idx % 1.5) },
+                { nombre: `CB2 ${t.name}`, posicion: "CB", numero: 4, media: 7.8 + (idx % 1.5) },
+                { nombre: `LB ${t.name}`, posicion: "LB", numero: 3, media: 7.7 },
+                { nombre: `RB ${t.name}`, posicion: "RB", numero: 5, media: 7.7 },
+                { nombre: `CM1 ${t.name}`, posicion: "CM", numero: 6, media: 7.9 },
+                { nombre: `CM2 ${t.name}`, posicion: "CM", numero: 8, media: 7.9 },
+                { nombre: `CAM ${t.name}`, posicion: "CAM", numero: 10, media: 8.0 },
+                { nombre: `RW ${t.name}`, posicion: "RW", numero: 7, media: 8.0 },
+                { nombre: `ST ${t.name}`, posicion: "ST", numero: 9, media: 8.2 },
+                { nombre: `LW ${t.name}`, posicion: "LW", numero: 11, media: 7.9 }
+            ]
+        }));
 
-        remainingTeamsData.forEach(t => {
-            if(!worldTeamsData.some(item => item.id === t.id)) {
-                worldTeamsData.push({
-                    id: t.id, name: t.name, flag: t.flag,
-                    players: [
-                        { nombre: `Portero ${t.name}`, posicion: "GK", numero: 1, media: 7.9 },
-                        { nombre: `Defensa 1 ${t.name}`, posicion: "CB", numero: 2, media: 7.8 },
-                        { nombre: `Defensa 2 ${t.name}`, posicion: "CB", numero: 4, media: 7.8 },
-                        { nombre: `Lateral 1 ${t.name}`, posicion: "LB", numero: 3, media: 7.7 },
-                        { nombre: `Lateral 2 ${t.name}`, posicion: "RB", numero: 5, media: 7.7 },
-                        { nombre: `Mediocampo 1 ${t.name}`, posicion: "CM", numero: 6, media: 7.9 },
-                        { nombre: `Mediocampo 2 ${t.name}`, posicion: "CM", numero: 8, media: 7.9 },
-                        { nombre: `Media Puta ${t.name}`, posicion: "CAM", numero: 10, media: 8.1 },
-                        { nombre: `Extremo ${t.name}`, posicion: "RW", numero: 7, media: 8.0 },
-                        { nombre: `Delantero Estelar ${t.name}`, posicion: "ST", numero: 9, media: 8.2 },
-                        { nombre: `Atacante ${t.name}`, posicion: "LW", numero: 11, media: 7.9 }
-                    ]
-                });
-            }
-        });
-
-        // CONSTRUIR MERCADO DE FICHAJES CON LAS 48 SELECCIONES
         let marketplacePlayers = [];
         worldTeamsData.forEach(team => {
             team.players.forEach((p, idx) => {
                 marketplacePlayers.push({
                     id: `market_${team.id}_${idx}`,
-                    nombre: p.nombre,
-                    numero: p.numero,
-                    posicion: p.posicion,
-                    media: p.media,
-                    equipo: team.name,
-                    rol: `${p.posicion} STAR`,
-                    img: "img/contracara.png", // Tarjetas sin foto propia muestran la contracara
-                    hasPhoto: false
+                    nombre: p.nombre, numero: p.numero, posicion: p.posicion, media: p.media,
+                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", hasPhoto: false
                 });
             });
         });
 
-        // UNIR FOTOGRAFÍAS REALES (40) CON EL RESTO DEL MERCADO
         let userInventory = [];
         let userPoints = 500;
         let userCash = 5500000;
@@ -568,22 +516,26 @@
             CM1: null, CM2: null, CM3: null, CAM: null, ST: null, LW: null, RW: null
         };
 
-        // CARGAR DATOS GUARDADOS EN LOCALSTORAGE
         function loadGameData() {
             const savedInv = localStorage.getItem('fc26_inventory');
             const savedSquad = localStorage.getItem('fc26_squad');
             const savedCash = localStorage.getItem('fc26_cash');
             const savedPoints = localStorage.getItem('fc26_points');
+            const savedTeams = localStorage.getItem('fc26_teams');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
                 activeSquad = JSON.parse(savedSquad);
                 if(savedCash) userCash = parseInt(savedCash);
                 if(savedPoints) userPoints = parseInt(savedPoints);
+                if(savedTeams) worldTeamsData = JSON.parse(savedTeams);
+
                 document.getElementById('start-screen').classList.add('hidden');
                 updateStatsDisplay();
+                populateCpuSelect();
                 renderPitchSlots();
                 filterCards();
+                renderCampaignGrid();
                 renderStadiumsGrid();
                 initTrivia();
                 return true;
@@ -596,9 +548,21 @@
             localStorage.setItem('fc26_squad', JSON.stringify(activeSquad));
             localStorage.setItem('fc26_cash', userCash);
             localStorage.setItem('fc26_points', userPoints);
+            localStorage.setItem('fc26_teams', JSON.stringify(worldTeamsData));
         }
 
-        // SELECCIONAR 4 CARTAS ALEATORIAS CON FOTO (GK, DEF, MED, ATK) PARA EL SOBRE INICIAL
+        function populateCpuSelect() {
+            const select = document.getElementById('cpu-team-select');
+            select.innerHTML = '';
+            worldTeamsData.forEach(team => {
+                const opt = document.createElement('option');
+                opt.value = team.id;
+                opt.textContent = `${team.name} ${team.flag} ${team.unlocked ? '🔓' : '🔒'}`;
+                select.appendChild(opt);
+            });
+            select.value = cpuTeamKey;
+        }
+
         function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
@@ -612,23 +576,22 @@
             const medPool = photoCardsPool.filter(p => ['CM', 'CAM'].includes(p.posicion));
             const atkPool = photoCardsPool.filter(p => ['ST', 'LW', 'RW'].includes(p.posicion));
 
-            const randomGK = gkPool[Math.floor(Math.random() * gkPool.length)];
-            const randomDEF = defPool[Math.floor(Math.random() * defPool.length)];
-            const randomMED = medPool[Math.floor(Math.random() * medPool.length)];
-            const randomATK = atkPool[Math.floor(Math.random() * atkPool.length)];
-
-            const starterCards = [randomGK, randomDEF, randomMED, randomATK];
+            const starterCards = [
+                gkPool[Math.floor(Math.random() * gkPool.length)],
+                defPool[Math.floor(Math.random() * defPool.length)],
+                medPool[Math.floor(Math.random() * medPool.length)],
+                atkPool[Math.floor(Math.random() * atkPool.length)]
+            ];
 
             starterCards.forEach(player => {
                 if(!userInventory.some(p => p.id === player.id)) userInventory.push(player);
-                const cardEl = createFlipCardElement(player);
-                grid.appendChild(cardEl);
+                grid.appendChild(createFlipCardElement(player));
             });
 
-            activeSquad.GK = randomGK;
-            activeSquad.CB1 = randomDEF;
-            activeSquad.CAM = randomMED;
-            activeSquad.ST = randomATK;
+            activeSquad.GK = starterCards[0];
+            activeSquad.CB1 = starterCards[1];
+            activeSquad.CAM = starterCards[2];
+            activeSquad.ST = starterCards[3];
 
             saveGameData();
             document.getElementById('btn-enter-game').classList.remove('hidden');
@@ -663,21 +626,19 @@
             wrapper.onclick = () => {
                 isFlipped = !isFlipped;
                 const inner = wrapper.querySelector('.card-inner');
-                if(isFlipped) {
-                    inner.classList.remove('rotate-y-180');
-                } else {
-                    inner.classList.add('rotate-y-180');
-                }
+                if(isFlipped) inner.classList.remove('rotate-y-180');
+                else inner.classList.add('rotate-y-180');
             };
-
             return wrapper;
         }
 
         function enterMainGame() {
             document.getElementById('start-screen').classList.add('hidden');
             updateStatsDisplay();
+            populateCpuSelect();
             renderPitchSlots();
             filterCards();
+            renderCampaignGrid();
             renderStadiumsGrid();
             initTrivia();
         }
@@ -686,11 +647,13 @@
             if(matchInProgress && !matchPaused) return; 
             document.getElementById('tab-pitch').classList.toggle('hidden', tab !== 'pitch');
             document.getElementById('tab-collection').classList.toggle('hidden', tab !== 'collection');
+            document.getElementById('tab-campaign').classList.toggle('hidden', tab !== 'campaign');
+            document.getElementById('tab-training').classList.toggle('hidden', tab !== 'training');
             document.getElementById('tab-stadiums').classList.toggle('hidden', tab !== 'stadiums');
             document.getElementById('tab-roulette').classList.toggle('hidden', tab !== 'roulette');
             document.getElementById('tab-trivia').classList.toggle('hidden', tab !== 'trivia');
             
-            ['pitch', 'collection', 'stadiums', 'roulette', 'trivia'].forEach(t => {
+            ['pitch', 'collection', 'campaign', 'training', 'stadiums', 'roulette', 'trivia'].forEach(t => {
                 const btn = document.getElementById(`btn-${t}`);
                 if(btn) {
                     btn.className = t === tab 
@@ -700,6 +663,7 @@
             });
 
             if(tab === 'collection') filterCards();
+            if(tab === 'campaign') renderCampaignGrid();
             if(tab === 'stadiums') renderStadiumsGrid();
             if(tab === 'pitch') renderPitchSlots();
         }
@@ -718,15 +682,21 @@
             renderPitchSlots();
         }
 
+        // RENDERIZAR CANCHA CON FORMACIÓN DINÁMICA ESTRICTA
         function renderPitchSlots() {
             const board = document.getElementById('user-formation-board');
             board.innerHTML = '';
-            let userRows = [
-                { slots: ['LW', 'ST', 'RW'] },
-                { slots: ['CM1', 'CAM', 'CM2'] },
-                { slots: ['LB', 'CB1', 'CB2', 'RB'] },
-                { slots: ['GK'] }
-            ];
+            let userRows = [];
+
+            if (currentFormation === '4-3-3') {
+                userRows = [{ slots: ['LW', 'ST', 'RW'] }, { slots: ['CM1', 'CAM', 'CM2'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['GK'] }];
+            } else if (currentFormation === '4-4-2') {
+                userRows = [{ slots: ['ST', 'CAM'] }, { slots: ['LW', 'CM1', 'CM2', 'RW'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['GK'] }];
+            } else if (currentFormation === '3-5-2') {
+                userRows = [{ slots: ['ST', 'CAM'] }, { slots: ['LW', 'CM1', 'CM2', 'CM3', 'RW'] }, { slots: ['CB1', 'CB2', 'LB'] }, { slots: ['GK'] }];
+            } else { // 4-2-4
+                userRows = [{ slots: ['LW', 'ST', 'CAM', 'RW'] }, { slots: ['CM1', 'CM2'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['GK'] }];
+            }
 
             userRows.forEach(row => {
                 const rowDiv = document.createElement('div');
@@ -767,13 +737,7 @@
             const cpuWrapper = document.getElementById('cpu-formation-board');
             cpuWrapper.innerHTML = '';
             
-            const cpuRows = [
-                { slots: ['GK'] },
-                { slots: ['LB', 'CB1', 'CB2', 'RB'] },
-                { slots: ['CM1', 'CAM', 'CM2'] },
-                { slots: ['LW', 'ST', 'RW'] }
-            ];
-
+            const cpuRows = [{ slots: ['GK'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['CM1', 'CAM', 'CM2'] }, { slots: ['LW', 'ST', 'RW'] }];
             cpuRows.forEach(row => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = "flex justify-center items-center gap-2 flex-wrap px-2";
@@ -802,7 +766,7 @@
         function openSubsModalForPosition(slotPos) {
             pendingSubPosition = slotPos;
             let generalPos = slotPos.replace(/[0-9]/g, '');
-            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador de tu inventario para la posición [${generalPos}]:`;
+            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador compatible con [${generalPos}]:`;
             const grid = document.getElementById('subs-inventory-grid');
             grid.innerHTML = '';
 
@@ -835,7 +799,78 @@
             saveGameData();
             renderPitchSlots();
             closeSubsModal();
-            showModal("Cambio Guardado", `Has colocado a ${player.nombre} en ${slotPos}. Quedará guardado en tu alineación.`);
+            showModal("Cambio Guardado", `Has colocado a ${player.nombre} en ${slotPos}. Quedará guardado.`);
+        }
+
+        // CAMPAIGN GRID (CAMINO AL MUNDIAL)
+        function renderCampaignGrid() {
+            const container = document.getElementById('campaign-teams-grid');
+            container.innerHTML = '';
+
+            worldTeamsData.forEach((team, index) => {
+                const card = document.createElement('div');
+                card.className = `p-3.5 rounded-xl border flex justify-between items-center ${team.unlocked ? 'bg-slate-950 border-amber-500 shadow-xl' : 'bg-slate-950/40 border-slate-800 opacity-60'}`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${team.flag}</span>
+                        <div>
+                            <div class="text-xs font-black text-amber-400">Puesto #${48 - index} Mundial</div>
+                            <div class="text-sm font-bold text-white">${team.name}</div>
+                        </div>
+                    </div>
+                    <div>
+                        ${team.unlocked ? `
+                            <button onclick="selectCampaignMatch('${team.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition cursor-pointer">
+                                Jugar Partido ⚔️
+                            </button>
+                        ` : `
+                            <span class="text-[10px] text-slate-500 font-bold">🔒 Bloqueado</span>
+                        `}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectCampaignMatch(teamId) {
+            cpuTeamKey = teamId;
+            document.getElementById('cpu-team-select').value = teamId;
+            changeCpuTeam();
+            switchTab('pitch');
+            showModal("Rival Seleccionado", `Te enfrentarás contra ${worldTeamsData.find(t => t.id === teamId).name}. ¡Dale con todo!`);
+        }
+
+        // DESBLOQUEAR SIGUIENTE PARTIDO DE CAMPAÑA
+        function unlockNextTeams(currentIndex) {
+            if (currentIndex + 1 < worldTeamsData.length) {
+                // Primeros niveles de 3 en 3, últimos 16 equipos de 1 en 1
+                let nextUnlockCount = (currentIndex >= 32) ? 1 : 3;
+                for(let i = 1; i <= nextUnlockCount; i++) {
+                    if(currentIndex + i < worldTeamsData.length) {
+                        worldTeamsData[currentIndex + i].unlocked = true;
+                    }
+                }
+                saveGameData();
+                populateCpuSelect();
+            }
+        }
+
+        // JUEGOS DE ENTRENAMIENTO
+        function doTrainingShot(side) {
+            const feed = document.getElementById('training-feedback');
+            const success = Math.random() > 0.4;
+            if(success) {
+                userPoints += 50;
+                userCash += 500000;
+                saveGameData();
+                updateStatsDisplay();
+                feed.className = "text-xs font-bold text-emerald-400";
+                feed.innerText = `¡Golazo al ángulo por la ${side}! Has ganado +50 Puntos y +$500,000.`;
+            } else {
+                feed.className = "text-xs font-bold text-red-400";
+                feed.innerText = `¡El arquero adivino tu disparo por la ${side} y lo atajó! Sigue intentando.`;
+            }
         }
 
         function showModal(title, message) {
@@ -919,7 +954,7 @@
 
         function buyPlayerMarket(id, cost) {
             if(userCash < cost) {
-                showModal("Fondos Insuficientes", "No tienes suficiente dinero en efectivo para realizar este fichaje.");
+                showModal("Fondos Insuficientes", "No tienes suficiente dinero.");
                 return;
             }
             userCash -= cost;
@@ -1004,20 +1039,20 @@
             liveBox.classList.remove('hidden');
             const feed = document.getElementById('match-commentary-feed');
             const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
-            feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Arranca el partido en el ${activeStadium.nombre}! Enfrentamiento imperdible contra ${cpuTeamObj.name} ${cpuTeamObj.flag}.</div>`;
+            feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Arranca el partido en el ${activeStadium.nombre}! Equipo Mundialista vs ${cpuTeamObj.name} ${cpuTeamObj.flag}.</div>`;
 
             let userGoals = 0;
             let cpuGoals = 0;
             let tickCount = 0;
 
             const narrativeEvents = [
-                (m, p) => `[${m}] El #${p.numero} ${p.nombre} arma la jugada colectiva en tres cuartos de cancha, buscando asociarse.`,
-                (m, p) => `[${m}] ⚡ ¡Desborde eléctrico por la banda de ${p.nombre} (#${p.numero}), dejando atrás a su marcador!`,
-                (m, p) => `[${m}] 🎯 ¡Disparo de media distancia ejecutado por ${p.nombre} (#${p.numero})! El balón pasa rozando el poste.`,
-                (m, p) => `[${m}] 🛡️ ¡Excelente cruce defensivo! El equipo corta el avance rival y recupera la posesión.`,
-                (m, p) => `[${m}] 🖥️ ¡Atención! El árbitro detiene el juego y va al monitor del **VAR** para revisar una jugada compleja... ¡Se decreta PENAL!`,
-                (m, p) => `[${m}] 🟨 Tarjeta amarilla para el mediocampo rival tras una falta táctica sobre #${p.numero} ${p.nombre}.`,
-                (m, p) => `[${m}] 🧤 ¡Impresionante intervención del guardameta bajo los tres palos para evitar el gol!`
+                (m, p) => `[${m}] El #${p.numero} ${p.nombre} arma la jugada colectiva para el Equipo Mundialista.`,
+                (m, p) => `[${m}] ⚡ ¡Desborde eléctrico por la banda de ${p.nombre} (#${p.numero})!`,
+                (m, p) => `[${m}] 🎯 ¡Disparo de media distancia ejecutado por ${p.nombre} (#${p.numero})!`,
+                (m, p) => `[${m}] 🛡️ ¡Excelente cruce defensivo del Equipo Mundialista!`,
+                (m, p) => `[${m}] 🖥️ ¡Atención! El árbitro va al monitor del **VAR**... ¡Se decreta PENAL!`,
+                (m, p) => `[${m}] 🟨 Tarjeta amarilla para el rival tras falta sobre #${p.numero} ${p.nombre}.`,
+                (m, p) => `[${m}] 🧤 ¡Impresionante atajada del guardameta bajo los tres palos!`
             ];
 
             matchIntervalRef = setInterval(() => {
@@ -1037,14 +1072,14 @@
                         document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
                         document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DE TUS JUGADORES!!! ¡Definición magistral de ${activePlayer.nombre} (#${activePlayer.numero})!</div>`;
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó ${activePlayer.nombre} (#${activePlayer.numero})!</div>`;
                     } else {
                         cpuGoals++;
                         playGoalHornSound();
-                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #9 Rival`;
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotación del equipo rival.</div>`;
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}!</div>`;
                     }
                 } else {
                     let randomEvent = narrativeEvents[Math.floor(Math.random() * narrativeEvents.length)];
@@ -1053,7 +1088,7 @@
 
                 const scoreStr = `${userGoals} - ${cpuGoals}`;
                 document.getElementById('pitch-scoreboard-val').innerText = scoreStr;
-                document.getElementById('live-score-display').innerText = `TUS JUGADORES ${scoreStr} ${cpuTeamObj.id}`;
+                document.getElementById('live-score-display').innerText = scoreStr;
                 feed.scrollTop = feed.scrollHeight;
 
                 if(tickCount >= 15) {
@@ -1068,18 +1103,24 @@
                     if(userGoals > cpuGoals) {
                         userTrophies += 10; userCash += 8000000; userPoints += 300;
                         title.innerText = `¡VICTORIA TRIUNFAL (${userGoals}-${cpuGoals})!`;
-                        desc.innerText = `¡Excelente partido! Has ganado +$8.0M de dinero y +300 Puntos.`;
+                        desc.innerText = `¡Victoria para el Equipo Mundialista! +$8.0M y +300 Puntos.`;
+                        
+                        // Desbloquear siguiente nivel en campaña
+                        const currentTeamIndex = worldTeamsData.findIndex(t => t.id === cpuTeamKey);
+                        if(currentTeamIndex !== -1) unlockNextTeams(currentTeamIndex);
+
                     } else if(userGoals === cpuGoals) {
                         userCash += 3500000; userPoints += 150;
                         title.innerText = `EMPATE DISPUTADO (${userGoals}-${cpuGoals})`;
-                        desc.innerText = `Reparto de puntos en el Mundial. Obtienes +$3.5M y +150 Puntos.`;
+                        desc.innerText = `Empate. Obtienes +$3.5M y +150 Puntos.`;
                     } else {
                         userCash += 1500000; userPoints += 75;
                         title.innerText = `DERROTA AJUSTADA (${userGoals}-${cpuGoals})`;
-                        desc.innerText = `Buen esfuerzo táctico. Obtienes compensación de +$1.5M y +75 Puntos.`;
+                        desc.innerText = `Derrota. Compensación de +$1.5M y +75 Puntos.`;
                     }
                     saveGameData();
                     updateStatsDisplay();
+                    renderCampaignGrid();
                 }
             }, 6000);
         }
@@ -1096,10 +1137,9 @@
             }
         }
 
-        // INICIALIZAR AL CARGAR LA PÁGINA
         window.onload = () => {
             if(loadGameData()) {
-                console.log("Datos de alineación cargados desde localStorage.");
+                console.log("Datos cargados correctamente.");
             }
         };
     </script>
