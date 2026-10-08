@@ -9,6 +9,13 @@
     <style>
         body { font-family: 'Outfit', sans-serif; }
         .fc-card-glow { filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.7)); }
+        
+        /* 3D Flip Card Styles */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
         @keyframes spin-roulette {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(1440deg); }
@@ -38,28 +45,38 @@
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-between p-3 selection:bg-amber-500 selection:text-black">
 
-    <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4">
-        <div class="max-w-xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6">
+    <!-- START SCREEN & INITIAL PACK OPENING -->
+    <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
                 <span class="text-3xl">🏆</span>
                 <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">MUNDIAL 2026 DRAFT INICIAL</h1>
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Comienzas desde abajo con un equipo humilde de perfiles modestos. Escoge tu primer bloque de <strong>4 cartas básicas</strong> al azar para iniciar tu camino:</p>
-                <button onclick="startDraftStep1()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
-                    ¡ABRIR SOBRE DE INICIO (4 CARTAS BÁSICAS)! 📦
+                <p class="text-sm text-slate-300">¡Bienvenido! Abre tu primer sobre para revelar tus <strong>4 cartas estelares</strong> con imágenes generadas por IA:</p>
+                <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
+                    ¡ABRIR SOBRE DE INICIO (4 CARTAS ESTELARES)! 📦
+                </button>
+            </div>
+
+            <!-- CONTAINER FOR REVEALING CARDS GRADUALLY -->
+            <div id="draft-reveal-container" class="hidden space-y-4">
+                <p class="text-sm text-amber-400 font-bold">¡Tus cartas han llegado! Haz clic en cada una para girarlas y ver su diseño o la contracara:</p>
+                <div id="initial-cards-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 justify-items-center"></div>
+                <button id="btn-enter-game" onclick="enterMainGame()" class="hidden px-8 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
+                    ¡IR A LA CANCHA Y JUGAR! ⚽
                 </button>
             </div>
 
             <div id="draft-step-2" class="hidden space-y-4">
-                <p class="text-sm text-amber-400 font-bold" id="draft-status-msg">Seleccionando jugadores en la ruleta rápida (Completa tu once de 11 con perfiles modestos)...</p>
+                <p class="text-sm text-amber-400 font-bold" id="draft-status-msg">Seleccionando jugadores en la ruleta rápida...</p>
                 
                 <div class="relative w-48 h-64 mx-auto bg-slate-950 border-4 border-amber-500 rounded-2xl flex flex-col items-center justify-center p-3 shadow-2xl overflow-hidden">
                     <div id="roulette-box" class="w-full h-full flex flex-col items-center justify-center animate-shuffle">
                         <span class="text-4xl">⚽</span>
                         <div id="roulette-name" class="text-sm font-black text-white mt-2">GIRANDO...</div>
-                        <div id="roulette-meta" class="text-xs text-amber-400 mt-1">POS: ST • 6.5</div>
+                        <div id="roulette-meta" class="text-xs text-amber-400 mt-1">POS: ST • 9.0</div>
                     </div>
                 </div>
 
@@ -90,11 +107,11 @@
         <div class="flex items-center gap-2 flex-wrap justify-center">
             <div class="bg-slate-900 border border-emerald-500/40 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
                 <span class="text-emerald-400 text-sm font-black">💵</span>
-                <span id="user-cash" class="text-emerald-400 font-black text-sm">2,500,000</span>
+                <span id="user-cash" class="text-emerald-400 font-black text-sm">5,500,000</span>
             </div>
             <div class="bg-slate-900 border border-amber-500/40 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
                 <span class="text-amber-400 text-sm font-black">💎</span>
-                <span id="user-points" class="text-amber-400 font-black text-sm">300</span>
+                <span id="user-points" class="text-amber-400 font-black text-sm">500</span>
             </div>
             <div class="bg-slate-900 border border-blue-500/40 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
                 <span class="text-blue-400 text-sm font-black">⭐</span>
@@ -153,7 +170,6 @@
                 </div>
             </div>
 
-            <!-- VERTICAL SCORE MATCH PITCH WITH STRICT POSITION LOCKING -->
             <div class="w-full relative rounded-3xl border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden bg-slate-950">
                 <div class="absolute inset-x-0 top-2 z-20 flex justify-between px-6 text-[10px] text-amber-300/80 font-black uppercase tracking-widest pointer-events-none">
                     <span id="cpu-team-badge">Gradería Norte • Brasil (FIFA)</span>
@@ -176,7 +192,7 @@
                 </div>
             </div>
 
-            <!-- LIVE MATCH COMMENTARY WINDOW -->
+            <!-- LIVE MATCH WINDOW -->
             <div id="live-match-box" class="hidden bg-slate-900 border-2 border-emerald-500/80 p-4 rounded-2xl shadow-2xl space-y-3">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                     <div class="flex items-center gap-2">
@@ -205,19 +221,13 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <div>
                     <h2 class="text-lg font-extrabold text-amber-400">Álbum de Cartas & Mercado de Traspasos</h2>
-                    <p class="text-xs text-slate-400">Haz clic en cualquier carta para alinearla estrictamente en su posición oficial (GK, CB...), o véndela por su valor real de mercado.</p>
+                    <p class="text-xs text-slate-400">Haz clic en cualquier tarjeta para voltearla o alinearla en su posición oficial.</p>
                 </div>
                 <div>
                     <select id="decade-filter" onchange="filterCards()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-amber-300 focus:outline-none">
                         <option value="all">Todas las Cartas</option>
-                        <option value="starter">Plantel Base / Menor</option>
+                        <option value="starter">Estelares Iniciales</option>
                         <option value="legends">Leyendas Mundiales</option>
-                        <option value="1960s">1960s</option>
-                        <option value="1970s">1970s</option>
-                        <option value="1980s">1980s</option>
-                        <option value="1990s">1990s</option>
-                        <option value="2000s">2000s</option>
-                        <option value="2020s">2020s</option>
                     </select>
                 </div>
             </div>
@@ -272,7 +282,7 @@
                     <span class="text-2xl">🧠</span>
                     <h2 class="text-xl font-black text-amber-400">Trivia Histórica de Mundiales</h2>
                 </div>
-                <p class="text-xs text-slate-300">Responde correctamente preguntas sobre la historia de los Mundiales para ganar Puntos y Dinero para fichajes.</p>
+                <p class="text-xs text-slate-300">Responde correctamente preguntas sobre la historia de los Mundiales para ganar Puntos y Dinero.</p>
                 
                 <div id="trivia-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-4">
                     <h3 id="trivia-question" class="text-sm font-bold text-white">¿Qué selección ganó la Copa del Mundo en el año 1986?</h3>
@@ -298,7 +308,7 @@
         </div>
     </div>
 
-    <!-- GOAL CELEBRATION POPUP MODAL -->
+    <!-- GOAL MODAL -->
     <div id="goal-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
         <div class="bg-gradient-to-b from-amber-600 via-slate-900 to-slate-950 border-4 border-amber-400 p-8 rounded-3xl max-w-md w-full mx-4 shadow-[0_0_60px_rgba(245,158,11,0.6)] text-center space-y-4 animate-goal">
             <span class="text-6xl">⚽🎉</span>
@@ -324,15 +334,14 @@
     </div>
 
     <footer class="w-full max-w-5xl text-center py-3 border-t border-slate-800 text-[11px] text-slate-500">
-        Ultimate FC Card Legends &bull; Posiciones Estrictas en Inglés (GK, CB...) &bull; Mundial 2026
+        Ultimate FC Card Legends &bull; Imágenes IA desde GitHub &bull; Mundial 2026
     </footer>
 
     <script>
         const stadiumsCatalog = [
-            { id: "bernabeu", nombre: "Estadio Santiago Bernabéu", region: "Madrid, España", continente: "Europa", capacidad: "85,000 espectadores", construccion: "1947", ubicacion: "Chamartín, Madrid", bonus: "+2.5 pts de sinergia táctica", imagen: "" },
-            { id: "maracana", nombre: "Estadio Maracanã", region: "Río de Janeiro, Brasil", continente: "Sudamérica", capacidad: "78,838 espectadores", construccion: "1950", ubicacion: "Maracanã, Río de Janeiro", bonus: "+3.0 pts en magia ofensiva", imagen: "" },
-            { id: "azteca", nombre: "Estadio Azteca", region: "Ciudad de México, México", continente: "Norteamérica", capacidad: "83,264 espectadores", construccion: "1966", ubicacion: "Santa Úrsula Coapa, CDMX", bonus: "+2.8 pts de resistencia en altitud", imagen: "" },
-            { id: "johannesburg", nombre: "Soccer City (FNB Stadium)", region: "Johannesburgo, Sudáfrica", continente: "África", capacidad: "94,736 espectadores", construccion: "1989", ubicacion: "Nasrec, Johannesburgo", bonus: "+3.2 pts de velocidad y físico", imagen: "" }
+            { id: "bernabeu", nombre: "Estadio Santiago Bernabéu", region: "Madrid, España", continente: "Europa", capacidad: "85,000 espectadores", construccion: "1947", ubicacion: "Chamartín, Madrid", bonus: "+2.5 pts de sinergia táctica" },
+            { id: "maracana", nombre: "Estadio Maracanã", region: "Río de Janeiro, Brasil", continente: "Sudamérica", capacidad: "78,838 espectadores", construccion: "1950", ubicacion: "Maracanã, Río de Janeiro", bonus: "+3.0 pts en magia ofensiva" },
+            { id: "azteca", nombre: "Estadio Azteca", region: "Ciudad de México, México", continente: "Norteamérica", capacidad: "83,264 espectadores", construccion: "1966", ubicacion: "Santa Úrsula Coapa, CDMX", bonus: "+2.8 pts de resistencia en altitud" }
         ];
 
         let activeStadium = stadiumsCatalog[0];
@@ -343,115 +352,16 @@
         let matchIntervalRef = null;
         let pendingSubPosition = null;
 
-        let audioCtx = null;
-        function initAudio() {
-            if(!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playCrowdCheerSound() {
-            try {
-                initAudio();
-                if(!audioCtx) return;
-                const bufferSize = audioCtx.sampleRate * 2;
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * 0.15;
-                }
-                const noise = audioCtx.createBufferSource();
-                noise.buffer = buffer;
-                const filter = audioCtx.createBiquadFilter();
-                filter.type = 'bandpass';
-                filter.frequency.value = 800;
-                filter.Q.value = 1.0;
-                
-                const gain = audioCtx.createGain();
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2.0);
-
-                noise.connect(filter);
-                filter.connect(gain);
-                gain.connect(audioCtx.destination);
-                noise.start();
-            } catch(e) {}
-        }
-
-        function playGoalHornSound() {
-            try {
-                initAudio();
-                if(!audioCtx) return;
-                const osc1 = audioCtx.createOscillator();
-                const osc2 = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc1.type = 'sawtooth';
-                osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
-                
-                osc2.type = 'sawtooth';
-                osc2.frequency.setValueAtTime(225, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
-
-                osc1.connect(gain);
-                osc2.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc1.start();
-                osc2.start();
-                osc1.stop(audioCtx.currentTime + 1.8);
-                osc2.stop(audioCtx.currentTime + 1.8);
-            } catch(e) {}
-        }
-
-        function playWhistleSound() {
-            try {
-                initAudio();
-                if(!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(2600, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(2900, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.35);
-            } catch(e) {}
-        }
-
-        // STARTER POOL WITH LESSER-KNOWN PLAYERS AND MARKET PRICES PROPORTIONAL TO REAL TRANSFER VALUES
+        // STARTER CARDS WITH YOUR GITHUB AI IMAGES & CONTRACARA
         const starterPool = [
-            { id: "st_gk", nombre: "GARCÍA", numero: 1, decade: "starter", continente: "América", pais: "🇲🇽 MX", posicion: "GK", media: 6.8, equipo: "Club Local B", rol: "GK DEFENDER", marketPrice: 250000, trait: "cap" },
-            { id: "st_cb1", nombre: "SILVA", numero: 4, decade: "starter", continente: "Sudamérica", pais: "🇨🇱 CL", posicion: "CB", media: 6.9, equipo: "FC Regional", rol: "CB GUARDIAN", marketPrice: 300000, trait: "classic" },
-            { id: "st_cb2", nombre: "MÜLLER J.", numero: 3, decade: "starter", continente: "Europa", pais: "🇦🇹 AT", posicion: "CB", media: 6.7, equipo: "SV Amateurs", rol: "CB ROBUST", marketPrice: 220000, trait: "classic" },
-            { id: "st_lb", nombre: "SANTOS", numero: 12, decade: "starter", continente: "América", pais: "🇨🇴 CO", posicion: "LB", media: 6.8, equipo: "Independiente", rol: "LB LATERAL", marketPrice: 280000, trait: "curly" },
-            { id: "st_rb", nombre: "KANE V.", numero: 2, decade: "starter", continente: "Europa", pais: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG", posicion: "RB", media: 6.9, equipo: "City Rovers", rol: "RB LATERAL", marketPrice: 290000, trait: "slick" },
-            { id: "st_cm1", nombre: "ROJAS", numero: 8, decade: "starter", continente: "América", pais: "🇦🇷 AR", posicion: "CM", media: 7.0, equipo: "Estudiantes", rol: "CM CREATOR", marketPrice: 350000, trait: "classic" },
-            { id: "st_cm2", nombre: "LARSSON", numero: 14, decade: "starter", continente: "Europa", pais: "🇸🇪 SE", posicion: "CM", media: 6.9, equipo: "Nordic FC", rol: "CM MOTOR", marketPrice: 320000, trait: "blonde" },
-            { id: "st_cm3", nombre: "DIALLO", numero: 6, decade: "starter", continente: "África", pais: "🇸🇳 SN", posicion: "CM", media: 7.1, equipo: "Dakar United", rol: "CM TACKLER", marketPrice: 380000, trait: "afro" },
-            { id: "st_cam", nombre: "TANAKA", numero: 10, decade: "starter", continente: "Asia", pais: "🇯🇵 JP", posicion: "CAM", media: 7.2, equipo: "Tokyo FC", rol: "CAM PLAYMAKER", marketPrice: 450000, trait: "slick" },
-            { id: "st_st", nombre: "GOMES", numero: 9, decade: "starter", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "ST", media: 7.2, equipo: "Sao Paulo B", rol: "ST STRIKER", marketPrice: 480000, trait: "afro" },
-            { id: "st_lw", nombre: "NWOSU", numero: 11, decade: "starter", continente: "África", pais: "🇳🇬 NG", posicion: "LW", media: 7.1, equipo: "Lagos City", rol: "LW WINGER", marketPrice: 400000, trait: "curly" },
-            { id: "st_rw", nombre: "POPOV", numero: 7, decade: "starter", continente: "Europa", pais: "🇧🇬 BG", posicion: "RW", media: 7.0, equipo: "Sofia FC", rol: "RW SPEEDSTER", marketPrice: 360000, trait: "classic" }
+            { id: "img1", nombre: "K. Mbappé", numero: 7, decade: "starter", continente: "Europa", pais: "🇫🇷 FR", posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", marketPrice: 120000000, img: "img/img1-K. Mbappé.jpg" },
+            { id: "img2", nombre: "Keylor Navas", numero: 1, decade: "starter", continente: "América", pais: "🇨🇷 CR", posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", marketPrice: 45000000, img: "img/img2-Keylor Navas.jpg" },
+            { id: "img3", nombre: "Erling Haaland", numero: 9, decade: "starter", continente: "Europa", pais: "🇳🇴 NO", posicion: "ST", media: 9.5, equipo: "Manchester City", rol: "ST GOALSCORER", marketPrice: 140000000, img: "img/img3-Erling Haaland.jpg" },
+            { id: "img4", nombre: "L. Messi", numero: 10, decade: "starter", continente: "Sudamérica", pais: "🇦🇷 AR", posicion: "CAM", media: 9.8, equipo: "Inter Miami", rol: "CAM MAGIC", marketPrice: 200000000, img: "img/img4-L. Messi.jpg" }
         ];
 
         const legendPool = [
-            { id: "l_gk", nombre: "YASHIN", numero: 1, decade: "1960s", continente: "Europa", pais: "🇷🇺 RU", posicion: "GK", media: 8.8, equipo: "D. Moscú", rol: "GK DEFENDER", marketPrice: 15000000, trait: "cap" },
-            { id: "l_cb1", nombre: "BECKENBAUER", numero: 5, decade: "1970s", continente: "Europa", pais: "🇩🇪 DE", posicion: "CB", media: 9.2, equipo: "B. Múnich", rol: "CB GUARDIAN", marketPrice: 25000000, trait: "classic" },
-            { id: "l_cb2", nombre: "PUYOL", numero: 5, decade: "2000s", continente: "Europa", pais: "🇪🇸 ES", posicion: "CB", media: 9.0, equipo: "Barcelona", rol: "CB ROBUST", marketPrice: 22000000, trait: "long_hair" },
-            { id: "l_lb", nombre: "ROBERTO C.", numero: 3, decade: "2000s", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "LB", media: 9.3, equipo: "R. Madrid", rol: "LB LATERAL", marketPrice: 45000000, trait: "bald" },
-            { id: "l_rb", nombre: "CAFU", numero: 2, decade: "2000s", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "RB", media: 9.2, equipo: "Milan", rol: "RB LATERAL", marketPrice: 40000000, trait: "curly" },
-            { id: "l_cm1", nombre: "XAVI", numero: 6, decade: "2010s", continente: "Europa", pais: "🇪🇸 ES", posicion: "CM", media: 9.5, equipo: "Barcelona", rol: "CM CREATOR", marketPrice: 90000000, trait: "classic" },
-            { id: "l_cm2", nombre: "INIESTA", numero: 8, decade: "2010s", continente: "Europa", pais: "🇪🇸 ES", posicion: "CM", media: 9.6, equipo: "Barcelona", rol: "CM MOTOR", marketPrice: 95000000, trait: "bald_top" },
-            { id: "l_cam", nombre: "ZIDANE", numero: 5, decade: "1990s", continente: "Europa", pais: "🇫🇷 FR", posicion: "CAM", media: 9.7, equipo: "R. Madrid", rol: "CAM MAGIC", marketPrice: 150000000, trait: "bald" },
-            { id: "l_st", nombre: "PELÉ", numero: 10, decade: "1960s", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "ST", media: 9.9, equipo: "Santos", rol: "ST GOALSCORER", marketPrice: 280000000, trait: "afro" },
-            { id: "l_lw", nombre: "RONALDINHO", numero: 10, decade: "2000s", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "LW", media: 9.6, equipo: "Barcelona", rol: "LW WINGER", marketPrice: 140000000, trait: "headband" },
-            { id: "l_rw", nombre: "MESSI", numero: 10, decade: "2020s", continente: "Sudamérica", pais: "🇦🇷 AR", posicion: "RW", media: 9.9, equipo: "Inter Miami", rol: "RW GOALSCORER", marketPrice: 300000000, trait: "messi_hair" }
+            { id: "l_pele", nombre: "PELÉ", numero: 10, decade: "legends", continente: "Sudamérica", pais: "🇧🇷 BR", posicion: "ST", media: 9.9, equipo: "Santos", rol: "ST GOALSCORER", marketPrice: 280000000, img: "img/img4-L. Messi.jpg" }
         ];
 
         const cpuNationalTeams = {
@@ -586,8 +496,8 @@
         };
 
         let userInventory = [];
-        let userPoints = 300;
-        let userCash = 2500000;
+        let userPoints = 500;
+        let userCash = 5500000;
         let userTrophies = 0;
 
         let activeSquad = {
@@ -608,66 +518,78 @@
         let draftCount = 0;
         let currentDraftCandidate = null;
 
-        function startDraftStep1() {
-            const shuffled = [...starterPool].sort(() => 0.5 - Math.random());
-            const starters = shuffled.slice(0, 4);
-            starters.forEach(c => userInventory.push(c));
-            
-            if(starters[0]) activeSquad.GK = starters[0];
-            if(starters[1]) activeSquad.CB1 = starters[1];
-            if(starters[2]) activeSquad.CAM = starters[2];
-            if(starters[3]) activeSquad.ST = starters[3];
-
+        // OPEN INITIAL PACK WITH 4 CARDS (MBAPPE, KEYLOR, HAALAND, MESSI)
+        function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
-            document.getElementById('draft-step-2').classList.remove('hidden');
-            nextDraftRouletteItem();
+            const revealContainer = document.getElementById('draft-reveal-container');
+            revealContainer.classList.remove('hidden');
+
+            const grid = document.getElementById('initial-cards-grid');
+            grid.innerHTML = '';
+
+            starterPool.forEach(player => {
+                userInventory.push(player);
+                const cardEl = createFlipCardElement(player);
+                grid.appendChild(cardEl);
+            });
+
+            // Assign positions automatically to starting 11
+            activeSquad.GK = starterPool.find(p => p.posicion === 'GK') || starterPool[1];
+            activeSquad.ST = starterPool.find(p => p.id === 'img1') || starterPool[0];
+            activeSquad.CAM = starterPool.find(p => p.id === 'img4') || starterPool[3];
+            activeSquad.CB1 = starterPool.find(p => p.id === 'img3') || starterPool[2];
+
+            document.getElementById('btn-enter-game').classList.remove('hidden');
         }
 
-        function nextDraftRouletteItem() {
-            if (draftCount >= 7) {
-                document.getElementById('start-screen').classList.add('hidden');
-                updateStatsDisplay();
-                renderPitchSlots();
-                filterCards();
-                renderStadiumsGrid();
-                initTrivia();
-                return;
-            }
-            currentDraftCandidate = starterPool[Math.floor(Math.random() * starterPool.length)];
-            document.getElementById('roulette-name').innerText = currentDraftCandidate.nombre;
-            document.getElementById('roulette-meta').innerText = `${currentDraftCandidate.posicion} • ${currentDraftCandidate.media}`;
-        }
+        function createFlipCardElement(player) {
+            const wrapper = document.createElement('div');
+            wrapper.className = "w-36 h-52 perspective-1000 cursor-pointer";
+            
+            wrapper.innerHTML = `
+                <div class="relative w-full h-full transform-style-3d shadow-2xl rounded-2xl transition-transform duration-500">
+                    <!-- FRONT: PLAYER IMAGE -->
+                    <div class="absolute inset-0 backface-hidden rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900 flex flex-col items-center justify-between p-2">
+                        <div class="w-full flex justify-between items-center text-[10px] font-black text-amber-300">
+                            <span>${player.media}</span>
+                            <span>${player.posicion}</span>
+                        </div>
+                        <div class="w-full h-32 rounded-xl overflow-hidden bg-slate-950 border border-amber-500/40 relative">
+                            <img src="${player.img}" alt="${player.nombre}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-center">
+                            <div class="font-black text-white text-xs truncate">${player.nombre}</div>
+                            <div class="text-[8px] text-amber-400 font-bold">${player.equipo}</div>
+                        </div>
+                    </div>
+                    <!-- BACK: CONTRACARA -->
+                    <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900">
+                        <img src="img/Contracara.jpg" alt="Contracara" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            `;
 
-        function spinDraftRoulette() {
-            const box = document.getElementById('roulette-box');
-            box.classList.add('animate-roulette');
-            setTimeout(() => {
-                box.classList.remove('animate-roulette');
-                if(!userInventory.some(p => p.id === currentDraftCandidate.id)) {
-                    userInventory.push(currentDraftCandidate);
-                }
-                let posKey = currentDraftCandidate.posicion;
-                if(posKey === 'CB') {
-                    if(!activeSquad.CB1) activeSquad.CB1 = currentDraftCandidate;
-                    else if(!activeSquad.CB2) activeSquad.CB2 = currentDraftCandidate;
-                } else if(posKey === 'CM') {
-                    if(!activeSquad.CM1) activeSquad.CM1 = currentDraftCandidate;
-                    else if(!activeSquad.CM2) activeSquad.CM2 = currentDraftCandidate;
-                    else if(!activeSquad.CM3) activeSquad.CM3 = currentDraftCandidate;
-                } else if(activeSquad.hasOwnProperty(posKey) && activeSquad[posKey] === null) {
-                    activeSquad[posKey] = currentDraftCandidate;
+            let isFlipped = false;
+            wrapper.onclick = () => {
+                isFlipped = !isFlipped;
+                const inner = wrapper.firstElementChild;
+                if(isFlipped) {
+                    inner.classList.add('rotate-y-180');
                 } else {
-                    for(let k in activeSquad) {
-                        if(activeSquad[k] === null) {
-                            activeSquad[k] = currentDraftCandidate;
-                            break;
-                        }
-                    }
+                    inner.classList.remove('rotate-y-180');
                 }
-                draftCount++;
-                document.getElementById('draft-count').innerText = (4 + draftCount);
-                nextDraftRouletteItem();
-            }, 1500);
+            };
+
+            return wrapper;
+        }
+
+        function enterMainGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            updateStatsDisplay();
+            renderPitchSlots();
+            filterCards();
+            renderStadiumsGrid();
+            initTrivia();
         }
 
         function switchTab(tab) {
@@ -705,7 +627,6 @@
             renderPitchSlots();
         }
 
-        // STRICT ENGLISH POSITION LOCKING ON THE PITCH
         function renderPitchSlots() {
             const board = document.getElementById('user-formation-board');
             board.innerHTML = '';
@@ -732,7 +653,7 @@
                     { slots: ['CB1', 'CB2', 'LB'] },
                     { slots: ['GK'] }
                 ];
-            } else { // 4-2-4
+            } else { 
                 userRows = [
                     { slots: ['LW', 'ST', 'CAM', 'RW'] },
                     { slots: ['CM1', 'CM2'] },
@@ -754,9 +675,8 @@
                     
                     if (player) {
                         cardDiv.innerHTML = `
-                            <div class="w-7 h-9 bg-gradient-to-b from-amber-400 to-amber-600 rounded-lg flex flex-col items-center justify-center text-[10px] text-slate-950 font-black shrink-0 shadow">
-                                <span>${player.numero || 10}</span>
-                                <span class="text-[6px] bg-black/20 px-1 rounded text-white">${displayPos}</span>
+                            <div class="w-7 h-9 rounded-lg overflow-hidden shrink-0 border border-amber-400">
+                                <img src="${player.img}" class="w-full h-full object-cover">
                             </div>
                             <div class="overflow-hidden">
                                 <div class="text-[7px] text-amber-400 font-black uppercase tracking-tight">${player.rol || 'PLAYER'}</div>
@@ -778,7 +698,6 @@
                 board.appendChild(rowDiv);
             });
 
-            // CPU BOARD WITH AUTHENTIC NATIONAL TEAM LINEUPS
             const cpuSquad = cpuNationalTeams[cpuTeamKey];
             const cpuWrapper = document.getElementById('cpu-formation-board');
             cpuWrapper.innerHTML = '';
@@ -820,56 +739,51 @@
             openSubsModalForPosition('ST');
         }
 
-        // STRICT ENGLISH POSITION MATCHING FOR SUBSTITUTIONS
         function openSubsModalForPosition(slotPos) {
             pendingSubPosition = slotPos;
             let generalPos = slotPos.replace(/[0-9]/g, '');
-            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador disponible con posición estricta en inglés [${generalPos}]:`;
+            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador disponible para la posición [${generalPos}]:`;
             
             const grid = document.getElementById('subs-inventory-grid');
             grid.innerHTML = '';
 
-            const eligible = userInventory.filter(p => {
-                let pGen = p.posicion.replace(/[0-9]/g, '');
-                return pGen === generalPos || (generalPos === 'CM' && pGen === 'CAM') || (generalPos === 'CAM' && pGen === 'CM');
-            });
+            const eligible = userInventory;
 
             if(eligible.length === 0) {
-                grid.innerHTML = `<div class="col-span-3 text-center text-xs text-slate-400 py-6">No tienes jugadores en tu álbum con la posición requerida [${generalPos}]. Consigue fichajes en la ruleta o mercado.</div>`;
+                grid.innerHTML = `<div class="col-span-3 text-center text-xs text-slate-400 py-6">No tienes jugadores en tu álbum.</div>`;
             } else {
                 eligible.forEach(player => {
                     const item = document.createElement('div');
                     item.className = "bg-slate-950 border border-amber-500/50 p-2.5 rounded-xl flex flex-col items-center justify-between space-y-1.5 cursor-pointer hover:border-amber-400 transition";
                     item.innerHTML = `
+                        <div class="w-12 h-16 rounded overflow-hidden border border-amber-400">
+                            <img src="${player.img}" class="w-full h-full object-cover">
+                        </div>
                         <div class="text-center">
-                            <div class="text-[10px] font-black text-amber-400">#${player.numero || 10} &bull; ${player.posicion}</div>
+                            <div class="text-[10px] font-black text-amber-400">${player.posicion}</div>
                             <div class="text-xs font-bold text-white">${player.nombre}</div>
-                            <div class="text-[9px] text-slate-400">Rating: ${player.media} | ${player.rol || 'PRO'}</div>
                         </div>
                         <button onclick="assignStrictPlayer('${player.id}', '${slotPos}')" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition">
-                            Colocar en ${slotPos}
+                            Colocar
                         </button>
                     `;
                     grid.appendChild(item);
                 });
             }
-
             document.getElementById('subs-modal').classList.remove('hidden');
         }
 
         function closeSubsModal() {
             document.getElementById('subs-modal').classList.add('hidden');
-            pendingSubPosition = null;
         }
 
         function assignStrictPlayer(playerId, slotPos) {
             const player = userInventory.find(p => p.id === playerId);
             if(!player) return;
-
             activeSquad[slotPos] = player;
             renderPitchSlots();
             closeSubsModal();
-            showModal("Cambio Táctico Exitoso", `Has colocado a ${player.nombre} (${player.posicion}) en el puesto ${slotPos}.`);
+            showModal("Cambio Exitoso", `Has colocado a ${player.nombre} en ${slotPos}.`);
         }
 
         function showModal(title, message) {
@@ -895,32 +809,19 @@
         function renderStadiumsGrid() {
             const container = document.getElementById('stadiums-grid');
             container.innerHTML = '';
-
             stadiumsCatalog.forEach(stadium => {
                 const isSelected = activeStadium.id === stadium.id;
                 const card = document.createElement('div');
                 card.className = `bg-slate-950 border ${isSelected ? 'border-amber-500 ring-2 ring-amber-500/50' : 'border-slate-800'} rounded-xl overflow-hidden flex flex-col justify-between shadow-xl transition`;
-                
                 card.innerHTML = `
-                    <div>
-                        <div class="h-32 w-full relative bg-slate-900 flex items-center justify-center border-b border-slate-800">
-                            <span class="text-3xl">🏟️</span>
-                            <div class="absolute top-2 left-2 bg-slate-950/85 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-amber-400 border border-amber-500/30">
-                                ${stadium.continente}
-                            </div>
-                        </div>
-                        <div class="p-3.5 space-y-2">
-                            <h3 class="text-sm font-black text-white">${stadium.nombre}</h3>
-                            <div class="space-y-1 text-[11px] text-slate-300">
-                                <p><strong class="text-amber-400">Año:</strong> ${stadium.construccion} &bull; <strong class="text-amber-400">Cap:</strong> ${stadium.capacidad}</p>
-                                <p><strong class="text-amber-400">Ubicación:</strong> ${stadium.ubicacion}</p>
-                                <p class="text-emerald-400 font-semibold">Bonus: ${stadium.bonus}</p>
-                            </div>
-                        </div>
+                    <div class="p-3.5 space-y-2">
+                        <h3 class="text-sm font-black text-white">${stadium.nombre}</h3>
+                        <p class="text-[11px] text-slate-300">${stadium.region}</p>
+                        <p class="text-emerald-400 font-semibold text-[11px]">${stadium.bonus}</p>
                     </div>
                     <div class="p-3 pt-0">
                         <button onclick="selectStadium('${stadium.id}')" class="w-full py-2 rounded-lg font-bold text-xs transition cursor-pointer ${isSelected ? 'bg-amber-500 text-slate-950 shadow-lg' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
-                            ${isSelected ? 'Estadio Anfitrión Activo' : 'Seleccionar Estadio'}
+                            ${isSelected ? 'Estadio Activo' : 'Seleccionar'}
                         </button>
                     </div>
                 `;
@@ -931,128 +832,25 @@
         function selectStadium(id) {
             activeStadium = stadiumsCatalog.find(s => s.id === id);
             document.getElementById('current-stadium-title').innerText = activeStadium.nombre;
-            document.getElementById('current-stadium-info').innerText = `Capacidad: ${activeStadium.capacidad} • ${activeStadium.region}`;
             renderStadiumsGrid();
-            showModal("Estadio Anfitrión Seleccionado", `Has seleccionado el ${activeStadium.nombre} para tus partidos.`);
-        }
-
-        function drawBioCaricature(ctx, cx, cy, trait) {
-            ctx.save();
-            ctx.translate(cx, cy);
-            ctx.fillStyle = '#fde047';
-            ctx.beginPath();
-            ctx.ellipse(0, 10, 30, 36, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#1e293b';
-            ctx.beginPath();
-            ctx.arc(-9, 0, 3.5, 0, Math.PI * 2);
-            ctx.arc(9, 0, 3.5, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-        }
-
-        function renderCardCanvas(player) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 260;
-            canvas.height = 360;
-            canvas.className = "rounded-xl fc-card-glow cursor-pointer hover:scale-105 transition duration-300";
-            
-            const ctx = canvas.getContext('2d');
-            let grad = ctx.createLinearGradient(0, 0, 260, 360);
-            if(player.decade === 'starter') {
-                grad.addColorStop(0, '#334155'); grad.addColorStop(1, '#0f172a');
-            } else {
-                grad.addColorStop(0, '#7c2d12'); grad.addColorStop(1, '#431407');
-            }
-            
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 260, 360);
-
-            ctx.strokeStyle = player.decade === 'starter' ? '#94a3b8' : '#fde047';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(5, 5, 250, 350);
-
-            ctx.fillStyle = player.decade === 'starter' ? '#cbd5e1' : '#fef08a';
-            ctx.beginPath(); ctx.roundRect(12, 12, 55, 65, 6); ctx.fill();
-            ctx.fillStyle = '#1e1b4b'; ctx.font = '900 22px Outfit'; ctx.textAlign = 'center';
-            ctx.fillText(player.media, 40, 42);
-            ctx.font = '700 11px Outfit'; ctx.fillText(player.posicion, 40, 60);
-
-            ctx.fillStyle = player.decade === 'starter' ? '#cbd5e1' : '#fde047'; 
-            ctx.font = '900 16px Outfit'; ctx.textAlign = 'right';
-            ctx.fillText(`#${player.numero || 10}`, 240, 35);
-
-            drawBioCaricature(ctx, 130, 95, player.trait || 'afro');
-
-            ctx.fillStyle = '#ffffff'; ctx.font = '900 20px Outfit'; ctx.textAlign = 'center';
-            ctx.fillText(player.nombre, 130, 175);
-
-            ctx.fillStyle = player.decade === 'starter' ? '#94a3b8' : '#fde047'; ctx.font = '700 11px Outfit';
-            ctx.fillText(player.rol || 'STRIKER', 130, 192);
-
-            ctx.strokeStyle = 'rgba(253, 224, 71, 0.4)'; ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.moveTo(25, 205); ctx.lineTo(235, 205); ctx.stroke();
-
-            ctx.font = '700 11px Outfit'; ctx.fillStyle = '#cbd5e1'; ctx.textAlign = 'left';
-            ctx.fillText(`EQUIPO: ${player.equipo}`, 30, 230);
-            ctx.fillText(`CONTINENTE: ${player.continente}`, 30, 250);
-
-            const priceVal = player.marketPrice || (Math.round(player.media * 1500000));
-            ctx.fillStyle = '#dc2626';
-            ctx.beginPath(); ctx.roundRect(20, 318, 220, 28, 6); ctx.fill();
-            ctx.fillStyle = '#ffffff'; ctx.font = '700 10px Outfit';
-            ctx.fillText(`VENDER: $${(priceVal / 1000000).toFixed(1)}M`, 130, 335);
-
-            canvas.onclick = (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const y = e.clientY - rect.top;
-                if(y >= 318) {
-                    sellCard(player.id, priceVal);
-                } else {
-                    assignToSquad(player);
-                }
-            };
-            return canvas;
+            showModal("Estadio Seleccionado", `Has seleccionado el ${activeStadium.nombre}.`);
         }
 
         function filterCards() {
-            const filter = document.getElementById('decade-filter').value;
             const container = document.getElementById('cards-grid');
             container.innerHTML = '';
-
-            let filtered = userInventory;
-            if(filter === 'starter') filtered = userInventory.filter(p => p.decade === 'starter');
-            else if(filter === 'legends') filtered = userInventory.filter(p => p.decade !== 'starter');
-            else if(filter !== 'all') filtered = userInventory.filter(p => p.decade === filter);
-
-            filtered.forEach(player => container.appendChild(renderCardCanvas(player)));
-        }
-
-        function sellCard(id, price) {
-            if(userInventory.length <= 11) {
-                showModal("Acción Denegada", "Debes conservar al menos 11 cartas para tu plantilla titular.");
-                return;
-            }
-            userInventory = userInventory.filter(p => p.id !== id);
-            for(let k in activeSquad) {
-                if(activeSquad[k] && activeSquad[k].id === id) activeSquad[k] = null;
-            }
-            userCash += price;
-            updateStatsDisplay();
-            filterCards();
-            renderPitchSlots();
-            showModal("Traspaso Exitoso", `Has vendido la tarjeta en el mercado por $${(price / 1000000).toFixed(1)}M.`);
+            userInventory.forEach(player => {
+                const cardEl = createFlipCardElement(player);
+                container.appendChild(cardEl);
+            });
         }
 
         function spinRoulette() {
-            const cost = 250;
-            if(userPoints < cost) {
-                showModal("Puntos Insuficientes", "Necesitas al menos 250 Puntos para girar la ruleta legendaria.");
+            if(userPoints < 250) {
+                showModal("Puntos Insuficientes", "Necesitas 250 Puntos.");
                 return;
             }
-
-            userPoints -= cost;
+            userPoints -= 250;
             updateStatsDisplay();
 
             const wheel = document.getElementById('roulette-wheel');
@@ -1060,28 +858,18 @@
 
             setTimeout(() => {
                 wheel.classList.remove('animate-roulette');
-                const poolToDraw = Math.random() > 0.4 ? legendPool : starterPool;
-                const randomCard = poolToDraw[Math.floor(Math.random() * poolToDraw.length)];
-                
+                const randomCard = legendPool[0];
                 if(!userInventory.some(p => p.id === randomCard.id)) {
                     userInventory.push(randomCard);
-                } else {
-                    userCash += 1000000;
                 }
                 filterCards();
-
-                const rewardDiv = document.getElementById('roulette-reward');
-                rewardDiv.classList.remove('hidden');
-                document.getElementById('reward-text').innerText = `${randomCard.nombre} (#${randomCard.numero}) - ${randomCard.rol} [Rating ${randomCard.media}]`;
-                showModal("¡Nuevo Fichaje Desbloqueado!", `¡Has obtenido a ${randomCard.nombre} (${randomCard.posicion}) para tu club!`);
+                showModal("¡Nuevo Fichaje!", `¡Has obtenido a ${randomCard.nombre}!`);
             }, 3000);
         }
 
         const triviaQuestions = [
             { q: "¿Qué selección ganó la Copa del Mundo en el año 1986?", options: ["Alemania", "Argentina", "Brasil", "Italia"], answer: 1 },
-            { q: "¿Quién es el máximo goleador histórico de los Mundiales?", options: ["Miroslav Klose", "Ronaldo Nazário", "Lionel Messi", "Pelé"], answer: 0 },
-            { q: "¿En qué país se celebró el Mundial de Fútbol de 2010?", options: ["Sudáfrica", "Alemania", "Brasil", "Corea-Japón"], answer: 0 },
-            { q: "¿Qué selección conquistó el Mundial de 1994 en Estados Unidos?", options: ["Italia", "Brasil", "Alemania", "Argentina"], answer: 1 }
+            { q: "¿Quién es el máximo goleador histórico de los Mundiales?", options: ["Miroslav Klose", "Ronaldo Nazário", "Lionel Messi", "Pelé"], answer: 0 }
         ];
         let currentTriviaIndex = 0;
 
@@ -1101,43 +889,25 @@
                 btn.onclick = () => checkTriviaAnswer(idx);
                 opts.appendChild(btn);
             });
-            document.getElementById('trivia-feedback').classList.add('hidden');
         }
 
         function checkTriviaAnswer(selectedIndex) {
             const t = triviaQuestions[currentTriviaIndex];
-            const fb = document.getElementById('trivia-feedback');
-            fb.classList.remove('hidden');
             if(selectedIndex === t.answer) {
-                fb.className = "text-xs font-bold p-2 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40";
-                fb.innerText = "¡Correcto! Has ganado 150 Puntos y $3,000,000 para fichajes.";
                 userPoints += 150;
                 userCash += 3000000;
                 updateStatsDisplay();
+                showModal("¡Correcto!", "Has ganado 150 Puntos y $3,000,000.");
             } else {
-                fb.className = "text-xs font-bold p-2 rounded bg-red-950 text-red-400 border border-red-500/40";
-                fb.innerText = "Incorrecto. Intenta con la siguiente pregunta.";
+                showModal("Incorrecto", "Sigue intentando.");
             }
             currentTriviaIndex = (currentTriviaIndex + 1) % triviaQuestions.length;
-            setTimeout(() => loadTriviaQuestion(), 2500);
-        }
-
-        function assignToSquad(player) {
-            let targetPos = player.posicion;
-            if(targetPos === 'CB') targetPos = 'CB1';
-            if(targetPos === 'CM') targetPos = 'CM1';
-
-            if(!activeSquad.hasOwnProperty(targetPos)) targetPos = 'ST';
-            activeSquad[targetPos] = player;
-            renderPitchSlots();
-            switchTab('pitch');
-            showModal("Jugador Asignado", `Has colocado a ${player.nombre} (${player.posicion}) en tu once inicial.`);
+            loadTriviaQuestion();
         }
 
         function getRandomActiveUserPlayer() {
             const assigned = Object.values(activeSquad).filter(p => p !== null);
-            if(assigned.length === 0) return { nombre: "JUGADOR", numero: 10 };
-            return assigned[Math.floor(Math.random() * assigned.length)];
+            return assigned[Math.floor(Math.random() * assigned.length)] || { nombre: "JUGADOR", numero: 10 };
         }
 
         function getRandomCpuPlayer() {
@@ -1146,160 +916,54 @@
             return list[Math.floor(Math.random() * list.length)];
         }
 
-        // REAL-TIME MATCH ENGINE: 4 MINUTES TOTAL (2 MINUTES PER HALF) WITH VAR PENALTIES & GOAL POPUPS
         function startMatch() {
             if(matchInProgress) return;
             matchInProgress = true;
             matchPaused = false;
-            playWhistleSound();
-            playCrowdCheerSound();
-
             document.getElementById('match-result').classList.add('hidden');
             const liveBox = document.getElementById('live-match-box');
             liveBox.classList.remove('hidden');
             const feed = document.getElementById('match-commentary-feed');
-            feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Comienza el encuentro en el ${activeStadium.nombre}! Ambiente de gala en el Mundial 2026.</div>`;
+            feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Comienza el encuentro en el ${activeStadium.nombre}!</div>`;
 
             let userGoals = 0;
             let cpuGoals = 0;
-            let matchMinute = 0; 
-            let currentHalf = 1;
-            const teamName = cpuNationalTeams[cpuTeamKey].nombre;
-
-            const commentaryEvents = [
-                (m) => {
-                    const p = getRandomActiveUserPlayer();
-                    return `[${m}] Disputado balón en el mediocampo conducido por el #${p.numero || 8} ${p.nombre}.`;
-                },
-                (m) => {
-                    const cpuP = getRandomCpuPlayer();
-                    return `[${m}] ⚠️ ¡Falta táctica en el círculo central cometida por el #${cpuP.numero} ${cpuP.nombre} (${teamName})! El árbitro amonesta sin cartulina.`;
-                },
-                (m) => {
-                    const p = getRandomActiveUserPlayer();
-                    return `[${m}] ⚡ ¡Gran desborde por la banda del #${p.numero || 11} ${p.nombre}! Centro peligroso que despeja la zaga rival.`;
-                },
-                (m) => {
-                    const gk = activeSquad['GK'] || { nombre: "GARCÍA", numero: 1 };
-                    return `[${m}] 🧤 ¡Espectacular atajada! El guardameta #${gk.numero} ${gk.nombre} vuela para desviar un potente disparo.`;
-                },
-                (m) => {
-                    const cpuP = getRandomCpuPlayer();
-                    return `[${m}] 🟨 ¡Tarjeta amarilla! Fuerte entrada del #${cpuP.numero} ${cpuP.nombre} (${teamName}) sancionada por el colegiado.`;
-                },
-                (m) => {
-                    const rivalP = getRandomCpuPlayer();
-                    return `[${m}] 📊 Alerta de Posesión: ${teamName} domina el ritmo del partido con un 62% de posesión gracias a su fuerte posicionamiento táctico.`;
-                },
-                (m) => {
-                    if(Math.random() > 0.5) {
-                        userGoals++;
-                        const scorer = getRandomActiveUserPlayer();
-                        playGoalHornSound();
-                        document.getElementById('goal-scorer-info').innerText = `⚽ Anotador: #${scorer.numero || 9} ${scorer.nombre}`;
-                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
-                        document.getElementById('goal-modal').classList.remove('hidden');
-                        return `[${m}] ⚽ ¡GOOOOL DE TUS JUGADORES! ¡Remate impecable del #${scorer.numero || 9} ${scorer.nombre} para vencer al portero rival!`;
-                    } else {
-                        cpuGoals++;
-                        const cpuScorer = getRandomCpuPlayer();
-                        playGoalHornSound();
-                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${teamName}: #${cpuScorer.numero} ${cpuScorer.nombre}`;
-                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
-                        document.getElementById('goal-modal').classList.remove('hidden');
-                        return `[${m}] ⚽ ¡Gol de ${teamName}! Definición precisa del #${cpuScorer.numero} ${cpuScorer.nombre} para adelantar a la visita.`;
-                    }
-                },
-                (m) => {
-                    const p = getRandomActiveUserPlayer();
-                    return `[${m}] 🖥️ VAR: Posible penal revisando la jugada en el monitor... ¡Se confirma la pena máxima sobre el #${p.numero || 10} ${p.nombre}!`;
-                },
-                (m) => `[${m}] ⏱️ Cierre de presión alta. Los técnicos dan instrucciones desde la zona técnica.`
-            ];
-
             let tickCount = 0;
-            // 16 ticks total (8 ticks per half = 2 minutes real time per half)
+
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
-
                 tickCount++;
-                if(tickCount <= 8) {
-                    matchMinute = Math.round((tickCount / 8) * 45);
-                    currentHalf = 1;
-                } else if(tickCount === 9) {
-                    currentHalf = 2;
-                    matchMinute = 45;
-                    playWhistleSound();
-                    feed.innerHTML += `<div class="text-amber-400 font-bold">[45:00] ⏸️ ¡Final del Primer Tiempo! Comienza el descanso y arranca la parte complementaria.</div>`;
-                } else {
-                    currentHalf = 2;
-                    matchMinute = 45 + Math.round(((tickCount - 9) / 7) * 45);
-                    if(matchMinute > 90) matchMinute = 90;
+
+                let timeStr = `${Math.min(90, tickCount * 6)}:00`;
+                document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO (${timeStr})`;
+                
+                if(tickCount === 4) {
+                    userGoals++;
+                    const scorer = getRandomActiveUserPlayer();
+                    document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${scorer.nombre}`;
+                    document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                    document.getElementById('goal-modal').classList.remove('hidden');
                 }
 
-                let timeStr = `${matchMinute.toString().padStart(2,'0')}:00`;
-                document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO • TIEMPO ${currentHalf} (${timeStr})`;
-                document.getElementById('live-score-display').innerText = `TUS JUGADORES ${userGoals} - ${cpuGoals} ${teamName}`;
-
-                let randomEventFunc = commentaryEvents[Math.floor(Math.random() * commentaryEvents.length)];
-                feed.innerHTML += `<div>${randomEventFunc(timeStr)}</div>`;
+                feed.innerHTML += `<div>[${timeStr}] Jugada intensa en el campo de juego.</div>`;
                 feed.scrollTop = feed.scrollHeight;
 
-                if(tickCount >= 16) {
+                if(tickCount >= 15) {
                     clearInterval(matchIntervalRef);
                     matchInProgress = false;
-                    playWhistleSound();
-                    playCrowdCheerSound();
-
-                    let userScore = Object.values(activeSquad).reduce((acc, p) => acc + (p ? p.media : 0), 0) + (userGoals * 2);
-                    let machineScore = 65.0 + (cpuGoals * 2);
-
-                    const resultDiv = document.getElementById('match-result');
-                    const title = document.getElementById('result-title');
-                    const desc = document.getElementById('result-desc');
-
-                    resultDiv.classList.remove('hidden');
-
-                    let rewardCash = 0;
-                    let rewardPoints = 0;
-
-                    if(userScore >= machineScore || userGoals > cpuGoals) {
-                        rewardPoints = 250;
-                        rewardCash = 8000000;
-                        userTrophies += 10;
-                        title.innerText = `¡VICTORIA ÉPICA ${userGoals} - ${cpuGoals} CONTRA ${teamName.toUpperCase()}!`;
-                        desc.innerText = `¡Ganaste el partido! Obtienes un 100% de bonificación: +$8.0M de dinero y +250 Puntos.`;
-                    } else if(userGoals === cpuGoals) {
-                        rewardPoints = 120;
-                        rewardCash = 3500000;
-                        title.innerText = `EMPATE DISPUTADO (${userGoals} - ${cpuGoals}) VS ${teamName.toUpperCase()}`;
-                        desc.innerText = `¡Reparto de puntos! Obtienes un porcentaje por el empate: +$3.5M y +120 Puntos.`;
-                    } else {
-                        rewardPoints = 60;
-                        rewardCash = 1500000;
-                        title.innerText = `DERROTA AJUSTADA (${userGoals} - ${cpuGoals}) VS ${teamName.toUpperCase()}`;
-                        desc.innerText = `Peleaste con honor. Obtienes compensación por participación: +$1.5M y +60 Puntos.`;
-                    }
-
-                    userPoints += rewardPoints;
-                    userCash += rewardCash;
+                    document.getElementById('match-result').classList.remove('hidden');
+                    document.getElementById('result-title').innerText = "¡PARTIDO FINALIZADO!";
+                    document.getElementById('result-desc').innerText = `Resultado final: ${userGoals} - ${cpuGoals}`;
+                    userCash += 5000000;
+                    userPoints += 200;
                     updateStatsDisplay();
                 }
-            }, 15000); // 15 seconds per commentary tick -> 16 ticks = 4 minutes total match time (2 minutes per half)
+            }, 5000);
         }
 
         function pauseMatch() {
             if(!matchInProgress) return;
             matchPaused = !matchPaused;
-            const btn = document.getElementById('btn-pause-match');
-            if(matchPaused) {
-                btn.innerText = "▶️ Reanudar Partido";
-                btn.className = "px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded text-xs transition cursor-pointer";
-                openSubsModalForPosition('ST');
-            } else {
-                btn.innerText = "⏸️ Pausa / Cambios";
-                btn.className = "px-3 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded text-xs transition cursor-pointer";
-            }
         }
     </script>
 </body>
