@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Ultimate Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Intro Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -45,15 +45,26 @@
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-between p-3 selection:bg-amber-500 selection:text-black">
 
-    <!-- START SCREEN & WORLD CUP INTRO -->
-    <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4 overflow-y-auto">
+    <!-- INTRO VIDEO OVERLAY SCREEN -->
+    <div id="intro-video-screen" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
+        <video id="intro-video" class="w-full h-full object-cover" autoplay playsinline>
+            <source src="img/Intro.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de vídeos.
+        </video>
+        <button onclick="skipIntroVideo()" class="absolute bottom-8 right-8 px-6 py-2.5 bg-amber-500/80 hover:bg-amber-500 text-slate-950 font-black rounded-xl backdrop-blur-md transition text-xs shadow-2xl cursor-pointer">
+            Saltar Introducción ⏭️
+        </button>
+    </div>
+
+    <!-- START SCREEN & INITIAL PACK OPENING -->
+    <div id="start-screen" class="fixed inset-0 bg-slate-950 z-40 flex flex-col items-center justify-center p-4 overflow-y-auto hidden">
         <div class="max-w-2xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
                 <span class="text-3xl">🏆</span>
                 <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">HISTORIA DE LOS MUNDIALES</h1>
             </div>
             
-            <div id="intro-story-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs text-slate-300 space-y-2 text-left font-mono">
+            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs text-slate-300 space-y-2 text-left font-mono">
                 <p>🌍 <strong>¿Sabías que...?</strong> La Copa Mundial de la FIFA comenzó en Uruguay 1930 con solo 13 selecciones. El primer gol en la historia de los mundiales lo anotó el francés Lucien Laurent en el minuto 19 frente a México.</p>
                 <p>⚽ Hoy comienza tu propio camino hacia la gloria en el Mundial 2026. Empezarás desde abajo con un plantel modesto, construyendo tu leyenda partido a partido hasta alcanzar la cima mundial.</p>
             </div>
@@ -323,6 +334,7 @@
                 <div class="text-[11px] text-amber-400 font-bold" id="goal-player-details">Estadísticas del Goleador</div>
                 <div class="text-xs text-slate-300" id="goal-player-meta"></div>
             </div>
+            <div class="text-2xl font-black text-emerald-400 mt-1" id="goal-modal-score">0 - 0</div>
             <button onclick="closeGoalModal()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm cursor-pointer">Continuar</button>
         </div>
     </div>
@@ -424,7 +436,7 @@
         let worldTeamsData = rawWorldTeams.map((t, idx) => ({
             id: t.id, name: t.name, flag: t.flag,
             unlocked: idx < 3,
-            defeated: false, // Control para verificar si ya se ganó
+            defeated: false,
             players: t.players
         }));
 
@@ -451,12 +463,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v6');
-            const savedSquad = localStorage.getItem('fc26_sq_v6');
-            const savedCash = localStorage.getItem('fc26_cash_v6');
-            const savedPoints = localStorage.getItem('fc26_pts_v6');
-            const savedTeams = localStorage.getItem('fc26_teams_v6');
-            const savedWins = localStorage.getItem('fc26_wins_v6');
+            const savedInv = localStorage.getItem('fc26_inv_v7');
+            const savedSquad = localStorage.getItem('fc26_sq_v7');
+            const savedCash = localStorage.getItem('fc26_cash_v7');
+            const savedPoints = localStorage.getItem('fc26_pts_v7');
+            const savedTeams = localStorage.getItem('fc26_teams_v7');
+            const savedWins = localStorage.getItem('fc26_wins_v7');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -480,13 +492,29 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v6', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v6', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v6', userCash);
-            localStorage.setItem('fc26_pts_v6', userPoints);
-            localStorage.setItem('fc26_teams_v6', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v6', matchesWonCount);
+            localStorage.setItem('fc26_inv_v7', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v7', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v7', userCash);
+            localStorage.setItem('fc26_pts_v7', userPoints);
+            localStorage.setItem('fc26_teams_v7', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v7', matchesWonCount);
         }
+
+        function skipIntroVideo() {
+            const intro = document.getElementById('intro-video-screen');
+            intro.classList.add('hidden');
+            const startScreen = document.getElementById('start-screen');
+            startScreen.classList.remove('hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('intro-video');
+            if(video) {
+                video.onended = () => {
+                    skipIntroVideo();
+                };
+            }
+        });
 
         function populateCpuSelect() {
             const select = document.getElementById('cpu-team-select');
@@ -502,7 +530,7 @@
         }
 
         function openInitialPack() {
-            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
             revealContainer.classList.remove('hidden');
 
@@ -791,7 +819,7 @@
         function selectCampaignMatch(teamId) {
             const teamObj = worldTeamsData.find(t => t.id === teamId);
             if(teamObj && teamObj.defeated) {
-                showModal("Partido Ya Superado", "Ya has derrotado a esta selección. No puedes volver a jugar contra ella.");
+                showModal("Partido No Disponible", "Ya has derrotado a esta selección. No puedes volver a jugar contra ella.");
                 return;
             }
             cpuTeamKey = teamId;
@@ -1018,15 +1046,15 @@
                 let activePlayer = getRandomActiveUserPlayer();
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
-                // Banco de narraciones dinámicas variadas indicando siempre número y apellido
+                // Banco de comentarios 100% dinámicos y variados con dorsales y apellidos
                 const variedNarratives = [
                     `[${timeStr}] El #${activePlayer.numero} ${activePlayer.nombre} conduce el balón con clase por el medio campo.`,
-                    `[${timeStr}] ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre}!`,
-                    `[${timeStr}] 🎯 ¡Remate lejano de #${activePlayer.numero} ${activePlayer.nombre} que controla el arquero ${cpuTeamObj.name}!`,
-                    `[${timeStr}] 🛡️ Corte preciso de #${activePlayer.numero} ${activePlayer.nombre} para cortar el ataque de #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
-                    `[${timeStr}] ⚔️ Disputa intensa en el área entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
-                    `[${timeStr}] 🟨 Falta táctica cometida sobre #${activePlayer.numero} ${activePlayer.nombre}.`,
-                    `[${timeStr}] ⚽ Toques precisos en ofensiva liderados por #${activePlayer.numero} ${activePlayer.nombre}.`
+                    `[${timeStr}] ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre} buscando el espacio!`,
+                    `[${timeStr}] 🎯 ¡Remate lejano ejecutado por #${activePlayer.numero} ${activePlayer.nombre} que exige a la defensa!`,
+                    `[${timeStr}] 🛡️ Corte preciso de #${activePlayer.numero} ${activePlayer.nombre} anticipando a #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                    `[${timeStr}] ⚔️ Dureza en la marca entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                    `[${timeStr}] 🟨 Falta cometida sobre #${activePlayer.numero} ${activePlayer.nombre} en salida.`,
+                    `[${timeStr}] ⚽ Toques cortos y apertura de #${activePlayer.numero} ${activePlayer.nombre} hacia el ataque.`
                 ];
 
                 if(currentMatchMinute === 15 || currentMatchMinute === 30) {
@@ -1133,7 +1161,7 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
                     }
                 } else {
                     let randomComment2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
@@ -1164,7 +1192,7 @@
                         
                         const currentTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey);
                         if(currentTeamObj) {
-                            currentTeamObj.defeated = true; // Marcar con check y bloquear revancha
+                            currentTeamObj.defeated = true;
                             const currentTeamIndex = worldTeamsData.findIndex(t => t.id === cpuTeamKey);
                             if(currentTeamIndex !== -1) unlockNextTeams(currentTeamIndex);
                         }
