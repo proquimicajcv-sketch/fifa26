@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Fixed Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Definitive Career Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -45,23 +45,28 @@
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-between p-3 selection:bg-amber-500 selection:text-black">
 
-    <!-- START SCREEN & INITIAL PACK OPENING -->
+    <!-- START SCREEN & WORLD CUP INTRO -->
     <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4 overflow-y-auto">
-        <div class="max-w-3xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
+        <div class="max-w-2xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
                 <span class="text-3xl">🏆</span>
-                <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">MUNDIAL 2026 DRAFT INICIAL</h1>
+                <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">HISTORIA DE LOS MUNDIALES</h1>
             </div>
             
+            <div id="intro-story-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs text-slate-300 space-y-2 text-left font-mono">
+                <p>🌍 <strong>¿Sabías que...?</strong> La Copa Mundial de la FIFA comenzó en Uruguay 1930 con solo 13 selecciones. El primer gol en la historia de los mundiales lo anotó el francés Lucien Laurent en el minuto 19 frente a México.</p>
+                <p>⚽ Hoy comienza tu propio camino hacia la gloria en el Mundial 2026. Empezarás desde abajo con un plantel modesto, construyendo tu leyenda partido a partido hasta alcanzar la cima mundial.</p>
+            </div>
+
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para revelar tus <strong>4 cartas aleatorias</strong> sin duplicados (GK, DEF, MED, ATK). Las posiciones restantes se completarán con jugadores NPC de Media 70. <strong>Haz clic en cada carta</strong> para descubrirlas:</p>
+                <p class="text-sm text-slate-300">Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para recibir <strong>4 cartas básicas y sencillas</strong>. Las posiciones restantes se completarán con jugadores NPC de Media 70:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
-                    ¡ABRIR SOBRE DE INICIO (4 CARTAS)! 📦
+                    ¡ABRIR SOBRE DE CARTAS BÁSICAS! 📦
                 </button>
             </div>
 
             <div id="draft-reveal-container" class="hidden space-y-4">
-                <p class="text-sm text-amber-400 font-bold">¡Cartas listas! Haz clic en cada una para voltearlas y revelar al jugador:</p>
+                <p class="text-sm text-amber-400 font-bold">¡Cartas listas! Haz clic en cada una para voltearlas y revelar a tus jugadores iniciales:</p>
                 <div id="initial-cards-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center"></div>
                 <button id="btn-enter-game" onclick="enterMainGame()" class="hidden px-8 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer mx-auto">
                     ¡IR A LA CANCHA Y JUGAR! ⚽
@@ -211,7 +216,7 @@
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-4">
                 <div>
                     <h2 class="text-xl font-black text-amber-400">🗺️ Camino al Mundial (48 Selecciones)</h2>
-                    <p class="text-xs text-slate-300 mt-0.5">Gana partidos para acumular efectivo y fichar mejores estrellas. ¡Al 3er partido ya podrás comprar tu primera tarjeta básica en el mercado!</p>
+                    <p class="text-xs text-slate-300 mt-0.5">Gana partidos para acumular efectivo. Al 3er partido ganado ya podrás comprar tu primera tarjeta en el mercado ($350k x 3 = $1.05M).</p>
                 </div>
                 <div id="campaign-teams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto p-1"></div>
             </div>
@@ -308,12 +313,16 @@
         </div>
     </div>
 
-    <!-- GOAL MODAL -->
+    <!-- GOAL CELEBRATION POPUP MODAL -->
     <div id="goal-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
         <div class="bg-gradient-to-b from-amber-600 via-slate-900 to-slate-950 border-4 border-amber-400 p-8 rounded-3xl max-w-md w-full mx-4 text-center space-y-4 animate-goal">
             <span class="text-6xl">⚽🎉</span>
             <h2 class="text-4xl font-black text-amber-300">¡¡¡ G O L !!!</h2>
             <div id="goal-scorer-info" class="text-sm font-bold text-amber-200"></div>
+            <div class="bg-slate-950/80 border border-amber-500/40 p-3 rounded-xl space-y-1">
+                <div class="text-[11px] text-amber-400 font-bold" id="goal-player-details">Estadísticas del Goleador</div>
+                <div class="text-xs text-slate-300" id="goal-player-meta"></div>
+            </div>
             <button onclick="closeGoalModal()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm cursor-pointer">Continuar</button>
         </div>
     </div>
@@ -323,7 +332,7 @@
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xs w-full mx-4 text-center space-y-3">
             <h3 id="modal-title" class="text-lg font-black text-amber-400">Aviso</h3>
             <p id="modal-message" class="text-slate-300 text-xs"></p>
-            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs cursor-pointer">Entendido</button>
+            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-black rounded-lg text-xs cursor-pointer">Entendido</button>
         </div>
     </div>
 
@@ -347,6 +356,14 @@
         function playWhistleSound() { try { initAudio(); } catch(e){} }
         function playGoalHornSound() { try { initAudio(); } catch(e){} }
 
+        // CARTAS BÁSICAS Y SENCILLAS PARA EL SOBRE INICIAL
+        const basicStarterCards = [
+            { id: "basic_1", nombre: "Ryan Mendes", numero: 11, posicion: "RW", media: 7.2, equipo: "Selección Base", img: "img/img24.png" },
+            { id: "basic_2", nombre: "Vosinha", numero: 1, posicion: "GK", media: 7.1, equipo: "Selección Base", img: "img/img25.png" },
+            { id: "basic_3", nombre: "Fidel Escobar", numero: 3, posicion: "CB", media: 7.3, equipo: "Selección Base", img: "img/img27.png" },
+            { id: "basic_4", nombre: "NPC Defensor", numero: 2, posicion: "CB", media: 7.0, equipo: "Plantel Base", img: "img/img28.png" }
+        ];
+
         const photoCardsPool = [
             { id: "img1", nombre: "K. Mbappé", numero: 7, posicion: "ST", media: 9.4, equipo: "Real Madrid", img: "img/img1.png" },
             { id: "img2", nombre: "Keylor Navas", numero: 1, posicion: "GK", media: 9.0, equipo: "Leyenda Tica", img: "img/img2.png" },
@@ -354,7 +371,7 @@
             { id: "img4", nombre: "L. Messi", numero: 10, posicion: "CAM", media: 9.8, equipo: "Inter Miami", img: "img/img4.png" }
         ];
 
-        // 48 SELECCIONES CON PLANTILLAS REALES COMPLETAS Y ORDENADAS HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
+        // 48 SELECCIONES OFICIALES ORDENADAS HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
         const rawWorldTeams = [
             { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿", players: [{nombre:"Max Crocombe",posicion:"GK",numero:1,media:7.6},{nombre:"Tim Payne",posicion:"CB",numero:2,media:7.5},{nombre:"Michael Boxall",posicion:"CB",numero:5,media:7.6},{nombre:"Liberato Cacace",posicion:"LB",numero:13,media:7.9},{nombre:"Joe Bell",posicion:"CM",numero:8,media:7.7},{nombre:"Marko Stamenic",posicion:"CM",numero:6,media:7.9},{nombre:"Matthew Garbett",posicion:"CAM",numero:10,media:7.7},{nombre:"Elijah Just",posicion:"LW",numero:7,media:7.6},{nombre:"Chris Wood",posicion:"ST",numero:9,media:8.2},{nombre:"Sarpreet Singh",posicion:"RW",numero:11,media:7.8},{nombre:"Nando Pijnaker",posicion:"CB",numero:4,media:7.6}]},
             { id: "QAT", name: "Catar", flag: "🇶🇦", players: [{nombre:"Meshaal Barsham",posicion:"GK",numero:22,media:7.8},{nombre:"Pedro Miguel",posicion:"RB",numero:2,media:7.7},{nombre:"Boualem Khoukhi",posicion:"CB",numero:16,media:7.8},{nombre:"Lucas Mendes",posicion:"CB",numero:12,media:7.7},{nombre:"Homam Ahmed",posicion:"LB",numero:14,media:7.6},{nombre:"Ahmed Fathy",posicion:"CM",numero:23,media:7.6},{nombre:"Hassan Al-Haydos",posicion:"CAM",numero:10,media:7.9},{nombre:"Abdulaziz Hatem",posicion:"CM",numero:6,media:7.6},{nombre:"Akram Afif",posicion:"LW",numero:11,media:8.3},{nombre:"Almoez Ali",posicion:"ST",numero:19,media:8.1},{nombre:"Yusuf Abdurisag",posicion:"RW",numero:17,media:7.6}]},
@@ -418,7 +435,7 @@
                 marketplacePlayers.push({
                     id: `market_${team.id}_${idx}`,
                     nombre: p.nombre, numero: p.numero, posicion: p.posicion, media: p.media,
-                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", price: 350000 // Precio para comprar al 3er partido ganado ($350k x 3 = $1.05M)
+                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", price: 350000
                 });
             });
         });
@@ -435,12 +452,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v3');
-            const savedSquad = localStorage.getItem('fc26_sq_v3');
-            const savedCash = localStorage.getItem('fc26_cash_v3');
-            const savedPoints = localStorage.getItem('fc26_pts_v3');
-            const savedTeams = localStorage.getItem('fc26_teams_v3');
-            const savedWins = localStorage.getItem('fc26_wins_v3');
+            const savedInv = localStorage.getItem('fc26_inv_v5');
+            const savedSquad = localStorage.getItem('fc26_sq_v5');
+            const savedCash = localStorage.getItem('fc26_cash_v5');
+            const savedPoints = localStorage.getItem('fc26_pts_v5');
+            const savedTeams = localStorage.getItem('fc26_teams_v5');
+            const savedWins = localStorage.getItem('fc26_wins_v5');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -464,12 +481,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v3', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v3', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v3', userCash);
-            localStorage.setItem('fc26_pts_v3', userPoints);
-            localStorage.setItem('fc26_teams_v3', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v3', matchesWonCount);
+            localStorage.setItem('fc26_inv_v5', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v5', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v5', userCash);
+            localStorage.setItem('fc26_pts_v5', userPoints);
+            localStorage.setItem('fc26_teams_v5', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v5', matchesWonCount);
         }
 
         function populateCpuSelect() {
@@ -484,7 +501,6 @@
             select.value = cpuTeamKey;
         }
 
-        // ABRIR SOBRE INICIAL SIN DUPLICADOS Y COMPLETAR CON NPC DE MEDIA 70
         function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
@@ -493,22 +509,20 @@
             const grid = document.getElementById('initial-cards-grid');
             grid.innerHTML = '';
 
-            // Seleccionar 4 cartas únicas con foto
-            let shuffledPool = [...photoCardsPool].sort(() => 0.5 - Math.random());
-            let starterCards = shuffledPool.slice(0, 4);
+            let starterCards = [...basicStarterCards];
 
             starterCards.forEach(player => {
                 if(!userInventory.some(p => p.id === player.id)) userInventory.push(player);
                 grid.appendChild(createFlipCardElement(player));
             });
 
-            // Mapear estrictamente a sus posiciones sin duplicar
-            activeSquad.GK = starterCards.find(p => p.posicion === 'GK') || starterCards[0];
-            activeSquad.ST = starterCards.find(p => p.posicion === 'ST') || starterCards[1];
+            // Asignar en posiciones estrictas sin duplicados
+            activeSquad.GK = starterCards.find(p => p.posicion === 'GK') || starterCards[1];
+            activeSquad.ST = starterCards.find(p => p.posicion === 'ST') || starterCards[0];
             activeSquad.CAM = starterCards.find(p => p.posicion === 'CAM') || starterCards[2];
             activeSquad.CB1 = starterCards.find(p => ['CB', 'LB', 'RB'].includes(p.posicion)) || starterCards[3];
 
-            // Rellenar las posiciones restantes con NPC de Media 70 sin duplicar IDs
+            // Rellenar lo restante con NPC de Media 70 sin duplicar IDs
             const allPositions = ['GK', 'CB1', 'CB2', 'LB', 'RB', 'CM1', 'CM2', 'CM3', 'CAM', 'ST', 'LW', 'RW'];
             let npcIndex = 1;
             allPositions.forEach(pos => {
@@ -666,7 +680,7 @@
                 board.appendChild(rowDiv);
             });
 
-            // RENDERIZAR RIVAL CON JUGADORES REALES DE SU PLANTILLA
+            // RENDERIZAR RIVAL CON JUGADORES REALES
             const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
             const cpuWrapper = document.getElementById('cpu-formation-board');
             cpuWrapper.innerHTML = '';
@@ -731,7 +745,6 @@
             const player = userInventory.find(p => p.id === playerId);
             if(!player) return;
 
-            // Evitar duplicar jugadores en la alineación titular
             for(let key in activeSquad) {
                 if(activeSquad[key] && activeSquad[key].id === playerId && key !== slotPos) {
                     showModal("Acción Denegada", `${player.nombre} ya está alineado en la posición ${key}. No se permiten duplicados.`);
@@ -956,7 +969,7 @@
 
         function getRandomActiveUserPlayer() {
             const assigned = Object.values(activeSquad).filter(p => p !== null);
-            return assigned[Math.floor(Math.random() * assigned.length)] || { nombre: "Mbappé", numero: 7 };
+            return assigned[Math.floor(Math.random() * assigned.length)] || { nombre: "Jugador", numero: 7, posicion: "ST", media: 72 };
         }
 
         let globalUserGoals = 0;
@@ -974,6 +987,12 @@
             liveBox.classList.remove('hidden');
             const feed = document.getElementById('match-commentary-feed');
             const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
+            
+            // ASIGNAR ESTADIO AUTOMÁTICAMENTE SEGÚN EL PARTIDO
+            activeStadium = stadiumsCatalog[Math.floor(Math.random() * stadiumsCatalog.length)];
+            document.getElementById('current-stadium-title').innerText = activeStadium.nombre;
+            document.getElementById('current-stadium-info').innerText = `Capacidad: 85,000 • ${activeStadium.region}`;
+
             feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Arranca el partido en el ${activeStadium.nombre}! Equipo Mundialista vs ${cpuTeamObj.name} ${cpuTeamObj.flag}.</div>`;
 
             globalUserGoals = 0;
@@ -1003,6 +1022,8 @@
                         globalUserGoals++;
                         playGoalHornSound();
                         document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
+                        document.getElementById('goal-player-details').innerText = `Estadísticas del Goleador`;
+                        document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
@@ -1011,6 +1032,8 @@
                         playGoalHornSound();
                         let rivalScorer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
                         document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalScorer.numero} ${rivalScorer.nombre}`;
+                        document.getElementById('goal-player-details').innerText = `Estadísticas del Rival`;
+                        document.getElementById('goal-player-meta').innerText = `Posición: ${rivalScorer.posicion} • Rating: ${rivalScorer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
@@ -1078,6 +1101,8 @@
                         globalUserGoals++;
                         playGoalHornSound();
                         document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
+                        document.getElementById('goal-player-details').innerText = `Estadísticas del Goleador`;
+                        document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
@@ -1085,6 +1110,11 @@
                         globalCpuGoals++;
                         playGoalHornSound();
                         let rivalScorer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalScorer.numero} ${rivalScorer.nombre}`;
+                        document.getElementById('goal-player-details').innerText = `Estadísticas del Rival`;
+                        document.getElementById('goal-player-meta').innerText = `Posición: ${rivalScorer.posicion} • Rating: ${rivalScorer.media}★ • Selección: ${cpuTeamObj.name}`;
+                        document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
+                        document.getElementById('goal-modal').classList.remove('hidden');
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
                     }
                 } else {
@@ -1108,9 +1138,9 @@
                     if(globalUserGoals > globalCpuGoals) {
                         matchesWonCount++;
                         userTrophies += 10; 
-                        userCash += 350000; // Al 3er partido ganado (3 x $350k = $1.05M) alcanza para comprar una tarjeta de $1.0M
+                        userCash += 350000; 
                         userPoints += 100;
-                        title.innerText = `¡VICTORIA (${globalUserGoals}-${globalCpuGoals})!`;
+                        title.innerText = `🔥 ¡VICTORIA (${globalUserGoals}-${globalCpuGoals})! 🔥`;
                         desc.innerText = `¡Victoria! Has ganado +$350,000 y +100 Puntos. (Partidos ganados: ${matchesWonCount})`;
                         
                         const currentTeamIndex = worldTeamsData.findIndex(t => t.id === cpuTeamKey);
