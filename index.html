@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Definitive Career Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Ultimate Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -216,7 +216,7 @@
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-4">
                 <div>
                     <h2 class="text-xl font-black text-amber-400">🗺️ Camino al Mundial (48 Selecciones)</h2>
-                    <p class="text-xs text-slate-300 mt-0.5">Gana partidos para acumular efectivo. Al 3er partido ganado ya podrás comprar tu primera tarjeta en el mercado ($350k x 3 = $1.05M).</p>
+                    <p class="text-xs text-slate-300 mt-0.5">Los equipos derrotados se marcarán con un check (✅) y no se podrá jugar nuevamente contra ellos.</p>
                 </div>
                 <div id="campaign-teams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto p-1"></div>
             </div>
@@ -332,7 +332,7 @@
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xs w-full mx-4 text-center space-y-3">
             <h3 id="modal-title" class="text-lg font-black text-amber-400">Aviso</h3>
             <p id="modal-message" class="text-slate-300 text-xs"></p>
-            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-black rounded-lg text-xs cursor-pointer">Entendido</button>
+            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs cursor-pointer">Entendido</button>
         </div>
     </div>
 
@@ -356,7 +356,6 @@
         function playWhistleSound() { try { initAudio(); } catch(e){} }
         function playGoalHornSound() { try { initAudio(); } catch(e){} }
 
-        // CARTAS BÁSICAS Y SENCILLAS PARA EL SOBRE INICIAL
         const basicStarterCards = [
             { id: "basic_1", nombre: "Ryan Mendes", numero: 11, posicion: "RW", media: 7.2, equipo: "Selección Base", img: "img/img24.png" },
             { id: "basic_2", nombre: "Vosinha", numero: 1, posicion: "GK", media: 7.1, equipo: "Selección Base", img: "img/img25.png" },
@@ -371,7 +370,6 @@
             { id: "img4", nombre: "L. Messi", numero: 10, posicion: "CAM", media: 9.8, equipo: "Inter Miami", img: "img/img4.png" }
         ];
 
-        // 48 SELECCIONES OFICIALES ORDENADAS HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
         const rawWorldTeams = [
             { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿", players: [{nombre:"Max Crocombe",posicion:"GK",numero:1,media:7.6},{nombre:"Tim Payne",posicion:"CB",numero:2,media:7.5},{nombre:"Michael Boxall",posicion:"CB",numero:5,media:7.6},{nombre:"Liberato Cacace",posicion:"LB",numero:13,media:7.9},{nombre:"Joe Bell",posicion:"CM",numero:8,media:7.7},{nombre:"Marko Stamenic",posicion:"CM",numero:6,media:7.9},{nombre:"Matthew Garbett",posicion:"CAM",numero:10,media:7.7},{nombre:"Elijah Just",posicion:"LW",numero:7,media:7.6},{nombre:"Chris Wood",posicion:"ST",numero:9,media:8.2},{nombre:"Sarpreet Singh",posicion:"RW",numero:11,media:7.8},{nombre:"Nando Pijnaker",posicion:"CB",numero:4,media:7.6}]},
             { id: "QAT", name: "Catar", flag: "🇶🇦", players: [{nombre:"Meshaal Barsham",posicion:"GK",numero:22,media:7.8},{nombre:"Pedro Miguel",posicion:"RB",numero:2,media:7.7},{nombre:"Boualem Khoukhi",posicion:"CB",numero:16,media:7.8},{nombre:"Lucas Mendes",posicion:"CB",numero:12,media:7.7},{nombre:"Homam Ahmed",posicion:"LB",numero:14,media:7.6},{nombre:"Ahmed Fathy",posicion:"CM",numero:23,media:7.6},{nombre:"Hassan Al-Haydos",posicion:"CAM",numero:10,media:7.9},{nombre:"Abdulaziz Hatem",posicion:"CM",numero:6,media:7.6},{nombre:"Akram Afif",posicion:"LW",numero:11,media:8.3},{nombre:"Almoez Ali",posicion:"ST",numero:19,media:8.1},{nombre:"Yusuf Abdurisag",posicion:"RW",numero:17,media:7.6}]},
@@ -426,6 +424,7 @@
         let worldTeamsData = rawWorldTeams.map((t, idx) => ({
             id: t.id, name: t.name, flag: t.flag,
             unlocked: idx < 3,
+            defeated: false, // Control para verificar si ya se ganó
             players: t.players
         }));
 
@@ -452,12 +451,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v5');
-            const savedSquad = localStorage.getItem('fc26_sq_v5');
-            const savedCash = localStorage.getItem('fc26_cash_v5');
-            const savedPoints = localStorage.getItem('fc26_pts_v5');
-            const savedTeams = localStorage.getItem('fc26_teams_v5');
-            const savedWins = localStorage.getItem('fc26_wins_v5');
+            const savedInv = localStorage.getItem('fc26_inv_v6');
+            const savedSquad = localStorage.getItem('fc26_sq_v6');
+            const savedCash = localStorage.getItem('fc26_cash_v6');
+            const savedPoints = localStorage.getItem('fc26_pts_v6');
+            const savedTeams = localStorage.getItem('fc26_teams_v6');
+            const savedWins = localStorage.getItem('fc26_wins_v6');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -481,12 +480,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v5', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v5', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v5', userCash);
-            localStorage.setItem('fc26_pts_v5', userPoints);
-            localStorage.setItem('fc26_teams_v5', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v5', matchesWonCount);
+            localStorage.setItem('fc26_inv_v6', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v6', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v6', userCash);
+            localStorage.setItem('fc26_pts_v6', userPoints);
+            localStorage.setItem('fc26_teams_v6', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v6', matchesWonCount);
         }
 
         function populateCpuSelect() {
@@ -495,14 +494,15 @@
             worldTeamsData.forEach(team => {
                 const opt = document.createElement('option');
                 opt.value = team.id;
-                opt.textContent = `${team.name} ${team.flag} ${team.unlocked ? '🔓' : '🔒'}`;
+                let statusText = team.defeated ? '✅' : (team.unlocked ? '🔓' : '🔒');
+                opt.textContent = `${team.name} ${team.flag} ${statusText}`;
                 select.appendChild(opt);
             });
             select.value = cpuTeamKey;
         }
 
         function openInitialPack() {
-            document.getElementById('draft-step-1').classList.add('hidden');
+            document.getElementById('start-screen').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
             revealContainer.classList.remove('hidden');
 
@@ -516,13 +516,11 @@
                 grid.appendChild(createFlipCardElement(player));
             });
 
-            // Asignar en posiciones estrictas sin duplicados
             activeSquad.GK = starterCards.find(p => p.posicion === 'GK') || starterCards[1];
             activeSquad.ST = starterCards.find(p => p.posicion === 'ST') || starterCards[0];
             activeSquad.CAM = starterCards.find(p => p.posicion === 'CAM') || starterCards[2];
             activeSquad.CB1 = starterCards.find(p => ['CB', 'LB', 'RB'].includes(p.posicion)) || starterCards[3];
 
-            // Rellenar lo restante con NPC de Media 70 sin duplicar IDs
             const allPositions = ['GK', 'CB1', 'CB2', 'LB', 'RB', 'CM1', 'CM2', 'CM3', 'CAM', 'ST', 'LW', 'RW'];
             let npcIndex = 1;
             allPositions.forEach(pos => {
@@ -680,7 +678,6 @@
                 board.appendChild(rowDiv);
             });
 
-            // RENDERIZAR RIVAL CON JUGADORES REALES
             const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
             const cpuWrapper = document.getElementById('cpu-formation-board');
             cpuWrapper.innerHTML = '';
@@ -715,7 +712,7 @@
         function openSubsModalForPosition(slotPos) {
             pendingSubPosition = slotPos;
             let generalPos = slotPos.replace(/[0-9]/g, '');
-            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador para [${generalPos}] (Evita duplicados en cancha):`;
+            document.getElementById('subs-modal-desc').innerText = `Selecciona un jugador para [${generalPos}]:`;
             const grid = document.getElementById('subs-inventory-grid');
             grid.innerHTML = '';
 
@@ -747,7 +744,7 @@
 
             for(let key in activeSquad) {
                 if(activeSquad[key] && activeSquad[key].id === playerId && key !== slotPos) {
-                    showModal("Acción Denegada", `${player.nombre} ya está alineado en la posición ${key}. No se permiten duplicados.`);
+                    showModal("Acción Denegada", `${player.nombre} ya está alineado en ${key}. No se permiten duplicados.`);
                     return;
                 }
             }
@@ -765,7 +762,7 @@
 
             worldTeamsData.forEach((team, index) => {
                 const card = document.createElement('div');
-                card.className = `p-3.5 rounded-xl border flex justify-between items-center ${team.unlocked ? 'bg-slate-950 border-amber-500 shadow-xl' : 'bg-slate-950/40 border-slate-800 opacity-60'}`;
+                card.className = `p-3.5 rounded-xl border flex justify-between items-center ${team.defeated ? 'bg-emerald-950/40 border-emerald-500' : (team.unlocked ? 'bg-slate-950 border-amber-500 shadow-xl' : 'bg-slate-950/40 border-slate-800 opacity-60')}`;
                 
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
@@ -776,13 +773,15 @@
                         </div>
                     </div>
                     <div>
-                        ${team.unlocked ? `
+                        ${team.defeated ? `
+                            <span class="text-xs font-black text-emerald-400 bg-emerald-950 px-3 py-1.5 rounded-lg border border-emerald-500/40">✅ Derrotado</span>
+                        ` : (team.unlocked ? `
                             <button onclick="selectCampaignMatch('${team.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition cursor-pointer">
                                 Jugar Partido ⚔️
                             </button>
                         ` : `
                             <span class="text-[10px] text-slate-500 font-bold">🔒 Bloqueado</span>
-                        `}
+                        `)}
                     </div>
                 `;
                 container.appendChild(card);
@@ -790,11 +789,16 @@
         }
 
         function selectCampaignMatch(teamId) {
+            const teamObj = worldTeamsData.find(t => t.id === teamId);
+            if(teamObj && teamObj.defeated) {
+                showModal("Partido Ya Superado", "Ya has derrotado a esta selección. No puedes volver a jugar contra ella.");
+                return;
+            }
             cpuTeamKey = teamId;
             document.getElementById('cpu-team-select').value = teamId;
             changeCpuTeam();
             switchTab('pitch');
-            showModal("Rival Seleccionado", `Te enfrentarás contra ${worldTeamsData.find(t => t.id === teamId).name}. ¡A ganar!`);
+            showModal("Rival Seleccionado", `Te enfrentarás contra ${teamObj.name}. ¡A ganar!`);
         }
 
         function unlockNextTeams(currentIndex) {
@@ -978,6 +982,13 @@
 
         function startMatch() {
             if(matchInProgress) return;
+
+            const selectedTeam = worldTeamsData.find(t => t.id === cpuTeamKey);
+            if(selectedTeam && selectedTeam.defeated) {
+                showModal("Partido No Disponible", "Ya has derrotado a esta selección anteriormente. Escoge otro rival en el Camino al Mundial.");
+                return;
+            }
+
             matchInProgress = true;
             matchPaused = false;
             playWhistleSound();
@@ -986,9 +997,8 @@
             const liveBox = document.getElementById('live-match-box');
             liveBox.classList.remove('hidden');
             const feed = document.getElementById('match-commentary-feed');
-            const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
+            const cpuTeamObj = selectedTeam || worldTeamsData[0];
             
-            // ASIGNAR ESTADIO AUTOMÁTICAMENTE SEGÚN EL PARTIDO
             activeStadium = stadiumsCatalog[Math.floor(Math.random() * stadiumsCatalog.length)];
             document.getElementById('current-stadium-title').innerText = activeStadium.nombre;
             document.getElementById('current-stadium-info').innerText = `Capacidad: 85,000 • ${activeStadium.region}`;
@@ -999,16 +1009,6 @@
             globalCpuGoals = 0;
             currentMatchMinute = 0;
 
-            const narrativeEvents = [
-                (m, p) => `[${m}] El #${p.numero} ${p.nombre} arma la jugada colectiva para el Equipo Mundialista.`,
-                (m, p) => `[${m}] ⚡ ¡Desborde eléctrico por la banda de ${p.nombre} (#${p.numero})!`,
-                (m, p) => `[${m}] 🎯 ¡Disparo de media distancia ejecutado por ${p.nombre} (#${p.numero})!`,
-                (m, p) => `[${m}] 🛡️ ¡Excelente cruce defensivo del Equipo Mundialista!`,
-                (m, p) => `[${m}] 🖥️ ¡Atención! El árbitro va al monitor del **VAR**... ¡Se decreta PENAL!`,
-                (m, p) => `[${m}] 🟨 Tarjeta amarilla para el rival tras falta sobre #${p.numero} ${p.nombre}.`,
-                (m, p) => `[${m}] 🧤 ¡Impresionante atajada del guardameta bajo los tres palos!`
-            ];
-
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
                 currentMatchMinute += 3;
@@ -1016,6 +1016,18 @@
                 document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO &bull; MINUTO ${timeStr}`;
 
                 let activePlayer = getRandomActiveUserPlayer();
+                let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
+
+                // Banco de narraciones dinámicas variadas indicando siempre número y apellido
+                const variedNarratives = [
+                    `[${timeStr}] El #${activePlayer.numero} ${activePlayer.nombre} conduce el balón con clase por el medio campo.`,
+                    `[${timeStr}] ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre}!`,
+                    `[${timeStr}] 🎯 ¡Remate lejano de #${activePlayer.numero} ${activePlayer.nombre} que controla el arquero ${cpuTeamObj.name}!`,
+                    `[${timeStr}] 🛡️ Corte preciso de #${activePlayer.numero} ${activePlayer.nombre} para cortar el ataque de #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                    `[${timeStr}] ⚔️ Disputa intensa en el área entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                    `[${timeStr}] 🟨 Falta táctica cometida sobre #${activePlayer.numero} ${activePlayer.nombre}.`,
+                    `[${timeStr}] ⚽ Toques precisos en ofensiva liderados por #${activePlayer.numero} ${activePlayer.nombre}.`
+                ];
 
                 if(currentMatchMinute === 15 || currentMatchMinute === 30) {
                     if(Math.random() > 0.3) {
@@ -1030,17 +1042,16 @@
                     } else {
                         globalCpuGoals++;
                         playGoalHornSound();
-                        let rivalScorer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
-                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalScorer.numero} ${rivalScorer.nombre}`;
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalPlayer.numero} ${rivalPlayer.nombre}`;
                         document.getElementById('goal-player-details').innerText = `Estadísticas del Rival`;
-                        document.getElementById('goal-player-meta').innerText = `Posición: ${rivalScorer.posicion} • Rating: ${rivalScorer.media}★ • Selección: ${cpuTeamObj.name}`;
+                        document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
                     }
                 } else {
-                    let randomEvent = narrativeEvents[Math.floor(Math.random() * narrativeEvents.length)];
-                    feed.innerHTML += `<div>${randomEvent(timeStr, activePlayer)}</div>`;
+                    let randomComment = variedNarratives[Math.floor(Math.random() * variedNarratives.length)];
+                    feed.innerHTML += `<div>${randomComment}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1095,6 +1106,14 @@
 
                 let activePlayer = getRandomActiveUserPlayer();
                 const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
+                let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
+
+                const secondHalfNarratives = [
+                    `[${timeStr}] #${activePlayer.numero} ${activePlayer.nombre} presiona la salida del rival.`,
+                    `[${timeStr}] ⚡ ¡Cambio de ritmo de #${activePlayer.numero} ${activePlayer.nombre} buscando el desequilibrio!`,
+                    `[${timeStr}] 🛡️ Despeje providencial de la defensa liderada por #${activePlayer.numero} ${activePlayer.nombre}.`,
+                    `[${timeStr}] ⚔️ Duelo en el mediocampo entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`
+                ];
 
                 if(secondHalfMinute === 60 || secondHalfMinute === 75) {
                     if(Math.random() > 0.4) {
@@ -1109,16 +1128,16 @@
                     } else {
                         globalCpuGoals++;
                         playGoalHornSound();
-                        let rivalScorer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
-                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalScorer.numero} ${rivalScorer.nombre}`;
+                        document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalPlayer.numero} ${rivalPlayer.nombre}`;
                         document.getElementById('goal-player-details').innerText = `Estadísticas del Rival`;
-                        document.getElementById('goal-player-meta').innerText = `Posición: ${rivalScorer.posicion} • Rating: ${rivalScorer.media}★ • Selección: ${cpuTeamObj.name}`;
+                        document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalScorer.numero} ${rivalScorer.nombre}.</div>`;
                     }
                 } else {
-                    feed.innerHTML += `<div>[${timeStr}] Jugada disputada en el terreno de juego.</div>`;
+                    let randomComment2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
+                    feed.innerHTML += `<div>${randomComment2}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1143,8 +1162,12 @@
                         title.innerText = `🔥 ¡VICTORIA (${globalUserGoals}-${globalCpuGoals})! 🔥`;
                         desc.innerText = `¡Victoria! Has ganado +$350,000 y +100 Puntos. (Partidos ganados: ${matchesWonCount})`;
                         
-                        const currentTeamIndex = worldTeamsData.findIndex(t => t.id === cpuTeamKey);
-                        if(currentTeamIndex !== -1) unlockNextTeams(currentTeamIndex);
+                        const currentTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey);
+                        if(currentTeamObj) {
+                            currentTeamObj.defeated = true; // Marcar con check y bloquear revancha
+                            const currentTeamIndex = worldTeamsData.findIndex(t => t.id === cpuTeamKey);
+                            if(currentTeamIndex !== -1) unlockNextTeams(currentTeamIndex);
+                        }
 
                     } else if(globalUserGoals === globalCpuGoals) {
                         userCash += 150000; userPoints += 50;
@@ -1158,6 +1181,7 @@
                     saveGameData();
                     updateStatsDisplay();
                     renderCampaignGrid();
+                    populateCpuSelect();
                 }
             }, 3000);
         }
