@@ -54,15 +54,15 @@
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Abre tu primer sobre para revelar tus <strong>4 cartas estelares</strong> generadas por IA:</p>
+                <p class="text-sm text-slate-300">¡Bienvenido! Tus cartas están boca abajo sobre la mesa. <strong>Haz clic en cada una</strong> para darles la vuelta y descubrir tus fichajes:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
-                    ¡ABRIR SOBRE DE INICIO (4 CARTAS ESTELARES)! 📦
+                    ¡REPARTIR SOBRE DE INICIO (4 CARTAS)! 📦
                 </button>
             </div>
 
             <!-- CONTAINER FOR REVEALING CARDS GRADUALLY -->
             <div id="draft-reveal-container" class="hidden space-y-4">
-                <p class="text-sm text-amber-400 font-bold">¡Tus cartas han llegado! Haz clic en cada una para girarlas y ver su diseño o la contracara:</p>
+                <p class="text-sm text-amber-400 font-bold">¡Cartas listas! Haz clic en cada una para voltearlas y revelar al jugador:</p>
                 <div id="initial-cards-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center"></div>
                 <button id="btn-enter-game" onclick="enterMainGame()" class="hidden px-8 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer mx-auto">
                     ¡IR A LA CANCHA Y JUGAR! ⚽
@@ -419,7 +419,7 @@
                 CB1: { nombre: "LAPORTE", numero: 14, posicion: "CB", media: 9.1, rol: "CB GUARDIAN" },
                 CB2: { nombre: "CARVAJAL", numero: 2, posicion: "CB", media: 9.1, rol: "CB ROBUST" },
                 LB: { nombre: "BALDE", numero: 3, posicion: "LB", media: 9.0, rol: "LB LATERAL" },
-                RB: { nombre: "ALBA", numero: 18, posicion: "RB", media: 9.1, rol: "RB LATERAL" },
+                RB: { nombre: "ALBA", numero: 18, posicion: "RB", media: 9.1, rol: "LB LATERAL" },
                 CM1: { nombre: "RODRI", numero: 16, posicion: "CM", media: 9.5, rol: "CM TACKLER" },
                 CM2: { nombre: "GAVI", numero: 9, posicion: "CM", media: 9.1, rol: "CM MOTOR" },
                 CM3: { nombre: "PEDRI", numero: 20, posicion: "CM", media: 9.2, rol: "CM CREATOR" },
@@ -540,9 +540,10 @@
             const wrapper = document.createElement('div');
             wrapper.className = "w-32 h-48 sm:w-36 sm:h-52 perspective-1000 cursor-pointer";
             
+            // Starts facing back (showing contracara.png by default via .rotate-y-180 on the inner container)
             wrapper.innerHTML = `
-                <div class="relative w-full h-full transform-style-3d shadow-2xl rounded-2xl transition-transform duration-500">
-                    <!-- FRONT: FULL CARD IMAGE -->
+                <div class="card-inner relative w-full h-full transform-style-3d shadow-2xl rounded-2xl transition-transform duration-500 rotate-y-180">
+                    <!-- FRONT: PLAYER IMAGE -->
                     <div class="absolute inset-0 backface-hidden rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900">
                         <img src="${player.img}" alt="${player.nombre}" class="w-full h-full object-cover">
                     </div>
@@ -553,14 +554,14 @@
                 </div>
             `;
 
-            let isFlipped = false;
+            let isFlipped = false; // Starts showing back
             wrapper.onclick = () => {
                 isFlipped = !isFlipped;
-                const inner = wrapper.firstElementChild;
+                const inner = wrapper.querySelector('.card-inner');
                 if(isFlipped) {
-                    inner.classList.add('rotate-y-180');
+                    inner.classList.remove('rotate-y-180'); // Shows front (Player)
                 } else {
-                    inner.classList.remove('rotate-y-180');
+                    inner.classList.add('rotate-y-180'); // Shows back (Contracara)
                 }
             };
 
