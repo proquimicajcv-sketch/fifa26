@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Road to Glory Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Career Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -45,7 +45,7 @@
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-between p-3 selection:bg-amber-500 selection:text-black">
 
-    <!-- START SCREEN & INITIAL PACK OPENING WITH FLIP CARDS -->
+    <!-- START SCREEN & INITIAL PACK OPENING -->
     <div id="start-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-4 overflow-y-auto">
         <div class="max-w-3xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
@@ -54,13 +54,12 @@
             </div>
             
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">¡Bienvenido! Tu sobre inicial contiene <strong>4 cartas aleatorias</strong> distribuidas por posición (GK, DEF, MED, ATK)[cite: 6]. Están boca abajo con la contracara. <strong>Haz clic en cada una</strong> para descubrirlas:</p>
+                <p class="text-sm text-slate-300">¡Bienvenido a tu carrera! Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para revelar tus <strong>4 cartas aleatorias</strong> (GK, DEF, MED, ATK). Las posiciones restantes se completarán con jugadores NPC de Media 70. <strong>Haz clic en cada carta</strong> para descubrirlas:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
-                    ¡ABRIR SOBRE DE INICIO (4 CARTAS ALEATORIAS)! 📦
+                    ¡ABRIR SOBRE DE INICIO (4 CARTAS)! 📦
                 </button>
             </div>
 
-            <!-- CONTAINER FOR REVEALING CARDS GRADUALLY -->
             <div id="draft-reveal-container" class="hidden space-y-4">
                 <p class="text-sm text-amber-400 font-bold">¡Cartas listas! Haz clic en cada una para voltearlas y revelar al jugador:</p>
                 <div id="initial-cards-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center"></div>
@@ -89,11 +88,11 @@
         <div class="flex items-center gap-2 flex-wrap justify-center">
             <div class="bg-slate-900 border border-emerald-500/40 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
                 <span class="text-emerald-400 text-sm font-black">💵</span>
-                <span id="user-cash" class="text-emerald-400 font-black text-sm">5,500,000</span>
+                <span id="user-cash" class="text-emerald-400 font-black text-sm">0</span>
             </div>
             <div class="bg-slate-900 border border-amber-500/40 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
                 <span class="text-amber-400 text-sm font-black">💎</span>
-                <span id="user-points" class="text-amber-400 font-black text-sm">500</span>
+                <span id="user-points" class="text-amber-400 font-black text-sm">0</span>
             </div>
             <div class="bg-slate-900 border border-blue-500/40 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
                 <span class="text-blue-400 text-sm font-black">⭐</span>
@@ -151,7 +150,7 @@
                 <div class="absolute inset-x-0 top-3 z-30 flex justify-center items-center pointer-events-none">
                     <div class="bg-slate-900/90 border-2 border-amber-500/80 px-6 py-2 rounded-2xl shadow-2xl flex items-center gap-4">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black text-amber-300" id="user-team-banner-name">⚡ Equipo Mundialista</span>
+                            <span class="text-xs font-black text-amber-300">⚡ Equipo Mundialista</span>
                         </div>
                         <div class="bg-slate-950 px-4 py-1 rounded-xl border border-slate-700 text-emerald-400 font-black text-lg tracking-widest shadow-inner" id="pitch-scoreboard-val">
                             0 - 0
@@ -207,26 +206,24 @@
             </div>
         </section>
 
-        <!-- CAMPAIGN / ROAD TO WORLD CUP TAB -->
+        <!-- CAMPAIGN TAB -->
         <section id="tab-campaign" class="hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-4">
                 <div>
                     <h2 class="text-xl font-black text-amber-400">🗺️ Camino al Mundial (48 Selecciones)</h2>
-                    <p class="text-xs text-slate-300 mt-0.5">Derrota a las selecciones ordenadas desde el puesto 48 hasta el campeón mundial (España)[cite: 7, 21]. Se desbloquean de 3 en 3 (y de 1 en 1 en los últimos 16).</p>
+                    <p class="text-xs text-slate-300 mt-0.5">Gana partidos para acumular efectivo y fichar mejores estrellas. ¡Al 3er partido ya podrás comprar tu primera tarjeta básica en el mercado!</p>
                 </div>
                 <div id="campaign-teams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto p-1"></div>
             </div>
         </section>
 
-        <!-- TRAINING GAMES TAB -->
+        <!-- TRAINING TAB -->
         <section id="tab-training" class="hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-xl mx-auto space-y-4 text-center">
                 <h2 class="text-xl font-black text-amber-400">🎯 Centro de Entrenamiento Mundialista</h2>
-                <p class="text-xs text-slate-300">Completa sesiones de práctica de precisión para ganar Puntos y Dinero para fichajes.</p>
-                
+                <p class="text-xs text-slate-300">Completa prácticas para ganar tus primeros Puntos y Dinero.</p>
                 <div class="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-3">
-                    <h3 id="training-title" class="text-sm font-bold text-emerald-400">Reto 1: Práctica de Penales</h3>
-                    <p id="training-desc" class="text-xs text-slate-300">Escoge un lado para cobrar el penal contra el arquero rival:</p>
+                    <h3 class="text-sm font-bold text-emerald-400">Reto: Práctica de Penales</h3>
                     <div class="grid grid-cols-3 gap-2 py-2">
                         <button onclick="doTrainingShot('Izquierda')" class="py-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 transition cursor-pointer">⬅️ Izquierda</button>
                         <button onclick="doTrainingShot('Centro')" class="py-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 transition cursor-pointer">⬆️ Centro</button>
@@ -242,26 +239,22 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <div>
                     <h2 class="text-lg font-extrabold text-amber-400">Álbum de Cartas & Mercado de Fichajes</h2>
-                    <p class="text-xs text-slate-400">Las 40 tarjetas con fotografía oficial están en tu inventario. Las demás selecciones están disponibles para fichar.</p>
+                    <p class="text-xs text-slate-400">Compra fichajes estelares con el dinero ganado en partidos.</p>
                 </div>
                 <div>
                     <select id="decade-filter" onchange="filterCards()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-amber-300 focus:outline-none">
-                        <option value="all">Todas las Cartas (40 con foto)</option>
-                        <option value="market">Mercado de las 48 Selecciones</option>
+                        <option value="all">Mis Cartas</option>
+                        <option value="market">Mercado de Fichajes (48 Selecciones)</option>
                     </select>
                 </div>
             </div>
-
             <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center"></div>
         </section>
 
         <!-- STADIUMS TAB -->
         <section id="tab-stadiums" class="hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-4">
-                <div>
-                    <h2 class="text-xl font-black text-amber-400">Templos y Escenarios del Fútbol Mundial</h2>
-                    <p class="text-xs text-slate-300 mt-0.5">Selecciona el estadio anfitrión oficial para tus partidos.</p>
-                </div>
+                <h2 class="text-xl font-black text-amber-400">Templos del Fútbol Mundial</h2>
                 <div id="stadiums-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </section>
@@ -269,47 +262,24 @@
         <!-- ROULETTE TAB -->
         <section id="tab-roulette" class="hidden space-y-4">
             <div class="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 p-6 rounded-2xl border border-purple-800/50 shadow-2xl text-center space-y-4">
-                <div>
-                    <h2 class="text-2xl font-black text-purple-400">Ruleta Gacha Legendaria</h2>
-                    <p class="text-slate-300 text-xs mt-0.5">Gasta <span class="text-amber-400 font-bold">250 Puntos</span> para girar y desbloquear fichajes estelares.</p>
-                </div>
-
-                <div class="relative w-60 h-60 mx-auto bg-slate-950 border-4 border-amber-500 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(245,158,11,0.3)] overflow-hidden">
+                <h2 class="text-2xl font-black text-purple-400">Ruleta Gacha Legendaria</h2>
+                <div class="relative w-60 h-60 mx-auto bg-slate-950 border-4 border-amber-500 rounded-full flex items-center justify-center overflow-hidden">
                     <div id="roulette-wheel" class="absolute inset-0 flex items-center justify-center transition-all duration-300">
-                        <div class="text-center">
-                            <span class="text-4xl">⚽</span>
-                            <div class="text-[10px] text-amber-300 font-bold mt-1">RULETA FC 26</div>
-                        </div>
+                        <span class="text-4xl">⚽</span>
                     </div>
-                    <div class="absolute -top-1 w-5 h-5 bg-amber-400 rotate-45 z-20 shadow-lg"></div>
                 </div>
-
-                <div id="roulette-reward" class="hidden min-h-[90px] flex flex-col items-center justify-center p-3 bg-slate-900/90 rounded-xl border border-amber-500/40">
-                    <h3 class="text-sm font-bold text-amber-400">¡NUEVO FICHAJE DESBLOQUEADO!</h3>
-                    <p id="reward-text" class="text-white text-xs mt-0.5"></p>
-                </div>
-
-                <button onclick="spinRoulette()" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-xl hover:scale-105 transition cursor-pointer text-sm">
-                    ¡GIRAR RULETA (250 PUNTOS)!
-                </button>
+                <button onclick="spinRoulette()" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-xl text-sm">Girar Ruleta (250 Puntos)</button>
             </div>
         </section>
 
-        <!-- TRIVIA WORLD CUP TAB -->
+        <!-- TRIVIA TAB -->
         <section id="tab-trivia" class="hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-xl mx-auto space-y-4 text-center">
-                <div class="flex items-center justify-center gap-2">
-                    <span class="text-2xl">🧠</span>
-                    <h2 class="text-xl font-black text-amber-400">Trivia Histórica de Mundiales</h2>
-                </div>
-                <p class="text-xs text-slate-300">Responde correctamente preguntas sobre la historia de los Mundiales para ganar Puntos y Dinero.</p>
-                
+                <h2 class="text-xl font-black text-amber-400">Trivia Histórica</h2>
                 <div id="trivia-box" class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-4">
-                    <h3 id="trivia-question" class="text-sm font-bold text-white">¿Qué selección ganó la Copa del Mundo en el año 1986?</h3>
+                    <h3 id="trivia-question" class="text-sm font-bold text-white">Pregunta</h3>
                     <div id="trivia-options" class="grid grid-cols-1 gap-2"></div>
                 </div>
-
-                <div id="trivia-feedback" class="hidden text-xs font-bold p-2 rounded"></div>
             </div>
         </section>
 
@@ -318,180 +288,100 @@
     <!-- SUBS MODAL -->
     <div id="subs-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center hidden">
         <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xl w-full mx-4 shadow-2xl space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-lg font-black text-amber-400">Banquillo y Cambios Tácticos</h3>
-                <button onclick="closeSubsModal()" class="text-slate-400 hover:text-white font-bold px-2 py-1 bg-slate-800 rounded text-xs">✕ Cerrar</button>
-            </div>
-            <p class="text-xs text-slate-300" id="subs-modal-desc">Selecciona un jugador compatible con la posición requerida.</p>
-            
+            <h3 class="text-lg font-black text-amber-400">Banquillo y Cambios Tácticos</h3>
             <div id="subs-inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto p-1"></div>
+            <button onclick="closeSubsModal()" class="w-full py-1 bg-slate-800 rounded text-xs">Cerrar</button>
         </div>
     </div>
 
-    <!-- GOAL CELEBRATION POPUP MODAL -->
-    <div id="goal-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
-        <div class="bg-gradient-to-b from-amber-600 via-slate-900 to-slate-950 border-4 border-amber-400 p-8 rounded-3xl max-w-md w-full mx-4 shadow-[0_0_60px_rgba(245,158,11,0.6)] text-center space-y-4 animate-goal">
-            <span class="text-6xl">⚽🎉</span>
-            <h2 class="text-4xl font-black bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 bg-clip-text text-transparent">¡¡¡ G O L !!!</h2>
-            <div id="goal-scorer-info" class="text-sm font-bold text-amber-200"></div>
-            <div class="bg-slate-950/80 border border-amber-500/40 p-3 rounded-xl">
-                <div class="text-xs text-slate-400 uppercase tracking-widest">Marcador Parcial</div>
-                <div class="text-2xl font-black text-emerald-400 mt-1" id="goal-modal-score">0 - 0</div>
+    <!-- HALFTIME MODAL -->
+    <div id="halftime-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="bg-slate-900 border-4 border-amber-500 p-8 rounded-3xl max-w-lg w-full mx-4 shadow-2xl text-center space-y-4">
+            <h2 class="text-2xl font-black text-amber-400">MEDIO TIEMPO (30 SEG DE DESCANSO)</h2>
+            <div id="halftime-stats" class="bg-slate-950 p-4 rounded-xl text-xs space-y-2 font-mono text-slate-300"></div>
+            <p id="halftime-timer-msg" class="text-xs text-amber-300 font-bold">Reanudando en 30 segundos...</p>
+            <div class="flex gap-2">
+                <button onclick="openSubsModalForPosition('ST')" class="w-1/2 py-2.5 bg-amber-500 text-slate-950 font-black rounded-xl text-xs">🔄 Cambios</button>
+                <button onclick="resumeSecondHalf()" class="w-1/2 py-2.5 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs">▶️ Iniciar 2do Tiempo</button>
             </div>
-            <button onclick="closeGoalModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl hover:scale-105 transition text-sm cursor-pointer shadow-lg">
-                Continuar Partido ⚽
-            </button>
+        </div>
+    </div>
+
+    <!-- GOAL MODAL -->
+    <div id="goal-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="bg-gradient-to-b from-amber-600 via-slate-900 to-slate-950 border-4 border-amber-400 p-8 rounded-3xl max-w-md w-full mx-4 text-center space-y-4 animate-goal">
+            <span class="text-6xl">⚽🎉</span>
+            <h2 class="text-4xl font-black text-amber-300">¡¡¡ G O L !!!</h2>
+            <div id="goal-scorer-info" class="text-sm font-bold text-amber-200"></div>
+            <button onclick="closeGoalModal()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm">Continuar</button>
         </div>
     </div>
 
     <!-- CUSTOM MESSAGE MODAL -->
     <div id="custom-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xs w-full mx-4 shadow-2xl text-center space-y-3">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-xs w-full mx-4 text-center space-y-3">
             <h3 id="modal-title" class="text-lg font-black text-amber-400">Aviso</h3>
             <p id="modal-message" class="text-slate-300 text-xs"></p>
-            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition text-xs cursor-pointer">Entendido</button>
+            <button onclick="closeModal()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs">Entendido</button>
         </div>
     </div>
 
-    <footer class="w-full max-w-5xl text-center py-3 border-t border-slate-800 text-[11px] text-slate-500">
-        Ultimate FC Card Legends &bull; 48 Selecciones &bull; Mundial 2026
-    </footer>
-
     <script>
         const stadiumsCatalog = [
-            { id: "bernabeu", nombre: "Estadio Santiago Bernabéu", region: "Madrid, España", continente: "Europa", capacidad: "85,000 espectadores", construccion: "1947", ubicacion: "Chamartín, Madrid", bonus: "+2.5 pts de sinergia táctica" },
-            { id: "maracana", nombre: "Estadio Maracanã", region: "Río de Janeiro, Brasil", continente: "Sudamérica", capacidad: "78,838 espectadores", construccion: "1950", ubicacion: "Maracanã, Río de Janeiro", bonus: "+3.0 pts en magia ofensiva" },
-            { id: "azteca", nombre: "Estadio Azteca", region: "Ciudad de México, México", continente: "Norteamérica", capacidad: "83,264 espectadores", construccion: "1966", ubicacion: "Santa Úrsula Coapa, CDMX", bonus: "+2.8 pts de resistencia en altitud" }
+            { id: "bernabeu", nombre: "Estadio Santiago Bernabéu", region: "Madrid, España", bonus: "+2.5 pts sinergia" },
+            { id: "maracana", nombre: "Estadio Maracanã", region: "Río de Janeiro, Brasil", bonus: "+3.0 pts magia ofensiva" },
+            { id: "azteca", nombre: "Estadio Azteca", region: "CDMX, México", bonus: "+2.8 pts altitud" }
         ];
 
         let activeStadium = stadiumsCatalog[0];
         let currentFormation = '4-3-3';
-        let cpuTeamKey = 'BRA';
+        let cpuTeamKey = 'NZL';
         let matchInProgress = false;
         let matchPaused = false;
         let matchIntervalRef = null;
         let pendingSubPosition = null;
 
         let audioCtx = null;
-        function initAudio() {
-            if(!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playWhistleSound() {
-            try {
-                initAudio();
-                if(!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(2600, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(2900, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.35);
-            } catch(e) {}
-        }
-
-        function playGoalHornSound() {
-            try {
-                initAudio();
-                if(!audioCtx) return;
-                const osc1 = audioCtx.createOscillator();
-                const osc2 = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc1.type = 'sawtooth';
-                osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc2.type = 'sawtooth';
-                osc2.frequency.setValueAtTime(225, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
-                osc1.connect(gain);
-                osc2.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc1.start();
-                osc2.start();
-                osc1.stop(audioCtx.currentTime + 1.8);
-                osc2.stop(audioCtx.currentTime + 1.8);
-            } catch(e) {}
-        }
+        function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        function playWhistleSound() { try { initAudio(); } catch(e){} }
+        function playGoalHornSound() { try { initAudio(); } catch(e){} }
 
         const photoCardsPool = [
-            { id: "img1", nombre: "K. Mbappé", numero: 7, posicion: "ST", media: 9.4, equipo: "Real Madrid", rol: "ST STRIKER", img: "img/img1.png", hasPhoto: true },
-            { id: "img2", nombre: "Keylor Navas", numero: 1, posicion: "GK", media: 9.0, equipo: "Leyenda Tica", rol: "GK DEFENDER", img: "img/img2.png", hasPhoto: true },
-            { id: "img3", nombre: "Erling Haaland", numero: 9, posicion: "ST", media: 9.5, equipo: "Manchester City", rol: "ST GOALSCORER", img: "img/img3.png", hasPhoto: true },
-            { id: "img4", nombre: "L. Messi", numero: 10, posicion: "CAM", media: 9.8, equipo: "Inter Miami", rol: "CAM MAGIC", img: "img/img4.png", hasPhoto: true },
-            { id: "img5", nombre: "Pelé", numero: 10, posicion: "ST", media: 9.9, equipo: "Brasil Leyenda", rol: "ST GOALSCORER", img: "img/img5.png", hasPhoto: true },
-            { id: "img6", nombre: "Ronaldinho", numero: 10, posicion: "CAM", media: 9.6, equipo: "Barcelona", rol: "CAM MAGIC", img: "img/img6.png", hasPhoto: true },
-            { id: "img7", nombre: "Ronaldo Nazário", numero: 9, posicion: "ST", media: 9.7, equipo: "Brasil", rol: "ST STRIKER", img: "img/img7.png", hasPhoto: true },
-            { id: "img8", nombre: "Cristiano Ronaldo", numero: 7, posicion: "ST", media: 9.8, equipo: "Al Nassr", rol: "ST GOALSCORER", img: "img/img8.png", hasPhoto: true },
-            { id: "img9", nombre: "Onana", numero: 23, posicion: "GK", media: 9.1, equipo: "Camerún", rol: "GK DEFENDER", img: "img/img9.png", hasPhoto: true },
-            { id: "img10", nombre: "Son Heung-Min", numero: 7, posicion: "LW", media: 9.2, equipo: "Tottenham", rol: "LW WINGER", img: "img/img10.png", hasPhoto: true },
-            { id: "img11", nombre: "Cucurella", numero: 3, posicion: "LB", media: 8.9, equipo: "Chelsea", rol: "LB LATERAL", img: "img/img11.png", hasPhoto: true },
-            { id: "img12", nombre: "Dembélé", numero: 11, posicion: "RW", media: 9.1, equipo: "PSG", rol: "RW SPEEDSTER", img: "img/img12.png", hasPhoto: true },
-            { id: "img13", nombre: "Zidane", numero: 5, posicion: "CAM", media: 9.7, equipo: "Francia Leyenda", rol: "CAM MAGIC", img: "img/img13.png", hasPhoto: true },
-            { id: "img14", nombre: "Marcelo", numero: 12, posicion: "LB", media: 9.2, equipo: "Fluminense", rol: "LB LATERAL", img: "img/img14.png", hasPhoto: true },
-            { id: "img15", nombre: "David Villa", numero: 7, posicion: "ST", media: 9.1, equipo: "España", rol: "ST STRIKER", img: "img/img15.png", hasPhoto: true },
-            { id: "img16", nombre: "Raúl", numero: 7, posicion: "ST", media: 9.2, equipo: "Real Madrid", rol: "ST STRIKER", img: "img/img16.png", hasPhoto: true },
-            { id: "img17", nombre: "Sergio Ramos", numero: 4, posicion: "CB", media: 9.3, equipo: "Sevilla", rol: "CB GUARDIAN", img: "img/img17.png", hasPhoto: true },
-            { id: "img18", nombre: "Xabi Alonso", numero: 14, posicion: "CM", media: 9.2, equipo: "B. Leverkusen", rol: "CM MOTOR", img: "img/img18.png", hasPhoto: true },
-            { id: "img19", nombre: "René Higuita", numero: 1, posicion: "GK", media: 9.0, equipo: "Colombia", rol: "GK DEFENDER", img: "img/img19.png", hasPhoto: true },
-            { id: "img20", nombre: "James Rodríguez", numero: 10, posicion: "CAM", media: 9.1, equipo: "Colombia", rol: "CAM PLAYMAKER", img: "img/img20.png", hasPhoto: true },
-            { id: "img21", nombre: "Dibu Martínez", numero: 23, posicion: "GK", media: 9.2, equipo: "Argentina", rol: "GK DEFENDER", img: "img/img21.png", hasPhoto: true },
-            { id: "img22", nombre: "Jamal Musiala", numero: 42, posicion: "CAM", media: 9.2, equipo: "B. Múnich", rol: "CAM MAGIC", img: "img/img22.png", hasPhoto: true },
-            { id: "img23", nombre: "Luka Modric", numero: 10, posicion: "CM", media: 9.4, equipo: "Real Madrid", rol: "CM CREATOR", img: "img/img23.png", hasPhoto: true },
-            { id: "img24", nombre: "Ryan Mendes", numero: 11, posicion: "RW", media: 8.7, equipo: "Selección", rol: "RW WINGER", img: "img/img24.png", hasPhoto: true },
-            { id: "img25", nombre: "Vosinha", numero: 1, posicion: "GK", media: 8.6, equipo: "Selección", rol: "GK DEFENDER", img: "img/img25.png", hasPhoto: true },
-            { id: "img26", nombre: "Hugo Sánchez", numero: 9, posicion: "ST", media: 9.3, equipo: "México Leyenda", rol: "ST GOALSCORER", img: "img/img26.png", hasPhoto: true },
-            { id: "img27", nombre: "Fidel Escobar", numero: 3, posicion: "CB", media: 8.7, equipo: "Saprissa", rol: "CB ROBUST", img: "img/img27.png", hasPhoto: true },
-            { id: "img28", nombre: "NPC Defensor 1", numero: 2, posicion: "CB", media: 8.5, equipo: "Amateur", rol: "CB GUARDIAN", img: "img/img28.png", hasPhoto: true },
-            { id: "img29", nombre: "NPC Defensor 2", numero: 4, posicion: "CB", media: 8.5, equipo: "Amateur", rol: "CB ROBUST", img: "img/img29.png", hasPhoto: true },
-            { id: "img30", nombre: "NPC Mediocampista 1", numero: 8, posicion: "CM", media: 8.6, equipo: "Amateur", rol: "CM MOTOR", img: "img/img30.png", hasPhoto: true },
-            { id: "img31", nombre: "NPC Defensor 3", numero: 5, posicion: "LB", media: 8.4, equipo: "Amateur", rol: "LB LATERAL", img: "img/img31.png", hasPhoto: true },
-            { id: "img32", nombre: "NPC Portero 1", numero: 12, posicion: "GK", media: 8.6, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img32.png", hasPhoto: true },
-            { id: "img33", nombre: "NPC Atacante 1", numero: 11, posicion: "ST", media: 8.7, equipo: "Amateur", rol: "ST STRIKER", img: "img/img33.png", hasPhoto: true },
-            { id: "img34", nombre: "NPC Portero 2", numero: 13, posicion: "GK", media: 8.5, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img34.png", hasPhoto: true },
-            { id: "img35", nombre: "NPC Defensor 4", numero: 6, posicion: "RB", media: 8.5, equipo: "Amateur", rol: "RB LATERAL", img: "img/img35.png", hasPhoto: true },
-            { id: "img36", nombre: "NPC Portero 3", numero: 25, posicion: "GK", media: 8.4, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img36.png", hasPhoto: true },
-            { id: "img37", nombre: "NPC Atacante 2", numero: 17, posicion: "LW", media: 8.6, equipo: "Amateur", rol: "LW WINGER", img: "img/img37.png", hasPhoto: true },
-            { id: "img38", nombre: "NPC Atacante 3", numero: 19, posicion: "RW", media: 8.6, equipo: "Amateur", rol: "RW SPEEDSTER", img: "img/img38.png", hasPhoto: true },
-            { id: "img39", nombre: "NPC Atacante 4", numero: 20, posicion: "ST", media: 8.7, equipo: "Amateur", rol: "ST GOALSCORER", img: "img/img39.png", hasPhoto: true },
-            { id: "img40", nombre: "NPC Portero 4", numero: 30, posicion: "GK", media: 8.5, equipo: "Amateur", rol: "GK DEFENDER", img: "img/img40.png", hasPhoto: true }
+            { id: "img1", nombre: "K. Mbappé", numero: 7, posicion: "ST", media: 9.4, equipo: "Real Madrid", img: "img/img1.png" },
+            { id: "img2", nombre: "Keylor Navas", numero: 1, posicion: "GK", media: 9.0, equipo: "Leyenda Tica", img: "img/img2.png" },
+            { id: "img3", nombre: "Erling Haaland", numero: 9, posicion: "ST", media: 9.5, equipo: "Manchester City", img: "img/img3.png" },
+            { id: "img4", nombre: "L. Messi", numero: 10, posicion: "CAM", media: 9.8, equipo: "Inter Miami", img: "img/img4.png" }
         ];
 
-        // 48 SELECCIONES OFICIALES ORDENADAS DESDE EL PUESTO 48 HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
+        // 48 SELECCIONES OFICIALES ORDENADAS HASTA EL CAMPEÓN (ESPAÑA)[cite: 7, 21]
         const rawWorldTeams = [
-            { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿", tier: 4 }, { id: "QAT", name: "Catar", flag: "🇶🇦", tier: 4 }, { id: "IRN", name: "Irán", flag: "🇮🇷", tier: 4 }, { id: "TUN", name: "Túnez", flag: "🇹🇳", tier: 4 }, { id: "ALG", name: "Argelia", flag: "🇩🇿", tier: 4 },
-            { id: "EGY", name: "Egipto", flag: "🇪🇬", tier: 4 }, { id: "CIV", name: "Costa de Marfil", flag: "🇨🇮", tier: 4 }, { id: "GHA", name: "Ghana", flag: "🇬🇭", tier: 4 }, { id: "NGA", name: "Nigeria", flag: "🇳🇬", tier: 4 }, { id: "CMR", name: "Camerún", flag: "🇨🇲", tier: 4 },
-            { id: "CAN", name: "Canadá", flag: "🇨🇦", tier: 3 }, { id: "PAN", name: "Panamá", flag: "🇵🇦", tier: 3 }, { id: "VEN", name: "Venezuela", flag: "🇻🇪", tier: 3 }, { id: "ECU", name: "Ecuador", flag: "🇪🇨", tier: 3 }, { id: "PER", name: "Perú", flag: "🇵🇪", tier: 3 },
-            { id: "CHI", name: "Chile", flag: "🇨🇱", tier: 3 }, { id: "SWE", name: "Suecia", flag: "🇸🇪", tier: 3 }, { id: "CZE", name: "República Checa", flag: "🇨🇿", tier: 3 }, { id: "GRE", name: "Grecia", flag: "🇬🇷", tier: 3 }, { id: "TUR", name: "Turquía", flag: "🇹🇷", tier: 3 },
-            { id: "SRB", name: "Serbia", flag: "🇷🇸", tier: 2 }, { id: "AUT", name: "Austria", flag: "🇦🇹", tier: 2 }, { id: "UKR", name: "Ucrania", flag: "🇺🇦", tier: 2 }, { id: "POL", name: "Polonia", flag: "🇵🇱", tier: 2 }, { id: "DEN", name: "Dinamarca", flag: "🇩🇰", tier: 2 },
-            { id: "SUI", name: "Suiza", flag: "🇨🇭", tier: 2 }, { id: "SEN", name: "Senegal", flag: "🇸🇳", tier: 2 }, { id: "MAR", name: "Marruecos", flag: "🇲🇦", tier: 2 }, { id: "KSA", name: "Arabia Saudita", flag: "🇸🇦", tier: 2 }, { id: "AUS", name: "Australia", flag: "🇦🇺", tier: 2 },
-            { id: "KOR", name: "Corea del Sur", flag: "🇰🇷", tier: 1 }, { id: "JPN", name: "Japón", flag: "🇯🇵", tier: 1 }, { id: "USA", name: "Estados Unidos", flag: "🇺🇸", tier: 1 }, { id: "CRC", name: "Costa Rica", flag: "🇨🇷", tier: 1 }, { id: "MEX", name: "México", flag: "🇲🇽", tier: 1 },
-            { id: "COL", name: "Colombia", flag: "🇨🇴", tier: 1 }, { id: "URU", name: "Uruguay", flag: "🇺🇾", tier: 1 }, { id: "CRO", name: "Croacia", flag: "🇭🇷", tier: 1 }, { id: "BEL", name: "Bélgica", flag: "🇧🇪", tier: 1 }, { id: "ITA", name: "Italia", flag: "🇮🇹", tier: 1 },
-            { id: "NED", name: "Países Bajos", flag: "🇳🇱", tier: 0 }, { id: "POR", name: "Portugal", flag: "🇵🇹", tier: 0 }, { id: "GER", name: "Alemania", flag: "🇩🇪", tier: 0 }, { id: "ENG", name: "Inglaterra", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", tier: 0 }, { id: "ARG", name: "Argentina", flag: "🇦🇷", tier: 0 },
-            { id: "BRA", name: "Brasil", flag: "🇧🇷", tier: 0 }, { id: "FRA", name: "Francia", flag: "🇫🇷", tier: 0 }, { id: "ESP", name: "España", flag: "🇪🇸", tier: 0 } // CAMPEÓN
+            { id: "NZL", name: "Nueva Zelanda", flag: "🇳🇿" }, { id: "QAT", name: "Catar", flag: "🇶🇦" }, { id: "IRN", name: "Irán", flag: "🇮🇷" }, { id: "TUN", name: "Túnez", flag: "🇹🇳" }, { id: "ALG", name: "Argelia", flag: "🇩🇿" },
+            { id: "EGY", name: "Egipto", flag: "🇪🇬" }, { id: "CIV", name: "Costa de Marfil", flag: "🇨🇮" }, { id: "GHA", name: "Ghana", flag: "🇬🇭" }, { id: "NGA", name: "Nigeria", flag: "🇳🇬" }, { id: "CMR", name: "Camerún", flag: "🇨🇲" },
+            { id: "CAN", name: "Canadá", flag: "🇨🇦" }, { id: "PAN", name: "Panamá", flag: "🇵🇦" }, { id: "VEN", name: "Venezuela", flag: "🇻🇪" }, { id: "ECU", name: "Ecuador", flag: "🇪🇨" }, { id: "PER", name: "Perú", flag: "🇵🇪" },
+            { id: "CHI", name: "Chile", flag: "🇨🇱" }, { id: "SWE", name: "Suecia", flag: "🇸🇪" }, { id: "CZE", name: "República Checa", flag: "🇨🇿" }, { id: "GRE", name: "Grecia", flag: "🇬🇷" }, { id: "TUR", name: "Turquía", flag: "🇹🇷" },
+            { id: "SRB", name: "Serbia", flag: "🇷🇸" }, { id: "AUT", name: "Austria", flag: "🇦🇹" }, { id: "UKR", name: "Ucrania", flag: "🇺🇦" }, { id: "POL", name: "Polonia", flag: "🇵🇱" }, { id: "DEN", name: "Dinamarca", flag: "🇩🇰" },
+            { id: "SUI", name: "Suiza", flag: "🇨🇭" }, { id: "SEN", name: "Senegal", flag: "🇸🇳" }, { id: "MAR", name: "Marruecos", flag: "🇲🇦" }, { id: "KSA", name: "Arabia Saudita", flag: "🇸🇦" }, { id: "AUS", name: "Australia", flag: "🇦🇺" },
+            { id: "KOR", name: "Corea del Sur", flag: "🇰🇷" }, { id: "JPN", name: "Japón", flag: "🇯🇵" }, { id: "USA", name: "Estados Unidos", flag: "🇺🇸" }, { id: "CRC", name: "Costa Rica", flag: "🇨🇷" }, { id: "MEX", name: "México", flag: "🇲🇽" },
+            { id: "COL", name: "Colombia", flag: "🇨🇴" }, { id: "URU", name: "Uruguay", flag: "🇺🇾" }, { id: "CRO", name: "Croacia", flag: "🇭🇷" }, { id: "BEL", name: "Bélgica", flag: "🇧🇪" }, { id: "ITA", name: "Italia", flag: "🇮🇹" },
+            { id: "NED", name: "Países Bajos", flag: "🇳🇱" }, { id: "POR", name: "Portugal", flag: "🇵🇹" }, { id: "GER", name: "Alemania", flag: "🇩🇪" }, { id: "ENG", name: "Inglaterra", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, { id: "ARG", name: "Argentina", flag: "🇦🇷" },
+            { id: "BRA", name: "Brasil", flag: "🇧🇷" }, { id: "FRA", name: "Francia", flag: "🇫🇷" }, { id: "ESP", name: "España", flag: "🇪🇸" }
         ];
 
         let worldTeamsData = rawWorldTeams.map((t, idx) => ({
             id: t.id, name: t.name, flag: t.flag,
-            unlocked: idx < 3, // Primeros 3 desbloqueados
+            unlocked: idx < 3,
             players: [
-                { nombre: `GK ${t.name}`, posicion: "GK", numero: 1, media: 7.8 + (idx % 1.5) },
-                { nombre: `CB1 ${t.name}`, posicion: "CB", numero: 2, media: 7.8 + (idx % 1.5) },
-                { nombre: `CB2 ${t.name}`, posicion: "CB", numero: 4, media: 7.8 + (idx % 1.5) },
-                { nombre: `LB ${t.name}`, posicion: "LB", numero: 3, media: 7.7 },
-                { nombre: `RB ${t.name}`, posicion: "RB", numero: 5, media: 7.7 },
-                { nombre: `CM1 ${t.name}`, posicion: "CM", numero: 6, media: 7.9 },
-                { nombre: `CM2 ${t.name}`, posicion: "CM", numero: 8, media: 7.9 },
-                { nombre: `CAM ${t.name}`, posicion: "CAM", numero: 10, media: 8.0 },
-                { nombre: `RW ${t.name}`, posicion: "RW", numero: 7, media: 8.0 },
-                { nombre: `ST ${t.name}`, posicion: "ST", numero: 9, media: 8.2 },
-                { nombre: `LW ${t.name}`, posicion: "LW", numero: 11, media: 7.9 }
+                { nombre: `GK ${t.name}`, posicion: "GK", numero: 1, media: 7.5 },
+                { nombre: `CB1 ${t.name}`, posicion: "CB", numero: 2, media: 7.5 },
+                { nombre: `CB2 ${t.name}`, posicion: "CB", numero: 4, media: 7.5 },
+                { nombre: `LB ${t.name}`, posicion: "LB", numero: 3, media: 7.5 },
+                { nombre: `RB ${t.name}`, posicion: "RB", numero: 5, media: 7.5 },
+                { nombre: `CM1 ${t.name}`, posicion: "CM", numero: 6, media: 7.6 },
+                { nombre: `CM2 ${t.name}`, posicion: "CM", numero: 8, media: 7.6 },
+                { nombre: `CAM ${t.name}`, posicion: "CAM", numero: 10, media: 7.8 },
+                { nombre: `RW ${t.name}`, posicion: "RW", numero: 7, media: 7.7 },
+                { nombre: `ST ${t.name}`, posicion: "ST", numero: 9, media: 7.9 },
+                { nombre: `LW ${t.name}`, posicion: "LW", numero: 11, media: 7.7 }
             ]
         }));
 
@@ -501,27 +391,29 @@
                 marketplacePlayers.push({
                     id: `market_${team.id}_${idx}`,
                     nombre: p.nombre, numero: p.numero, posicion: p.posicion, media: p.media,
-                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", hasPhoto: false
+                    equipo: team.name, rol: `${p.posicion} STAR`, img: "img/contracara.png", price: 1000000 // Precio económico para poder comprar tras pocos partidos
                 });
             });
         });
 
         let userInventory = [];
-        let userPoints = 500;
-        let userCash = 5500000;
+        let userPoints = 0; // INICIA EN 0
+        let userCash = 0;   // INICIA EN 0
         let userTrophies = 0;
+        let matchesWonCount = 0;
 
         let activeSquad = {
             GK: null, CB1: null, CB2: null, LB: null, RB: null,
-            CM1: null, CM2: null, CM3: null, CAM: null, ST: null, LW: null, RW: null
+            CM1: null, CM2: null, CM3: null, CAM: null, ST: null, LW: null, RB: null
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inventory');
-            const savedSquad = localStorage.getItem('fc26_squad');
-            const savedCash = localStorage.getItem('fc26_cash');
-            const savedPoints = localStorage.getItem('fc26_points');
-            const savedTeams = localStorage.getItem('fc26_teams');
+            const savedInv = localStorage.getItem('fc26_inv_v2');
+            const savedSquad = localStorage.getItem('fc26_sq_v2');
+            const savedCash = localStorage.getItem('fc26_cash_v2');
+            const savedPoints = localStorage.getItem('fc26_pts_v2');
+            const savedTeams = localStorage.getItem('fc26_teams_v2');
+            const savedWins = localStorage.getItem('fc26_wins_v2');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -529,6 +421,7 @@
                 if(savedCash) userCash = parseInt(savedCash);
                 if(savedPoints) userPoints = parseInt(savedPoints);
                 if(savedTeams) worldTeamsData = JSON.parse(savedTeams);
+                if(savedWins) matchesWonCount = parseInt(savedWins);
 
                 document.getElementById('start-screen').classList.add('hidden');
                 updateStatsDisplay();
@@ -544,11 +437,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inventory', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_squad', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash', userCash);
-            localStorage.setItem('fc26_points', userPoints);
-            localStorage.setItem('fc26_teams', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_inv_v2', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v2', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v2', userCash);
+            localStorage.setItem('fc26_pts_v2', userPoints);
+            localStorage.setItem('fc26_teams_v2', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v2', matchesWonCount);
         }
 
         function populateCpuSelect() {
@@ -563,6 +457,7 @@
             select.value = cpuTeamKey;
         }
 
+        // COMPLETAR LOS 11 ESPACIOS RESTANTES CON JUGADORES NPC DE MEDIA 70
         function openInitialPack() {
             document.getElementById('draft-step-1').classList.add('hidden');
             const revealContainer = document.getElementById('draft-reveal-container');
@@ -571,16 +466,12 @@
             const grid = document.getElementById('initial-cards-grid');
             grid.innerHTML = '';
 
-            const gkPool = photoCardsPool.filter(p => p.posicion === 'GK');
-            const defPool = photoCardsPool.filter(p => ['CB', 'LB', 'RB'].includes(p.posicion));
-            const medPool = photoCardsPool.filter(p => ['CM', 'CAM'].includes(p.posicion));
-            const atkPool = photoCardsPool.filter(p => ['ST', 'LW', 'RW'].includes(p.posicion));
-
+            // 4 cartas aleatorias con foto
             const starterCards = [
-                gkPool[Math.floor(Math.random() * gkPool.length)],
-                defPool[Math.floor(Math.random() * defPool.length)],
-                medPool[Math.floor(Math.random() * medPool.length)],
-                atkPool[Math.floor(Math.random() * atkPool.length)]
+                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)],
+                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)],
+                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)],
+                photoCardsPool[Math.floor(Math.random() * photoCardsPool.length)]
             ];
 
             starterCards.forEach(player => {
@@ -588,10 +479,30 @@
                 grid.appendChild(createFlipCardElement(player));
             });
 
+            // Rellenar posiciones faltantes con NPC de Media 70
+            const positionsList = ['GK', 'CB1', 'CB2', 'LB', 'RB', 'CM1', 'CM2', 'CM3', 'CAM', 'ST', 'LW', 'RW'];
+            let npcIndex = 1;
+            positionsList.forEach((pos, idx) => {
+                if(!activeSquad[pos] && idx < 11) {
+                    const npcPlayer = {
+                        id: `npc_${npcIndex}`,
+                        nombre: `NPC${npcIndex}`,
+                        numero: 12 + npcIndex,
+                        posicion: pos.replace(/[0-9]/g, ''),
+                        media: 70,
+                        equipo: "Plantel Base",
+                        img: "img/contracara.png"
+                    };
+                    userInventory.push(npcPlayer);
+                    activeSquad[pos] = npcPlayer;
+                    npcIndex++;
+                }
+            });
+
             activeSquad.GK = starterCards[0];
-            activeSquad.CB1 = starterCards[1];
+            activeSquad.ST = starterCards[1];
             activeSquad.CAM = starterCards[2];
-            activeSquad.ST = starterCards[3];
+            activeSquad.CB1 = starterCards[3];
 
             saveGameData();
             document.getElementById('btn-enter-game').classList.remove('hidden');
@@ -600,7 +511,6 @@
         function createFlipCardElement(player) {
             const wrapper = document.createElement('div');
             wrapper.className = "w-32 h-48 sm:w-36 sm:h-52 perspective-1000 cursor-pointer";
-            
             wrapper.innerHTML = `
                 <div class="card-inner relative w-full h-full transform-style-3d shadow-2xl rounded-2xl transition-transform duration-500 rotate-y-180">
                     <div class="absolute inset-0 backface-hidden rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-900 flex flex-col justify-between p-2">
@@ -682,7 +592,6 @@
             renderPitchSlots();
         }
 
-        // RENDERIZAR CANCHA CON FORMACIÓN DINÁMICA ESTRICTA
         function renderPitchSlots() {
             const board = document.getElementById('user-formation-board');
             board.innerHTML = '';
@@ -694,7 +603,7 @@
                 userRows = [{ slots: ['ST', 'CAM'] }, { slots: ['LW', 'CM1', 'CM2', 'RW'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['GK'] }];
             } else if (currentFormation === '3-5-2') {
                 userRows = [{ slots: ['ST', 'CAM'] }, { slots: ['LW', 'CM1', 'CM2', 'CM3', 'RW'] }, { slots: ['CB1', 'CB2', 'LB'] }, { slots: ['GK'] }];
-            } else { // 4-2-4
+            } else { 
                 userRows = [{ slots: ['LW', 'ST', 'CAM', 'RW'] }, { slots: ['CM1', 'CM2'] }, { slots: ['LB', 'CB1', 'CB2', 'RB'] }, { slots: ['GK'] }];
             }
 
@@ -802,7 +711,6 @@
             showModal("Cambio Guardado", `Has colocado a ${player.nombre} en ${slotPos}. Quedará guardado.`);
         }
 
-        // CAMPAIGN GRID (CAMINO AL MUNDIAL)
         function renderCampaignGrid() {
             const container = document.getElementById('campaign-teams-grid');
             container.innerHTML = '';
@@ -841,10 +749,8 @@
             showModal("Rival Seleccionado", `Te enfrentarás contra ${worldTeamsData.find(t => t.id === teamId).name}. ¡Dale con todo!`);
         }
 
-        // DESBLOQUEAR SIGUIENTE PARTIDO DE CAMPAÑA
         function unlockNextTeams(currentIndex) {
             if (currentIndex + 1 < worldTeamsData.length) {
-                // Primeros niveles de 3 en 3, últimos 16 equipos de 1 en 1
                 let nextUnlockCount = (currentIndex >= 32) ? 1 : 3;
                 for(let i = 1; i <= nextUnlockCount; i++) {
                     if(currentIndex + i < worldTeamsData.length) {
@@ -856,21 +762,14 @@
             }
         }
 
-        // JUEGOS DE ENTRENAMIENTO
         function doTrainingShot(side) {
             const feed = document.getElementById('training-feedback');
-            const success = Math.random() > 0.4;
-            if(success) {
-                userPoints += 50;
-                userCash += 500000;
-                saveGameData();
-                updateStatsDisplay();
-                feed.className = "text-xs font-bold text-emerald-400";
-                feed.innerText = `¡Golazo al ángulo por la ${side}! Has ganado +50 Puntos y +$500,000.`;
-            } else {
-                feed.className = "text-xs font-bold text-red-400";
-                feed.innerText = `¡El arquero adivino tu disparo por la ${side} y lo atajó! Sigue intentando.`;
-            }
+            userPoints += 25;
+            userCash += 100000;
+            saveGameData();
+            updateStatsDisplay();
+            feed.className = "text-xs font-bold text-emerald-400";
+            feed.innerText = `¡Práctica completada! Ganaste +25 Puntos y +$100,000.`;
         }
 
         function showModal(title, message) {
@@ -913,7 +812,6 @@
 
         function selectStadium(id) {
             activeStadium = stadiumsCatalog.find(s => s.id === id);
-            document.getElementById('current-stadium-title').innerText = activeStadium.nombre;
             renderStadiumsGrid();
             showModal("Estadio Seleccionado", `Has seleccionado el ${activeStadium.nombre}.`);
         }
@@ -928,8 +826,8 @@
             listToDisplay.forEach(player => {
                 const cardEl = document.createElement('div');
                 cardEl.className = "bg-slate-900 border border-amber-500/50 p-3 rounded-2xl flex flex-col items-center justify-between w-48 shadow-xl space-y-2";
-                
                 const isOwned = userInventory.some(p => p.id === player.id);
+                const itemPrice = player.price || 1000000;
 
                 cardEl.innerHTML = `
                     <div class="w-24 h-32 rounded-xl overflow-hidden border border-amber-400 bg-slate-950">
@@ -943,8 +841,7 @@
                     ${isOwned ? `
                         <div class="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-1 rounded w-full text-center border border-emerald-500/30">En tu álbum</div>
                     ` : `
-                        <button onclick="buyPlayerMarket('${player.id}', 1500000)" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition cursor-pointer">
-                            Fichar ($1.5M)
+                        <button onclick="buyPlayerMarket('${player.id}', ${itemPrice})" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition cursor-pointer">                             Fichar ($${(itemPrice/1000000).toFixed(1)}M)
                         </button>
                     `}
                 `;
@@ -954,7 +851,7 @@
 
         function buyPlayerMarket(id, cost) {
             if(userCash < cost) {
-                showModal("Fondos Insuficientes", "No tienes suficiente dinero.");
+                showModal("Fondos Insuficientes", `Necesitas $${(cost/1000000).toFixed(1)}M. ¡Gana más partidos en el Camino al Mundial! (Al 3er partido ya podrás comprar tu primera tarjeta).`);
                 return;
             }
             userCash -= cost;
@@ -970,7 +867,7 @@
 
         function spinRoulette() {
             if(userPoints < 250) {
-                showModal("Puntos Insuficientes", "Necesitas 250 Puntos.");
+                showModal("Puntos Insuficientes", "Necesitas 250 Puntos (Gana partidos o entrena).");
                 return;
             }
             userPoints -= 250;
@@ -994,7 +891,6 @@
         let currentTriviaIndex = 0;
 
         function initTrivia() { loadTriviaQuestion(); }
-
         function loadTriviaQuestion() {
             const t = triviaQuestions[currentTriviaIndex];
             document.getElementById('trivia-question').innerText = t.q;
@@ -1012,10 +908,10 @@
         function checkTriviaAnswer(selectedIndex) {
             const t = triviaQuestions[currentTriviaIndex];
             if(selectedIndex === t.answer) {
-                userPoints += 150; userCash += 3000000;
+                userPoints += 50; userCash += 500000;
                 saveGameData();
                 updateStatsDisplay();
-                showModal("¡Correcto!", "Has ganado 150 Puntos y $3,000,000.");
+                showModal("¡Correcto!", "Has ganado +50 Puntos y +$500,000.");
             } else {
                 showModal("Incorrecto", "Sigue intentando.");
             }
@@ -1027,6 +923,10 @@
             const assigned = Object.values(activeSquad).filter(p => p !== null);
             return assigned[Math.floor(Math.random() * assigned.length)] || { nombre: "Mbappé", numero: 7 };
         }
+
+        let globalUserGoals = 0;
+        let globalCpuGoals = 0;
+        let currentMatchMinute = 0;
 
         function startMatch() {
             if(matchInProgress) return;
@@ -1041,9 +941,9 @@
             const cpuTeamObj = worldTeamsData.find(t => t.id === cpuTeamKey) || worldTeamsData[0];
             feed.innerHTML = `<div class="text-emerald-400">[00:00] 🏟️ ¡Arranca el partido en el ${activeStadium.nombre}! Equipo Mundialista vs ${cpuTeamObj.name} ${cpuTeamObj.flag}.</div>`;
 
-            let userGoals = 0;
-            let cpuGoals = 0;
-            let tickCount = 0;
+            globalUserGoals = 0;
+            globalCpuGoals = 0;
+            currentMatchMinute = 0;
 
             const narrativeEvents = [
                 (m, p) => `[${m}] El #${p.numero} ${p.nombre} arma la jugada colectiva para el Equipo Mundialista.`,
@@ -1057,27 +957,25 @@
 
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
-                tickCount++;
-
-                let matchMinute = Math.min(90, tickCount * 6);
-                let timeStr = `${matchMinute.toString().padStart(2, '0')}:00`;
+                currentMatchMinute += 3;
+                let timeStr = `${currentMatchMinute.toString().padStart(2, '0')}:00`;
                 document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO &bull; MINUTO ${timeStr}`;
 
                 let activePlayer = getRandomActiveUserPlayer();
 
-                if(tickCount === 3 || tickCount === 8 || tickCount === 12) {
+                if(currentMatchMinute === 15 || currentMatchMinute === 30) {
                     if(Math.random() > 0.3) {
-                        userGoals++;
+                        globalUserGoals++;
                         playGoalHornSound();
                         document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
-                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                        document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó ${activePlayer.nombre} (#${activePlayer.numero})!</div>`;
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
                     } else {
-                        cpuGoals++;
+                        globalCpuGoals++;
                         playGoalHornSound();
                         document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}`;
-                        document.getElementById('goal-modal-score').innerText = `${userGoals} - ${cpuGoals}`;
+                        document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}!</div>`;
                     }
@@ -1086,12 +984,80 @@
                     feed.innerHTML += `<div>${randomEvent(timeStr, activePlayer)}</div>`;
                 }
 
-                const scoreStr = `${userGoals} - ${cpuGoals}`;
+                const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
                 document.getElementById('pitch-scoreboard-val').innerText = scoreStr;
                 document.getElementById('live-score-display').innerText = scoreStr;
                 feed.scrollTop = feed.scrollHeight;
 
-                if(tickCount >= 15) {
+                if(currentMatchMinute >= 45) {
+                    clearInterval(matchIntervalRef);
+                    playWhistleSound();
+                    triggerHalftimeBreak();
+                }
+            }, 3000);
+        }
+
+        function triggerHalftimeBreak() {
+            document.getElementById('halftime-stats').innerHTML = `
+                <p><strong>Marcador al Medio Tiempo:</strong> ${globalUserGoals} - ${globalCpuGoals}</p>
+                <p><strong>Posesión de Balón:</strong> 52% - 48%</p>
+                <p><strong>Remates al Arco:</strong> 5 - 3</p>
+            `;
+            document.getElementById('halftime-modal').classList.remove('hidden');
+            
+            let countdown = 30;
+            const timerMsg = document.getElementById('halftime-timer-msg');
+            const timerRef = setInterval(() => {
+                countdown--;
+                timerMsg.innerText = `Reanudando en ${countdown} segundos...`;
+                if(countdown <= 0) {
+                    clearInterval(timerRef);
+                    resumeSecondHalf();
+                }
+            }, 1000);
+            window.activeHalfTimeCountdown = timerRef;
+        }
+
+        function resumeSecondHalf() {
+            if(window.activeHalfTimeCountdown) clearInterval(window.activeHalfTimeCountdown);
+            document.getElementById('halftime-modal').classList.add('hidden');
+            playWhistleSound();
+
+            const feed = document.getElementById('match-commentary-feed');
+            feed.innerHTML += `<div class="text-amber-400 font-bold">[45:00] ⏱️ ¡Arranca el segundo tiempo!</div>`;
+
+            let secondHalfMinute = 45;
+            matchIntervalRef = setInterval(() => {
+                if(matchPaused) return;
+                secondHalfMinute += 3;
+                if(secondHalfMinute > 90) secondHalfMinute = 90;
+                let timeStr = `${secondHalfMinute.toString().padStart(2, '0')}:00`;
+                document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO &bull; MINUTO ${timeStr}`;
+
+                let activePlayer = getRandomActiveUserPlayer();
+                if(secondHalfMinute === 60 || secondHalfMinute === 75) {
+                    if(Math.random() > 0.4) {
+                        globalUserGoals++;
+                        playGoalHornSound();
+                        document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
+                        document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
+                        document.getElementById('goal-modal').classList.remove('hidden');
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
+                    } else {
+                        globalCpuGoals++;
+                        playGoalHornSound();
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol del equipo rival!</div>`;
+                    }
+                } else {
+                    feed.innerHTML += `<div>[${timeStr}] Jugada disputada en el terreno de juego.</div>`;
+                }
+
+                const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
+                document.getElementById('pitch-scoreboard-val').innerText = scoreStr;
+                document.getElementById('live-score-display').innerText = scoreStr;
+                feed.scrollTop = feed.scrollHeight;
+
+                if(secondHalfMinute >= 90) {
                     clearInterval(matchIntervalRef);
                     matchInProgress = false;
                     playWhistleSound();
@@ -1100,29 +1066,31 @@
                     const title = document.getElementById('result-title');
                     const desc = document.getElementById('result-desc');
 
-                    if(userGoals > cpuGoals) {
-                        userTrophies += 10; userCash += 8000000; userPoints += 300;
-                        title.innerText = `¡VICTORIA TRIUNFAL (${userGoals}-${cpuGoals})!`;
-                        desc.innerText = `¡Victoria para el Equipo Mundialista! +$8.0M y +300 Puntos.`;
+                    if(globalUserGoals > globalCpuGoals) {
+                        matchesWonCount++;
+                        userTrophies += 10; 
+                        userCash += 350000; // Premio por victoria balanceado para permitir compra al 3er partido
+                        userPoints += 100;
+                        title.innerText = `¡VICTORIA (${globalUserGoals}-${globalCpuGoals})!`;
+                        desc.innerText = `¡Victoria! Has ganado +$350,000 y +100 Puntos. (Partidos ganados: ${matchesWonCount})`;
                         
-                        // Desbloquear siguiente nivel en campaña
                         const currentTeamIndex = worldTeamsData.findIndex(t => t.id === cpuTeamKey);
                         if(currentTeamIndex !== -1) unlockNextTeams(currentTeamIndex);
 
-                    } else if(userGoals === cpuGoals) {
-                        userCash += 3500000; userPoints += 150;
-                        title.innerText = `EMPATE DISPUTADO (${userGoals}-${cpuGoals})`;
-                        desc.innerText = `Empate. Obtienes +$3.5M y +150 Puntos.`;
+                    } else if(globalUserGoals === globalCpuGoals) {
+                        userCash += 150000; userPoints += 50;
+                        title.innerText = `EMPATE (${globalUserGoals}-${globalCpuGoals})`;
+                        desc.innerText = `Empate. Obtienes +$150,000 y +50 Puntos.`;
                     } else {
-                        userCash += 1500000; userPoints += 75;
-                        title.innerText = `DERROTA AJUSTADA (${userGoals}-${cpuGoals})`;
-                        desc.innerText = `Derrota. Compensación de +$1.5M y +75 Puntos.`;
+                        userCash += 50000; userPoints += 20;
+                        title.innerText = `DERROTA (${globalUserGoals}-${globalCpuGoals})`;
+                        desc.innerText = `Derrota. Compensación de +$50,000 y +20 Puntos.`;
                     }
                     saveGameData();
                     updateStatsDisplay();
                     renderCampaignGrid();
                 }
-            }, 6000);
+            }, 3000);
         }
 
         function pauseMatch() {
