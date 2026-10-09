@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Broadcast Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Pro Broadcast Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -49,8 +49,8 @@
     <div id="intro-video-screen" class="fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center p-4">
         <div class="max-w-xl w-full bg-slate-900 border-4 border-amber-500 rounded-3xl p-4 shadow-[0_0_50px_rgba(245,158,11,0.5)] text-center space-y-4">
             <div class="text-xs font-black text-amber-400 tracking-widest uppercase">📺 TRANSMISIÓN OFICIAL &bull; MUNDIAL 2026</div>
-            <div class="w-full h-64 bg-black rounded-2xl overflow-hidden border-2 border-slate-700 relative shadow-inner">
-                <video id="intro-video" class="w-full h-full object-cover" autoplay playsinline>
+            <div class="w-full h-64 bg-black rounded-2xl overflow-hidden border-2 border-slate-700 relative shadow-inner flex items-center justify-center">
+                <video id="intro-video" class="w-full h-full object-cover" autoplay playsinline controls>
                     <source src="img/Intro.mp4" type="video/mp4">
                     Tu navegador no soporta la reproducción de vídeos.
                 </video>
@@ -335,7 +335,7 @@
                 <div class="text-xs text-slate-300" id="goal-player-meta"></div>
             </div>
             <div class="text-2xl font-black text-emerald-400 mt-1" id="goal-modal-score">0 - 0</div>
-            <button onclick="closeGoalModal()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm cursor-pointer">Continuar</button>
+            <button onclick="closeGoalModalUnpause()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-sm cursor-pointer">Continuar Partido ⚽</button>
         </div>
     </div>
 
@@ -407,14 +407,23 @@
             } catch(e) {}
         }
 
-        function speakCommentary(text) {
+        // SISTEMA DE DOS VOCES PARA LOS COMERNTARISTAS (CONVERSACIÓN EN VIVO)
+        function speakDualCommentary(textA, textB) {
             try {
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'es-ES';
-                    utterance.rate = 1.1;
-                    window.speechSynthesis.speak(utterance);
+                    const utter1 = new SpeechSynthesisUtterance(textA);
+                    utter1.lang = 'es-ES';
+                    utter1.rate = 1.05;
+                    utter1.pitch = 1.0; // Narrador principal
+
+                    const utter2 = new SpeechSynthesisUtterance(textB);
+                    utter2.lang = 'es-ES';
+                    utter2.rate = 1.1;
+                    utter2.pitch = 0.85; // Comentarista en cancha (tono más grave)
+
+                    window.speechSynthesis.speak(utter1);
+                    window.speechSynthesis.speak(utter2);
                 }
             } catch(e) {}
         }
@@ -514,12 +523,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v10');
-            const savedSquad = localStorage.getItem('fc26_sq_v10');
-            const savedCash = localStorage.getItem('fc26_cash_v10');
-            const savedPoints = localStorage.getItem('fc26_pts_v10');
-            const savedTeams = localStorage.getItem('fc26_teams_v10');
-            const savedWins = localStorage.getItem('fc26_wins_v10');
+            const savedInv = localStorage.getItem('fc26_inv_v11');
+            const savedSquad = localStorage.getItem('fc26_sq_v11');
+            const savedCash = localStorage.getItem('fc26_cash_v11');
+            const savedPoints = localStorage.getItem('fc26_pts_v11');
+            const savedTeams = localStorage.getItem('fc26_teams_v11');
+            const savedWins = localStorage.getItem('fc26_wins_v11');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -544,12 +553,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v10', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v10', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v10', userCash);
-            localStorage.setItem('fc26_pts_v10', userPoints);
-            localStorage.setItem('fc26_teams_v10', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v10', matchesWonCount);
+            localStorage.setItem('fc26_inv_v11', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v11', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v11', userCash);
+            localStorage.setItem('fc26_pts_v11', userPoints);
+            localStorage.setItem('fc26_teams_v11', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v11', matchesWonCount);
         }
 
         function skipIntroVideo() {
@@ -910,7 +919,11 @@
         }
 
         function closeModal() { document.getElementById('custom-modal').classList.add('hidden'); }
-        function closeGoalModal() { document.getElementById('goal-modal').classList.add('hidden'); }
+        
+        function closeGoalModalUnpause() {
+            document.getElementById('goal-modal').classList.add('hidden');
+            matchPaused = false; // Reanudar al cerrar la ventana de gol
+        }
 
         function updateStatsDisplay() {
             document.getElementById('user-points').innerText = userPoints.toLocaleString();
@@ -1088,6 +1101,7 @@
             globalCpuGoals = 0;
             currentMatchMinute = 0;
 
+            // Intervalo configurado a 20 segundos por mensaje para dar tiempo de lectura y transmisión real
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
                 currentMatchMinute += 3;
@@ -1097,44 +1111,72 @@
                 let activePlayer = getRandomActiveUserPlayer();
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
-                const variedNarratives = [
-                    `Minuto ${currentMatchMinute}. El #${activePlayer.numero} ${activePlayer.nombre} conduce el balón con clase por el medio campo.`,
-                    `Minuto ${currentMatchMinute}. ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre} buscando el espacio!`,
-                    `Minuto ${currentMatchMinute}. 🎯 ¡Remate lejano ejecutado por #${activePlayer.numero} ${activePlayer.nombre} que exige a la defensa!`,
-                    `Minuto ${currentMatchMinute}. 🛡️ Corte preciso de #${activePlayer.numero} ${activePlayer.nombre} anticipando a #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
-                    `Minuto ${currentMatchMinute}. ⚔️ Dureza en la marca entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
-                    `Minuto ${currentMatchMinute}. 🟨 Falta cometida sobre #${activePlayer.numero} ${activePlayer.nombre} en salida.`,
-                    `Minuto ${currentMatchMinute}. ⚽ Toques cortos y apertura de #${activePlayer.numero} ${activePlayer.nombre} hacia el ataque.`
+                // Narración extendida con comentarios de táctica e historia de fútbol internacional
+                const proBroadcastNarratives = [
+                    {
+                        play: `Minuto ${currentMatchMinute}. El #${activePlayer.numero} ${activePlayer.nombre} controla con maestría y busca abrir la cancha.`,
+                        color: "text-slate-300",
+                        dialogueA: `Atención con la salida del equipo, con el número ${activePlayer.numero}, ${activePlayer.nombre}.`,
+                        dialogueB: `Sí, analista. Es un jugador que suele retener bien la pelota para bajarle el ritmo a la presión rival.`
+                    },
+                    {
+                        play: `Minuto ${currentMatchMinute}. ⚡ ¡Gran desborde por la banda de #${activePlayer.numero} ${activePlayer.nombre} dejando atrás a #${rivalPlayer.numero} ${rivalPlayer.nombre}!`,
+                        color: "text-amber-300",
+                        dialogueA: `¡Se escapa por la banda el jugador número ${activePlayer.numero}, ${activePlayer.nombre}!`,
+                        dialogueB: `¡Una auténtica locomotora! Muy difícil que lo alcance el defensor en el mano a mano.`
+                    },
+                    {
+                        play: `Minuto ${currentMatchMinute}. 🎯 ¡Prueba de media distancia por #${activePlayer.numero} ${activePlayer.nombre}! El balón se marcha cerca.`,
+                        color: "text-emerald-300",
+                        dialogueA: `¡Le pegó de media distancia el número ${activePlayer.numero}, ${activePlayer.nombre}!`,
+                        dialogueB: `¡Intentó sorprender al portero! En este tipo de partidos con espacios reducidos, hay que probar de afuera.`
+                    },
+                    {
+                        play: `Minuto ${currentMatchMinute}. 🛡️ Gran anticipación defensiva de #${activePlayer.numero} ${activePlayer.nombre} frenando a #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                        color: "text-blue-300",
+                        dialogueA: `¡Cortó muy bien el balón el número ${activePlayer.numero}, ${activePlayer.nombre}!`,
+                        dialogueB: `¡Excelente lectura táctica! Anticipó la jugada antes de que recibiera el delantero rival.`
+                    },
+                    {
+                        play: `Minuto ${currentMatchMinute}. 📋 Recuerda que este torneo de selecciones en 2026 nos trae el nuevo formato de 48 equipos en Norteamérica.`,
+                        color: "text-purple-300",
+                        dialogueA: `Impresionante marco de público hoy en el estadio.`,
+                        dialogueB: `Totalmente. Las selecciones han demostrado un nivel físico superlativo en este tramo del mundial.`
+                    }
                 ];
 
                 if(currentMatchMinute === 15 || currentMatchMinute === 30) {
                     if(Math.random() > 0.3) {
                         globalUserGoals++;
                         playGoalHornSound();
+                        matchPaused = true; // PAUSA AUTOMÁTICA HASTA QUE LE DAN PLAY
                         document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
                         document.getElementById('goal-player-details').innerText = `Estadísticas del Goleador`;
                         document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        let commentaryText = `¡Gooooooolazo del Equipo Mundialista! ¡Anotó el número ${activePlayer.numero}, ${activePlayer.nombre}!`;
-                        speakCommentary(commentaryText);
-                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
+                        
+                        let goalNarration = `¡Gooooooolazo! ¡Goooool del Equipo Mundialista! ¡Anotó el jugador número ${activePlayer.numero}, ${activePlayer.nombre}! ¡Impresionante definición para delirio de la afición!`;
+                        speakCommentary(goalNarration);
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}! (Partido pausado)</div>`;
                     } else {
                         globalCpuGoals++;
                         playGoalHornSound();
+                        matchPaused = true; // PAUSA AUTOMÁTICA HASTA QUE LE DAN PLAY
                         document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalPlayer.numero} ${rivalPlayer.nombre}`;
                         document.getElementById('goal-player-details').innerText = `Estadísticas del Rival`;
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        let commentaryText = `¡Goooooool de ${cpuTeamObj.name}! Anotó el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}.`;
-                        speakCommentary(commentaryText);
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
+                        
+                        let goalNarrationRival = `¡Goooooool de ${cpuTeamObj.name}! ¡Anotó el jugador número ${rivalPlayer.numero}, ${rivalPlayer.nombre}! Sorpresa en el terreno de juego.`;
+                        speakCommentary(goalNarrationRival);
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}. (Partido pausado)</div>`;
                     }
                 } else {
-                    let randomComment = variedNarratives[Math.floor(Math.random() * variedNarratives.length)];
-                    speakCommentary(randomComment);
-                    feed.innerHTML += `<div>[${timeStr}] ${randomComment}</div>`;
+                    let narrativeObj = variedNarratives[Math.floor(Math.random() * variedNarratives.length)];
+                    speakDualCommentary(narrativeObj.dialogueA, narrativeObj.dialogueB);
+                    feed.innerHTML += `<div class="${narrativeObj.color}">[${timeStr}] ${narrativeObj.play}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1147,7 +1189,7 @@
                     playWhistleSound();
                     triggerHalftimeBreak();
                 }
-            }, 3500);
+            }, 20000); // 20 SEGUNDOS EXACTOS POR MENSAJE
         }
 
         function triggerHalftimeBreak() {
@@ -1192,38 +1234,38 @@
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
                 const secondHalfNarratives = [
-                    `Minuto ${secondHalfMinute}. #${activePlayer.numero} ${activePlayer.nombre} presiona la salida del rival.`,
-                    `Minuto ${secondHalfMinute}. ⚡ ¡Cambio de ritmo de #${activePlayer.numero} ${activePlayer.nombre} buscando el desequilibrio!`,
-                    `Minuto ${secondHalfMinute}. 🛡️ Despeje providencial de la defensa liderada por #${activePlayer.numero} ${activePlayer.nombre}.`,
-                    `Minuto ${secondHalfMinute}. ⚔️ Duelo en el mediocampo entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`
+                    { play: `Minuto ${secondHalfMinute}. #${activePlayer.numero} ${activePlayer.nombre} presiona la salida del rival con intensidad.`, dialogueA: `Presiona arriba el número ${activePlayer.numero}, ${activePlayer.nombre}.`, dialogueB: `Buscan ahogar la salida desde el fondo.` },
+                    { play: `Minuto ${secondHalfMinute}. ⚡ ¡Cambio de ritmo de #${activePlayer.numero} ${activePlayer.nombre} buscando el desequilibrio!`, dialogueA: `¡Qué gran cambio de ritmo!`, dialogueB: `Deja atrás al rival con muchísima potencia.` }
                 ];
 
                 if(secondHalfMinute === 60 || secondHalfMinute === 75) {
                     if(Math.random() > 0.4) {
                         globalUserGoals++;
                         playGoalHornSound();
+                        matchPaused = true; // PAUSA AUTOMÁTICA EN GOL
                         document.getElementById('goal-scorer-info').innerText = `⚽ GOLAZO DE: #${activePlayer.numero} ${activePlayer.nombre}`;
                         document.getElementById('goal-player-details').innerText = `Estadísticas del Goleador`;
                         document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         speakCommentary(`¡Gooooooolazo del Equipo Mundialista! Anotó el número ${activePlayer.numero}, ${activePlayer.nombre}.`);
-                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}! (Pausado)</div>`;
                     } else {
                         globalCpuGoals++;
                         playGoalHornSound();
+                        matchPaused = true; // PAUSA AUTOMÁTICA EN GOL
                         document.getElementById('goal-scorer-info').innerText = `⚽ Gol de ${cpuTeamObj.name}: #${rivalPlayer.numero} ${rivalPlayer.nombre}`;
                         document.getElementById('goal-player-details').innerText = `Estadísticas del Rival`;
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         speakCommentary(`¡Goooooool de ${cpuTeamObj.name}! Anotó el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}.`);
-                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
+                        feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}. (Pausado)</div>`;
                     }
                 } else {
-                    let randomComment2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
-                    speakCommentary(randomComment2);
-                    feed.innerHTML += `<div>[${timeStr}] ${randomComment2}</div>`;
+                    let narrativeObj2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
+                    speakDualCommentary(narrativeObj2.dialogueA, narrativeObj2.dialogueB);
+                    feed.innerHTML += `<div>[${timeStr}] ${narrativeObj2.play}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1269,7 +1311,7 @@
                     renderCampaignGrid();
                     populateCpuSelect();
                 }
-            }, 3500);
+            }, 20000); // 20 SEGUNDOS EXACTOS POR MENSAJE
         }
 
         function pauseMatch() {
