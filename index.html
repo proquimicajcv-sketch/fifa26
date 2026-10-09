@@ -334,7 +334,7 @@
     <div id="goal-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden">
         <div class="bg-gradient-to-b from-amber-600 via-slate-900 to-slate-950 border-4 border-amber-400 p-8 rounded-3xl max-w-md w-full mx-4 text-center space-y-4 animate-goal">
             <span class="text-6xl">⚽🎉</span>
-            <h2 class="text-4xl font-black text-amber-300">¡¡¡ GOLAZOOOOO !!!</h2>
+            <h2 class="text-4xl font-black text-amber-300">¡¡¡ GOOOLAAAAZOOOOO !!!</h2>
             <div id="goal-scorer-info" class="text-sm font-bold text-amber-200"></div>
             <div class="bg-slate-950/80 border border-amber-500/40 p-3 rounded-xl space-y-1">
                 <div class="text-[11px] text-amber-400 font-bold" id="goal-player-details">Estadísticas del Goleador</div>
@@ -426,11 +426,10 @@
                     window.speechSynthesis.cancel();
                     const cleanText = cleanTextForSpeech(text);
                     const utter = new SpeechSynthesisUtterance(cleanText);
-                    utter.lang = 'es-MX'; // Acento latino más natural
-                    utter.rate = isGoal ? 1.12 : 1.05;
-                    utter.pitch = isGoal ? 1.25 : 1.0;
+                    utter.lang = 'es-MX';
+                    utter.rate = isGoal ? 1.15 : 1.08;
+                    utter.pitch = isGoal ? 1.3 : 1.0;
 
-                    // Buscar una voz latina o en español de alta calidad si está disponible
                     const voices = window.speechSynthesis.getVoices();
                     const latinVoice = voices.find(v => v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('es-AR') || v.lang.includes('es-CO'));
                     if (latinVoice) {
@@ -537,12 +536,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v13');
-            const savedSquad = localStorage.getItem('fc26_sq_v13');
-            const savedCash = localStorage.getItem('fc26_cash_v13');
-            const savedPoints = localStorage.getItem('fc26_pts_v13');
-            const savedTeams = localStorage.getItem('fc26_teams_v13');
-            const savedWins = localStorage.getItem('fc26_wins_v13');
+            const savedInv = localStorage.getItem('fc26_inv_v14');
+            const savedSquad = localStorage.getItem('fc26_sq_v14');
+            const savedCash = localStorage.getItem('fc26_cash_v14');
+            const savedPoints = localStorage.getItem('fc26_pts_v14');
+            const savedTeams = localStorage.getItem('fc26_teams_v14');
+            const savedWins = localStorage.getItem('fc26_wins_v14');
 
             if(savedInv && savedSquad && JSON.parse(savedInv).length > 0) {
                 userInventory = JSON.parse(savedInv);
@@ -567,12 +566,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v13', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v13', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v13', userCash);
-            localStorage.setItem('fc26_pts_v13', userPoints);
-            localStorage.setItem('fc26_teams_v13', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v13', matchesWonCount);
+            localStorage.setItem('fc26_inv_v14', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v14', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v14', userCash);
+            localStorage.setItem('fc26_pts_v14', userPoints);
+            localStorage.setItem('fc26_teams_v14', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v14', matchesWonCount);
         }
 
         function resetGameData() {
@@ -591,7 +590,6 @@
             const intro = document.getElementById('intro-video-screen');
             intro.classList.add('hidden');
             
-            // Forzar verificación de inventario vacío para mostrar el sobre de cartas iniciales
             if(userInventory.length === 0) {
                 const startScreen = document.getElementById('start-screen');
                 startScreen.classList.remove('hidden');
@@ -619,7 +617,6 @@
             if(video) {
                 video.onended = () => { skipIntroVideo(); };
             }
-            // Si hay datos cargados pero el inventario está vacío, forzar pantalla de inicio con sobre
             if(!loadGameData()) {
                 document.getElementById('intro-video-screen').classList.remove('hidden');
             }
@@ -791,13 +788,14 @@
                     cardDiv.onclick = () => openSubsModalForPosition(pos);
                     
                     if (player) {
+                        let displayName = player.nombre.includes('NPC') ? `Jugador [${player.posicion}]` : player.nombre;
                         cardDiv.innerHTML = `
                             <div class="w-7 h-9 rounded-lg overflow-hidden shrink-0 border border-amber-400">
                                 <img src="${player.img || 'img/contracara.png'}" class="w-full h-full object-cover">
                             </div>
                             <div class="overflow-hidden">
-                                <div class="text-[7px] text-amber-400 font-black uppercase tracking-tight">número${player.numero || 10} • ${player.posicion}</div>
-                                <div class="font-black text-white text-xs truncate">${player.nombre}</div>
+                                <div class="text-[7px] text-amber-400 font-black uppercase tracking-tight">${player.nombre.includes('NPC') ? '' : 'número' + player.numero + ' •'} ${player.posicion}</div>
+                                <div class="font-black text-white text-xs truncate">${displayName}</div>
                                 <div class="text-[7px] text-emerald-400 font-bold">Rating: ${player.media}</div>
                             </div>
                         `;
@@ -856,12 +854,13 @@
             userInventory.forEach(player => {
                 const item = document.createElement('div');
                 item.className = "bg-slate-950 border border-amber-500/50 p-2.5 rounded-xl flex flex-col items-center justify-between space-y-1.5 cursor-pointer hover:border-amber-400 transition";
+                let isNpc = player.nombre.includes('NPC');
                 item.innerHTML = `
                     <div class="w-12 h-16 rounded overflow-hidden border border-amber-400">
                         <img src="${player.img || 'img/contracara.png'}" class="w-full h-full object-cover">
                     </div>
                     <div class="text-center">
-                        <div class="text-[10px] font-black text-amber-400">número${player.numero} • ${player.posicion}</div>
+                        <div class="text-[10px] font-black text-amber-400">${isNpc ? '' : 'número' + player.numero + ' •'} ${player.posicion}</div>
                         <div class="text-xs font-bold text-white">${player.nombre}</div>
                     </div>
                     <button onclick="assignStrictPlayer('${player.id}', '${slotPos}')" class="w-full py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded transition cursor-pointer">
@@ -1021,13 +1020,14 @@
                 cardEl.className = "bg-slate-900 border border-amber-500/50 p-3 rounded-2xl flex flex-col items-center justify-between w-48 shadow-xl space-y-2";
                 const isOwned = userInventory.some(p => p.id === player.id);
                 const itemPrice = player.price || 350000;
+                let isNpc = player.nombre.includes('NPC');
 
                 cardEl.innerHTML = `
                     <div class="w-24 h-32 rounded-xl overflow-hidden border border-amber-400 bg-slate-950 flex items-center justify-center">
                         <img src="${player.img || 'img/contracara.png'}" class="w-full h-full object-cover">
                     </div>
                     <div class="text-center overflow-hidden w-full">
-                        <div class="text-[10px] font-black text-amber-400">número${player.numero} • ${player.posicion} • ${player.media}★</div>
+                        <div class="text-[10px] font-black text-amber-400">${isNpc ? '' : 'número' + player.numero + ' •'} ${player.posicion} • ${player.media}★</div>
                         <div class="text-xs font-black text-white truncate">${player.nombre}</div>
                         <div class="text-[9px] text-slate-400 truncate">${player.equipo}</div>
                     </div>
@@ -1120,6 +1120,8 @@
         let globalUserGoals = 0;
         let globalCpuGoals = 0;
         let currentMatchMinute = 0;
+        let matchStepCount = 0;
+        let usedNarrativeIndexes = [];
 
         function startMatch() {
             if(matchInProgress) return;
@@ -1161,14 +1163,16 @@
             globalUserGoals = 0;
             globalCpuGoals = 0;
             currentMatchMinute = 0;
+            matchStepCount = 0;
+            usedNarrativeIndexes = [];
 
+            // Intervalo más rápido y con exactamente 4 jugadas por período (cada 6 segundos)
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
                 
-                // Incremento de minutos dinámico y variable (entre 2 y 5 minutos)
-                let minuteJump = Math.floor(Math.random() * 4) + 2;
-                currentMatchMinute += minuteJump;
-                if(currentMatchMinute > 45) currentMatchMinute = 45;
+                matchStepCount++;
+                currentMatchMinute += 11; // Llegará a 44-45 en el paso 4
+                if(matchStepCount >= 4) currentMatchMinute = 45;
 
                 let timeStr = `${currentMatchMinute.toString().padStart(2, '0')}:00`;
                 document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO • MINUTO ${timeStr}`;
@@ -1176,22 +1180,40 @@
                 let activePlayer = getRandomActiveUserPlayer();
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
-                // Filtro profesional: Si el jugador es NPC, no decir su nombre ni número genérico en la voz
                 let isNpcActive = activePlayer.nombre.includes('NPC');
-                let playerSpeechText = isNpcActive ? "Un jugador del equipo" : `el número ${activePlayer.numero}, ${activePlayer.nombre}`;
-                
+                let playerSpeechText = isNpcActive ? "El jugador" : `el número ${activePlayer.numero}, ${activePlayer.nombre}`;
                 let isNpcRival = rivalPlayer.nombre.includes('NPC');
-                let rivalSpeechText = isNpcRival ? "un rival" : `el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}`;
+                let rivalSpeechText = isNpcRival ? "el rival" : `el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}`;
 
-                const quickNarratives = [
-                    { play: `Minuto ${currentMatchMinute}. ${isNpcActive ? 'El jugador' : 'El #' + activePlayer.numero + ' ' + activePlayer.nombre} controla con maestría y busca abrir la cancha.`, speech: `En el minuto ${currentMatchMinute}, ${playerSpeechText} controla con gran calidad y busca abrir la cancha.` },
-                    { play: `Minuto ${currentMatchMinute}. ⚡ ¡Gran desborde por la banda de ${isNpcActive ? 'el atacante' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} dejando atrás a su marcador!`, speech: `Minuto ${currentMatchMinute}. ¡Gran desborde por la banda de ${playerSpeechText}, dejando atrás a la defensa!` },
-                    { play: `Minuto ${currentMatchMinute}. 🎯 ¡Prueba de media distancia por ${isNpcActive ? 'el volante' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}! El balón se marcha cerca.`, speech: `Minuto ${currentMatchMinute}. ¡Intento de media distancia de ${playerSpeechText}! El balón pasa muy cerca del poste.` },
-                    { play: `Minuto ${currentMatchMinute}. 🛡️ Gran anticipación defensiva de ${isNpcActive ? 'la zaga' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} cortando el avance rival.`, speech: `Minuto ${currentMatchMinute}. Gran anticipación defensiva de ${playerSpeechText} cortando el ataque contrario.` }
+                // Banco exclusivo de narraciones para evitar repeticiones
+                const baseNarratives = [
+                    { 
+                        play: `Minuto ${currentMatchMinute}. ${isNpcActive ? 'El jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} domina el esférico en tres cuartos de cancha.`, 
+                        speech: `Minuto ${currentMatchMinute}. ${playerSpeechText} domina el esférico en tres cuartos de cancha buscando espacios.` 
+                    },
+                    { 
+                        play: `Minuto ${currentMatchMinute}. ⚡ ¡Gran desborde por la banda de ${isNpcActive ? 'el atacante' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}!`, 
+                        speech: `Minuto ${currentMatchMinute}. ¡Gran desborde por la banda de ${playerSpeechText} dejando rivales en el camino!` 
+                    },
+                    { 
+                        play: `Minuto ${currentMatchMinute}. 🎯 ¡Disparo lejano ejecutado por ${isNpcActive ? 'el volante' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} que se va desviado!`, 
+                        speech: `Minuto ${currentMatchMinute}. ¡Disparo lejano ejecutado por ${playerSpeechText} que se marcha desviado de la portería!` 
+                    },
+                    { 
+                        play: `Minuto ${currentMatchMinute}. 🛡️ ¡Excelente atajada y seguridad bajo los palos del guardameta ${activePlayer.posicion === 'GK' ? '#' + activePlayer.numero + ' ' + activePlayer.nombre : 'titular'}!`, 
+                        speech: `Minuto ${currentMatchMinute}. ¡Excelente atajada y firmeza bajo los palos de nuestro portero!` 
+                    }
                 ];
 
-                if(currentMatchMinute >= 18 && currentMatchMinute <= 32 && Math.random() < 0.4) {
-                    if(Math.random() > 0.3) {
+                // Seleccionar un índice no repetido
+                let availableIndexes = baseNarratives.map((_, idx) => idx).filter(idx => !usedNarrativeIndexes.includes(idx));
+                if(availableIndexes.length === 0) availableIndexes = [0];
+                let chosenIdx = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+                usedNarrativeIndexes.push(chosenIdx);
+
+                // En el paso 2 o 3, simular posibilidad de gol
+                if(matchStepCount === 2 || matchStepCount === 3) {
+                    if(Math.random() > 0.4) {
                         globalUserGoals++;
                         playGoalHornSound();
                         matchPaused = true; 
@@ -1201,10 +1223,10 @@
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         
-                        let goalText = `¡Golazooooo! ¡Gooool del Equipo Mundialista! Anotó ${playerSpeechText}, en la posición de ${activePlayer.posicion}, con un rating estelar de ${activePlayer.media} estrellas.`;
+                        let goalText = `¡Goooolaaaaazooooo! ¡Gooool del Equipo Mundialista! Anotó ${playerSpeechText}, posición ${activePlayer.posicion}, con un rating estelar de ${activePlayer.media} estrellas.`;
                         speakCommentary(goalText, true);
-                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOLAZOOOOO DEL EQUIPO MUNDIALISTA!!! ¡Anotó ${isNpcActive ? 'Jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}! (Partido pausado)</div>`;
-                    } else {
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOLAAAAZOOOOO DEL EQUIPO MUNDIALISTA!!! ¡Anotó ${isNpcActive ? 'Jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}! (Partido pausado)</div>`;
+                    } else if(Math.random() > 0.6) {
                         globalCpuGoals++;
                         playGoalHornSound();
                         matchPaused = true; 
@@ -1214,14 +1236,18 @@
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         
-                        let goalTextRival = `¡Golazooooo de ${cpuTeamObj.name}! Anotó ${rivalSpeechText}, posición ${rivalPlayer.posicion}, con rating de ${rivalPlayer.media}.`;
+                        let goalTextRival = `¡Goooolaaaaazooooo de ${cpuTeamObj.name}! Anotó ${rivalSpeechText}, posición ${rivalPlayer.posicion}.`;
                         speakCommentary(goalTextRival, true);
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó ${isNpcRival ? 'Jugador' : '#' + rivalPlayer.numero + ' ' + rivalPlayer.nombre}. (Pausado)</div>`;
+                    } else {
+                        let narrativeObj = baseNarratives[chosenIdx];
+                        speakCommentary(narrativeObj.speech);
+                        feed.innerHTML += `<div class="text-slate-300">[${timeStr}] ${narrativeObj.play}</div>`;
                     }
                 } else {
-                    let narrativeObj = quickNarratives[Math.floor(Math.random() * quickNarratives.length)];
+                    let narrativeObj = baseNarratives[chosenIdx];
                     speakCommentary(narrativeObj.speech);
-                    feed.innerHTML += `<div class="${narrativeObj.color}">[${timeStr}] ${narrativeObj.play}</div>`;
+                    feed.innerHTML += `<div class="text-slate-300">[${timeStr}] ${narrativeObj.play}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1229,12 +1255,12 @@
                 document.getElementById('live-score-display').innerText = scoreStr;
                 feed.scrollTop = feed.scrollHeight;
 
-                if(currentMatchMinute >= 45) {
+                if(matchStepCount >= 4) {
                     clearInterval(matchIntervalRef);
                     playWhistleSound();
                     triggerHalftimeBreak();
                 }
-            }, 12000);
+            }, 6000); // 6 segundos por jugada para hacerlo rápido
         }
 
         function triggerHalftimeBreak() {
@@ -1267,12 +1293,15 @@
             feed.innerHTML += `<div class="text-amber-400 font-bold">[45:00] ⏱️ ¡Arranca el segundo tiempo!</div>`;
 
             let secondHalfMinute = 45;
+            let secondHalfStep = 0;
+            let usedSecondHalfIndexes = [];
+
             matchIntervalRef = setInterval(() => {
                 if(matchPaused) return;
                 
-                let minuteJump2 = Math.floor(Math.random() * 4) + 2;
-                secondHalfMinute += minuteJump2;
-                if(secondHalfMinute > 90) secondHalfMinute = 90;
+                secondHalfStep++;
+                secondHalfMinute += 11;
+                if(secondHalfStep >= 4) secondHalfMinute = 90;
 
                 let timeStr = `${secondHalfMinute.toString().padStart(2, '0')}:00`;
                 document.getElementById('match-timer-label').innerText = `TRANSMISIÓN EN VIVO • MINUTO ${timeStr}`;
@@ -1282,16 +1311,35 @@
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
                 let isNpcActive = activePlayer.nombre.includes('NPC');
-                let playerSpeechText = isNpcActive ? "Un jugador del equipo" : `el número ${activePlayer.numero}, ${activePlayer.nombre}`;
+                let playerSpeechText = isNpcActive ? "El jugador" : `el número ${activePlayer.numero}, ${activePlayer.nombre}`;
                 let isNpcRival = rivalPlayer.nombre.includes('NPC');
-                let rivalSpeechText = isNpcRival ? "un rival" : `el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}`;
+                let rivalSpeechText = isNpcRival ? "el rival" : `el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}`;
 
                 const secondHalfNarratives = [
-                    { play: `Minuto ${secondHalfMinute}. ${isNpcActive ? 'El jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} presiona la salida del rival con intensidad.`, speech: `Minuto ${secondHalfMinute}. ${playerSpeechText} presiona la salida del rival con mucha intensidad.` },
-                    { play: `Minuto ${secondHalfMinute}. ⚡ ¡Cambio de ritmo de ${isNpcActive ? 'el atacante' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} buscando el desequilibrio!`, speech: `Minuto ${secondHalfMinute}. ¡Impresionante cambio de ritmo de ${playerSpeechText} buscando desequilibrar!` }
+                    { 
+                        play: `Minuto ${secondHalfMinute}. ${isNpcActive ? 'El jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} presiona la salida con intensidad.`, 
+                        speech: `Minuto ${secondHalfMinute}. ${playerSpeechText} presiona la salida del rival con mucha intensidad en campo contrario.` 
+                    },
+                    { 
+                        play: `Minuto ${secondHalfMinute}. ⚡ ¡Cambio de ritmo de ${isNpcActive ? 'el atacante' : '#' + activePlayer.numero + ' ' + activePlayer.nombre} buscando romper líneas!`, 
+                        speech: `Minuto ${secondHalfMinute}. ¡Impresionante cambio de ritmo de ${playerSpeechText} buscando romper líneas defensivas!` 
+                    },
+                    { 
+                        play: `Minuto ${secondHalfMinute}. 🛡️ ¡Impecable intervención del guardameta ${activePlayer.posicion === 'GK' ? '#' + activePlayer.numero + ' ' + activePlayer.nombre : 'defensiva'} despejando el peligro!`, 
+                        speech: `Minuto ${secondHalfMinute}. ¡Impecable intervención bajo los tres palos evitando la anotación rival!` 
+                    },
+                    { 
+                        play: `Minuto ${secondHalfMinute}. 🎯 ¡Centro preciso al área que conecta ${isNpcActive ? 'el delantero' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}!`, 
+                        speech: `Minuto ${secondHalfMinute}. ¡Centro preciso al área que logra conectar ${playerSpeechText} con potencia!` 
+                    }
                 ];
 
-                if(secondHalfMinute >= 60 && secondHalfMinute <= 80 && Math.random() < 0.4) {
+                let availableIndexes2 = secondHalfNarratives.map((_, idx) => idx).filter(idx => !usedSecondHalfIndexes.includes(idx));
+                if(availableIndexes2.length === 0) availableIndexes2 = [0];
+                let chosenIdx2 = availableIndexes2[Math.floor(Math.random() * availableIndexes2.length)];
+                usedSecondHalfIndexes.push(chosenIdx2);
+
+                if(secondHalfStep === 2 || secondHalfStep === 3) {
                     if(Math.random() > 0.4) {
                         globalUserGoals++;
                         playGoalHornSound();
@@ -1302,10 +1350,10 @@
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         
-                        let goalText = `¡Golazooooo! ¡Gooool del Equipo Mundialista! Anotó ${playerSpeechText}, posición ${activePlayer.posicion}, con rating de ${activePlayer.media}.`;
+                        let goalText = `¡Goooolaaaaazooooo! ¡Gooool del Equipo Mundialista! Anotó ${playerSpeechText}, posición ${activePlayer.posicion}, con rating de ${activePlayer.media}.`;
                         speakCommentary(goalText, true);
-                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOLAZOOOOO DEL EQUIPO MUNDIALISTA!!! ¡Anotó ${isNpcActive ? 'Jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}! (Pausado)</div>`;
-                    } else {
+                        feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOLAAAAZOOOOO DEL EQUIPO MUNDIALISTA!!! ¡Anotó ${isNpcActive ? 'Jugador' : '#' + activePlayer.numero + ' ' + activePlayer.nombre}! (Pausado)</div>`;
+                    } else if(Math.random() > 0.6) {
                         globalCpuGoals++;
                         playGoalHornSound();
                         matchPaused = true; 
@@ -1315,12 +1363,16 @@
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
                         
-                        let goalTextRival = `¡Golazooooo de ${cpuTeamObj.name}! Anotó ${rivalSpeechText}, posición ${rivalPlayer.posicion}.`;
+                        let goalTextRival = `¡Goooolaaaaazooooo de ${cpuTeamObj.name}! Anotó ${rivalSpeechText}, posición ${rivalPlayer.posicion}.`;
                         speakCommentary(goalTextRival, true);
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó ${isNpcRival ? 'Jugador' : '#' + rivalPlayer.numero + ' ' + rivalPlayer.nombre}. (Pausado)</div>`;
+                    } else {
+                        let narrativeObj2 = secondHalfNarratives[chosenIdx2];
+                        speakCommentary(narrativeObj2.speech);
+                        feed.innerHTML += `<div>[${timeStr}] ${narrativeObj2.play}</div>`;
                     }
                 } else {
-                    let narrativeObj2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
+                    let narrativeObj2 = secondHalfNarratives[chosenIdx2];
                     speakCommentary(narrativeObj2.speech);
                     feed.innerHTML += `<div>[${timeStr}] ${narrativeObj2.play}</div>`;
                 }
@@ -1330,7 +1382,7 @@
                 document.getElementById('live-score-display').innerText = scoreStr;
                 feed.scrollTop = feed.scrollHeight;
 
-                if(secondHalfMinute >= 90) {
+                if(secondHalfStep >= 4) {
                     clearInterval(matchIntervalRef);
                     matchInProgress = false;
                     playWhistleSound();
@@ -1371,7 +1423,7 @@
                     renderCampaignGrid();
                     populateCpuSelect();
                 }
-            }, 12000);
+            }, 6000);
         }
 
         function pauseMatch() {
