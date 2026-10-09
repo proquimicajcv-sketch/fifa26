@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 Intro Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 TV Intro Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -45,32 +45,32 @@
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-between p-3 selection:bg-amber-500 selection:text-black">
 
-    <!-- INTRO VIDEO OVERLAY SCREEN -->
-    <div id="intro-video-screen" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
-        <video id="intro-video" class="w-full h-full object-cover" autoplay playsinline>
-            <source src="img/Intro.mp4" type="video/mp4">
-            Tu navegador no soporta la reproducción de vídeos.
-        </video>
-        <button onclick="skipIntroVideo()" class="absolute bottom-8 right-8 px-6 py-2.5 bg-amber-500/80 hover:bg-amber-500 text-slate-950 font-black rounded-xl backdrop-blur-md transition text-xs shadow-2xl cursor-pointer">
-            Saltar Introducción ⏭️
-        </button>
+    <!-- INTRO VIDEO TV SCREEN -->
+    <div id="intro-video-screen" class="fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center p-4">
+        <div class="max-w-xl w-full bg-slate-900 border-4 border-amber-500 rounded-3xl p-4 shadow-[0_0_50px_rgba(245,158,11,0.5)] text-center space-y-4">
+            <div class="text-xs font-black text-amber-400 tracking-widest uppercase">📺 TRANSMISIÓN OFICIAL &bull; MUNDIAL 2026</div>
+            <div class="w-full h-64 bg-black rounded-2xl overflow-hidden border-2 border-slate-700 relative shadow-inner">
+                <video id="intro-video" class="w-full h-full object-cover" autoplay playsinline>
+                    <source src="img/Intro.mp4" type="video/mp4">
+                    Tu navegador no soporta la reproducción de vídeos.
+                </video>
+            </div>
+            <button onclick="skipIntroVideo()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl hover:scale-105 transition text-sm cursor-pointer shadow-lg">
+                SALTAR INTRODUCCIÓN ⏭️
+            </button>
+        </div>
     </div>
 
     <!-- START SCREEN & INITIAL PACK OPENING -->
     <div id="start-screen" class="fixed inset-0 bg-slate-950 z-40 flex flex-col items-center justify-center p-4 overflow-y-auto hidden">
-        <div class="max-w-2xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
+        <div class="max-w-3xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
                 <span class="text-3xl">🏆</span>
-                <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">HISTORIA DE LOS MUNDIALES</h1>
+                <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">MUNDIAL 2026 DRAFT INICIAL</h1>
             </div>
             
-            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs text-slate-300 space-y-2 text-left font-mono">
-                <p>🌍 <strong>¿Sabías que...?</strong> La Copa Mundial de la FIFA comenzó en Uruguay 1930 con solo 13 selecciones. El primer gol en la historia de los mundiales lo anotó el francés Lucien Laurent en el minuto 19 frente a México.</p>
-                <p>⚽ Hoy comienza tu propio camino hacia la gloria en el Mundial 2026. Empezarás desde abajo con un plantel modesto, construyendo tu leyenda partido a partido hasta alcanzar la cima mundial.</p>
-            </div>
-
             <div id="draft-step-1" class="space-y-4">
-                <p class="text-sm text-slate-300">Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para recibir <strong>4 cartas básicas y sencillas</strong>. Las posiciones restantes se completarán con jugadores NPC de Media 70:</p>
+                <p class="text-sm text-slate-300">Comienzas con <strong>$0 y 0 Gemas</strong>. Abre tu sobre inicial para recibir <strong>4 cartas básicas y sencillas</strong> sin recortes. <strong>Haz clic en cada carta</strong> para descubrirlas:</p>
                 <button onclick="openInitialPack()" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg hover:scale-105 transition text-sm cursor-pointer">
                     ¡ABRIR SOBRE DE CARTAS BÁSICAS! 📦
                 </button>
@@ -365,8 +365,59 @@
 
         let audioCtx = null;
         function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-        function playWhistleSound() { try { initAudio(); } catch(e){} }
-        function playGoalHornSound() { try { initAudio(); } catch(e){} }
+        
+        function playWhistleSound() {
+            try {
+                initAudio();
+                if(!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(2600, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(2900, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            } catch(e) {}
+        }
+
+        function playGoalHornSound() {
+            try {
+                initAudio();
+                if(!audioCtx) return;
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(225, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioCtx.currentTime + 1.8);
+                osc2.stop(audioCtx.currentTime + 1.8);
+            } catch(e) {}
+        }
+
+        function speakCommentary(text) {
+            try {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 1.15;
+                    window.speechSynthesis.speak(utterance);
+                }
+            } catch(e) {}
+        }
 
         const basicStarterCards = [
             { id: "basic_1", nombre: "Ryan Mendes", numero: 11, posicion: "RW", media: 7.2, equipo: "Selección Base", img: "img/img24.png" },
@@ -463,12 +514,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v7');
-            const savedSquad = localStorage.getItem('fc26_sq_v7');
-            const savedCash = localStorage.getItem('fc26_cash_v7');
-            const savedPoints = localStorage.getItem('fc26_pts_v7');
-            const savedTeams = localStorage.getItem('fc26_teams_v7');
-            const savedWins = localStorage.getItem('fc26_wins_v7');
+            const savedInv = localStorage.getItem('fc26_inv_v9');
+            const savedSquad = localStorage.getItem('fc26_sq_v9');
+            const savedCash = localStorage.getItem('fc26_cash_v9');
+            const savedPoints = localStorage.getItem('fc26_pts_v9');
+            const savedTeams = localStorage.getItem('fc26_teams_v9');
+            const savedWins = localStorage.getItem('fc26_wins_v9');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -478,6 +529,7 @@
                 if(savedTeams) worldTeamsData = JSON.parse(savedTeams);
                 if(savedWins) matchesWonCount = parseInt(savedWins);
 
+                document.getElementById('intro-video-screen').classList.add('hidden');
                 document.getElementById('start-screen').classList.add('hidden');
                 updateStatsDisplay();
                 populateCpuSelect();
@@ -492,12 +544,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v7', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v7', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v7', userCash);
-            localStorage.setItem('fc26_pts_v7', userPoints);
-            localStorage.setItem('fc26_teams_v7', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v7', matchesWonCount);
+            localStorage.setItem('fc26_inv_v9', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v9', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v9', userCash);
+            localStorage.setItem('fc26_pts_v9', userPoints);
+            localStorage.setItem('fc26_teams_v9', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v9', matchesWonCount);
         }
 
         function skipIntroVideo() {
@@ -510,10 +562,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('intro-video');
             if(video) {
-                video.onended = () => {
-                    skipIntroVideo();
-                };
+                video.onended = () => { skipIntroVideo(); };
             }
+            loadGameData();
         });
 
         function populateCpuSelect() {
@@ -582,7 +633,7 @@
                             <span>${player.media}</span>
                             <span>${player.posicion}</span>
                         </div>
-                        <div class="w-full h-28 rounded-xl overflow-hidden bg-slate-950 border border-amber-500/40 relative">
+                        <div class="w-full h-28 rounded-xl overflow-hidden bg-slate-950 border border-amber-500/40 relative flex items-center justify-center">
                             <img src="${player.img}" alt="${player.nombre}" class="w-full h-full object-cover">
                         </div>
                         <div class="text-center">
@@ -910,7 +961,7 @@
                 const itemPrice = player.price || 350000;
 
                 cardEl.innerHTML = `
-                    <div class="w-24 h-32 rounded-xl overflow-hidden border border-amber-400 bg-slate-950">
+                    <div class="w-24 h-32 rounded-xl overflow-hidden border border-amber-400 bg-slate-950 flex items-center justify-center">
                         <img src="${player.img || 'img/contracara.png'}" class="w-full h-full object-cover">
                     </div>
                     <div class="text-center overflow-hidden w-full">
@@ -1046,7 +1097,6 @@
                 let activePlayer = getRandomActiveUserPlayer();
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
-                // Banco de comentarios 100% dinámicos y variados con dorsales y apellidos
                 const variedNarratives = [
                     `[${timeStr}] El #${activePlayer.numero} ${activePlayer.nombre} conduce el balón con clase por el medio campo.`,
                     `[${timeStr}] ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre} buscando el espacio!`,
@@ -1066,6 +1116,8 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
+                        let commentaryText = `¡Golazo del Equipo Mundialista! Anotó el jugador número ${activePlayer.numero}, ${activePlayer.nombre}.`;
+                        speakCommentary(commentaryText);
                         feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
                     } else {
                         globalCpuGoals++;
@@ -1075,10 +1127,13 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
+                        let commentaryText = `¡Gol de ${cpuTeamObj.name}! Anotó el jugador número ${rivalPlayer.numero}, ${rivalPlayer.nombre}.`;
+                        speakCommentary(commentaryText);
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
                     }
                 } else {
                     let randomComment = variedNarratives[Math.floor(Math.random() * variedNarratives.length)];
+                    speakCommentary(randomComment);
                     feed.innerHTML += `<div>${randomComment}</div>`;
                 }
 
@@ -1152,6 +1207,7 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
+                        speakCommentary(`¡Golazo del Equipo Mundialista! Anotó el jugador ${activePlayer.nombre}.`);
                         feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
                     } else {
                         globalCpuGoals++;
@@ -1161,10 +1217,12 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
+                        speakCommentary(`¡Gol de ${cpuTeamObj.name}! Anotó el jugador ${rivalPlayer.nombre}.`);
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
                     }
                 } else {
                     let randomComment2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
+                    speakCommentary(randomComment2);
                     feed.innerHTML += `<div>${randomComment2}</div>`;
                 }
 
@@ -1225,12 +1283,6 @@
                 btn.innerText = "⏸️ Pausa / Cambios";
             }
         }
-
-        window.onload = () => {
-            if(loadGameData()) {
-                console.log("Datos cargados correctamente.");
-            }
-        };
     </script>
 </body>
 </html>
