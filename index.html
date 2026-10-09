@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate FC Card Legends - World Cup 2026 TV Intro Edition</title>
+    <title>Ultimate FC Card Legends - World Cup 2026 Broadcast Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -63,7 +63,7 @@
 
     <!-- START SCREEN & INITIAL PACK OPENING -->
     <div id="start-screen" class="fixed inset-0 bg-slate-950 z-40 flex flex-col items-center justify-center p-4 overflow-y-auto hidden">
-        <div class="max-w-3xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
+        <div class="max-w-2xl w-full bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 shadow-2xl text-center space-y-6 my-auto">
             <div class="flex justify-center items-center gap-3">
                 <span class="text-3xl">🏆</span>
                 <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 bg-clip-text text-transparent">MUNDIAL 2026 DRAFT INICIAL</h1>
@@ -413,7 +413,7 @@
                     window.speechSynthesis.cancel();
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = 'es-ES';
-                    utterance.rate = 1.15;
+                    utterance.rate = 1.1;
                     window.speechSynthesis.speak(utterance);
                 }
             } catch(e) {}
@@ -514,12 +514,12 @@
         };
 
         function loadGameData() {
-            const savedInv = localStorage.getItem('fc26_inv_v9');
-            const savedSquad = localStorage.getItem('fc26_sq_v9');
-            const savedCash = localStorage.getItem('fc26_cash_v9');
-            const savedPoints = localStorage.getItem('fc26_pts_v9');
-            const savedTeams = localStorage.getItem('fc26_teams_v9');
-            const savedWins = localStorage.getItem('fc26_wins_v9');
+            const savedInv = localStorage.getItem('fc26_inv_v10');
+            const savedSquad = localStorage.getItem('fc26_sq_v10');
+            const savedCash = localStorage.getItem('fc26_cash_v10');
+            const savedPoints = localStorage.getItem('fc26_pts_v10');
+            const savedTeams = localStorage.getItem('fc26_teams_v10');
+            const savedWins = localStorage.getItem('fc26_wins_v10');
 
             if(savedInv && savedSquad) {
                 userInventory = JSON.parse(savedInv);
@@ -544,12 +544,12 @@
         }
 
         function saveGameData() {
-            localStorage.setItem('fc26_inv_v9', JSON.stringify(userInventory));
-            localStorage.setItem('fc26_sq_v9', JSON.stringify(activeSquad));
-            localStorage.setItem('fc26_cash_v9', userCash);
-            localStorage.setItem('fc26_pts_v9', userPoints);
-            localStorage.setItem('fc26_teams_v9', JSON.stringify(worldTeamsData));
-            localStorage.setItem('fc26_wins_v9', matchesWonCount);
+            localStorage.setItem('fc26_inv_v10', JSON.stringify(userInventory));
+            localStorage.setItem('fc26_sq_v10', JSON.stringify(activeSquad));
+            localStorage.setItem('fc26_cash_v10', userCash);
+            localStorage.setItem('fc26_pts_v10', userPoints);
+            localStorage.setItem('fc26_teams_v10', JSON.stringify(worldTeamsData));
+            localStorage.setItem('fc26_wins_v10', matchesWonCount);
         }
 
         function skipIntroVideo() {
@@ -1098,13 +1098,13 @@
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
                 const variedNarratives = [
-                    `[${timeStr}] El #${activePlayer.numero} ${activePlayer.nombre} conduce el balón con clase por el medio campo.`,
-                    `[${timeStr}] ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre} buscando el espacio!`,
-                    `[${timeStr}] 🎯 ¡Remate lejano ejecutado por #${activePlayer.numero} ${activePlayer.nombre} que exige a la defensa!`,
-                    `[${timeStr}] 🛡️ Corte preciso de #${activePlayer.numero} ${activePlayer.nombre} anticipando a #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
-                    `[${timeStr}] ⚔️ Dureza en la marca entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
-                    `[${timeStr}] 🟨 Falta cometida sobre #${activePlayer.numero} ${activePlayer.nombre} en salida.`,
-                    `[${timeStr}] ⚽ Toques cortos y apertura de #${activePlayer.numero} ${activePlayer.nombre} hacia el ataque.`
+                    `Minuto ${currentMatchMinute}. El #${activePlayer.numero} ${activePlayer.nombre} conduce el balón con clase por el medio campo.`,
+                    `Minuto ${currentMatchMinute}. ⚡ ¡Gran corrida por la banda de #${activePlayer.numero} ${activePlayer.nombre} buscando el espacio!`,
+                    `Minuto ${currentMatchMinute}. 🎯 ¡Remate lejano ejecutado por #${activePlayer.numero} ${activePlayer.nombre} que exige a la defensa!`,
+                    `Minuto ${currentMatchMinute}. 🛡️ Corte preciso de #${activePlayer.numero} ${activePlayer.nombre} anticipando a #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                    `Minuto ${currentMatchMinute}. ⚔️ Dureza en la marca entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`,
+                    `Minuto ${currentMatchMinute}. 🟨 Falta cometida sobre #${activePlayer.numero} ${activePlayer.nombre} en salida.`,
+                    `Minuto ${currentMatchMinute}. ⚽ Toques cortos y apertura de #${activePlayer.numero} ${activePlayer.nombre} hacia el ataque.`
                 ];
 
                 if(currentMatchMinute === 15 || currentMatchMinute === 30) {
@@ -1116,7 +1116,7 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        let commentaryText = `¡Golazo del Equipo Mundialista! Anotó el jugador número ${activePlayer.numero}, ${activePlayer.nombre}.`;
+                        let commentaryText = `¡Gooooooolazo del Equipo Mundialista! ¡Anotó el número ${activePlayer.numero}, ${activePlayer.nombre}!`;
                         speakCommentary(commentaryText);
                         feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
                     } else {
@@ -1127,14 +1127,14 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        let commentaryText = `¡Gol de ${cpuTeamObj.name}! Anotó el jugador número ${rivalPlayer.numero}, ${rivalPlayer.nombre}.`;
+                        let commentaryText = `¡Goooooool de ${cpuTeamObj.name}! Anotó el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}.`;
                         speakCommentary(commentaryText);
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
                     }
                 } else {
                     let randomComment = variedNarratives[Math.floor(Math.random() * variedNarratives.length)];
                     speakCommentary(randomComment);
-                    feed.innerHTML += `<div>${randomComment}</div>`;
+                    feed.innerHTML += `<div>[${timeStr}] ${randomComment}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1147,7 +1147,7 @@
                     playWhistleSound();
                     triggerHalftimeBreak();
                 }
-            }, 3000);
+            }, 3500);
         }
 
         function triggerHalftimeBreak() {
@@ -1192,10 +1192,10 @@
                 let rivalPlayer = cpuTeamObj.players[Math.floor(Math.random() * cpuTeamObj.players.length)];
 
                 const secondHalfNarratives = [
-                    `[${timeStr}] #${activePlayer.numero} ${activePlayer.nombre} presiona la salida del rival.`,
-                    `[${timeStr}] ⚡ ¡Cambio de ritmo de #${activePlayer.numero} ${activePlayer.nombre} buscando el desequilibrio!`,
-                    `[${timeStr}] 🛡️ Despeje providencial de la defensa liderada por #${activePlayer.numero} ${activePlayer.nombre}.`,
-                    `[${timeStr}] ⚔️ Duelo en el mediocampo entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`
+                    `Minuto ${secondHalfMinute}. #${activePlayer.numero} ${activePlayer.nombre} presiona la salida del rival.`,
+                    `Minuto ${secondHalfMinute}. ⚡ ¡Cambio de ritmo de #${activePlayer.numero} ${activePlayer.nombre} buscando el desequilibrio!`,
+                    `Minuto ${secondHalfMinute}. 🛡️ Despeje providencial de la defensa liderada por #${activePlayer.numero} ${activePlayer.nombre}.`,
+                    `Minuto ${secondHalfMinute}. ⚔️ Duelo en el mediocampo entre #${activePlayer.numero} ${activePlayer.nombre} y #${rivalPlayer.numero} ${rivalPlayer.nombre}.`
                 ];
 
                 if(secondHalfMinute === 60 || secondHalfMinute === 75) {
@@ -1207,7 +1207,7 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${activePlayer.posicion} • Rating: ${activePlayer.media}★ • Equipo: ${activePlayer.equipo || 'Plantel Base'}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        speakCommentary(`¡Golazo del Equipo Mundialista! Anotó el jugador ${activePlayer.nombre}.`);
+                        speakCommentary(`¡Gooooooolazo del Equipo Mundialista! Anotó el número ${activePlayer.numero}, ${activePlayer.nombre}.`);
                         feed.innerHTML += `<div class="text-amber-300 font-bold">[${timeStr}] ⚽ ¡¡¡GOOOOL DEL EQUIPO MUNDIALISTA!!! ¡Anotó #${activePlayer.numero} ${activePlayer.nombre}!</div>`;
                     } else {
                         globalCpuGoals++;
@@ -1217,13 +1217,13 @@
                         document.getElementById('goal-player-meta').innerText = `Posición: ${rivalPlayer.posicion} • Rating: ${rivalPlayer.media}★ • Selección: ${cpuTeamObj.name}`;
                         document.getElementById('goal-modal-score').innerText = `${globalUserGoals} - ${globalCpuGoals}`;
                         document.getElementById('goal-modal').classList.remove('hidden');
-                        speakCommentary(`¡Gol de ${cpuTeamObj.name}! Anotó el jugador ${rivalPlayer.nombre}.`);
+                        speakCommentary(`¡Goooooool de ${cpuTeamObj.name}! Anotó el número ${rivalPlayer.numero}, ${rivalPlayer.nombre}.`);
                         feed.innerHTML += `<div class="text-red-400 font-bold">[${timeStr}] ⚽ ¡Gol de ${cpuTeamObj.name}! Anotó #${rivalPlayer.numero} ${rivalPlayer.nombre}.</div>`;
                     }
                 } else {
                     let randomComment2 = secondHalfNarratives[Math.floor(Math.random() * secondHalfNarratives.length)];
                     speakCommentary(randomComment2);
-                    feed.innerHTML += `<div>${randomComment2}</div>`;
+                    feed.innerHTML += `<div>[${timeStr}] ${randomComment2}</div>`;
                 }
 
                 const scoreStr = `${globalUserGoals} - ${globalCpuGoals}`;
@@ -1269,7 +1269,7 @@
                     renderCampaignGrid();
                     populateCpuSelect();
                 }
-            }, 3000);
+            }, 3500);
         }
 
         function pauseMatch() {
